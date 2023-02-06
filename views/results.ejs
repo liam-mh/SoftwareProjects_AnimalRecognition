@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lan="en" and dir="Itr">
+<head>
+    <meta charset="utf-8">
+    <title> Interactive Login Form</title>
+    <link rel="stylesheet" href="results.css">
+    <script src ="admin-login.js"> </script>
+
+</head>
+
+<body>
+    <header>
+        <div class="container">
+          <div class="logo">
+            <img src="frontEndImages/elanco.png" alt="Logo" />
+          </div>
+
+          <div class="links">
+            <ul>
+              <li><a href="#" class="btn">Sign up</a></li>
+            </ul>
+          </div>
+
+          <div class="overlay"></div>
+    </header>
+
+        <div class="box">
+
+            <h4>results</h4>
+            
+        </div>
+        
+        <div class="rectangle">
+          <% for (let image of images) { %>
+            <div class="row">
+                <div class="column" style="width:320px;">
+                    <img src="<%= image.path %>" width="300" height="300">
+                </div>
+                <div class="column">
+                    <% for (let label of image.labels) { %>
+                        <li>Score: <%= label.score %>, <%= label.description %></li>
+                    <% } %>
+                </div>
+            </div>
+            <br>
+            <% } %>
+        </div>
+
+</body>
+        </html>

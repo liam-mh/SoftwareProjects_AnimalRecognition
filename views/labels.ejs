@@ -1,0 +1,29 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/style.css">        
+</head>
+<body>
+    <h1>Welcome to label results</h1>
+
+    <p>Label Results:</p>
+
+    <% for (let image of images) { %>
+    <div class="row">
+        <div class="column" style="width:320px;">
+            <img src="<%= image.path %>" width="300" height="300">
+        </div>
+        <div class="column">
+            <% for (let label of image.labels) { %>
+                <li>Score: <%= label.score %>, <%= label.description %></li>
+            <% } %>
+        </div>
+    </div>
+    <br>
+    <% } %>
+
+</body>
+</html>

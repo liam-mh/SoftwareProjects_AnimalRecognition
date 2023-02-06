@@ -1,0 +1,131 @@
+
+a {
+  text-decoration: none;
+}
+header {
+  position: relative;
+  z-index: 70;
+}
+
+header .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.overlay {
+  display: none;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.logo img {
+  width: 150px;
+  height: 75px;
+  margin-right: 0.6rem;
+  margin-top: -0.6rem;
+  position: relative; left: 25px;
+}
+.links ul {
+  display: flex;
+  list-style: none;
+  align-items: center;
+}
+
+.links a {
+  color: white;
+  margin-left: 4.5rem;
+  display: inline-block;
+  transition: 0.3s;
+  
+}
+
+.btn{
+  position: relative; right: 30px;
+  border: 0;
+  background-color: #0367fd;
+  display: block;
+  margin: 20px auto;
+  text-align: center;
+  padding:14px 35px;
+  outline: none;
+  color: white;
+  border-radius: 24px;
+  transition:0.25px;
+  cursor:pointer;
+  
+}
+
+
+body{
+  margin:0;
+  padding:0;
+  font-family: sans-serif;
+  background-size: cover;
+  
+}
+.box{
+width:300px;
+padding:30px;
+position: absolute;
+top:50%;
+left:50%;
+transform: translate(-50%,-50%);
+background:rgba(0,0,0,0.4);
+text-align:center;
+border-radius: 40px;
+opacity: 90%;
+
+}
+.box h1
+{
+  color: black;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.box input[type="text"],.box input[type="password"]
+{
+border: 0;
+background: none;
+display: block;
+margin: 20px auto;
+text-align: center;
+border:3px solid #0367fd;
+padding:14px 10px;
+width:220px;
+outline: none;
+color: white;
+border-radius: 24px;
+transition:0.25px;
+}
+
+.box input[type="text"]:focus,.box input[type="password"]:focus{
+
+width:270px;
+border-color: #ffc400ec;
+
+}
+.box input[type="submit"]{
+
+
+  border: 0;
+background-color: #0367fd;
+display: block;
+margin: 20px auto;
+text-align: center;
+padding:14px 35px;
+outline: none;
+color: white;
+border-radius: 24px;
+transition:0.25px;
+cursor:pointer;
+
+  
+}
+.box input[type="submit"]:hover{
+  background: #ffc400ec;
+}
