@@ -3,7 +3,7 @@ const vision = require('@google-cloud/vision');
     
 // Creates a client
 const client = new vision.ImageAnnotatorClient({
-    keyFilename: "key.json"
+    keyFilename: "visionAPI/key.json"
 });    
 
 // Export validated client
