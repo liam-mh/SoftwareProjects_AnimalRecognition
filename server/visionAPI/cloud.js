@@ -1,3 +1,5 @@
+// *** key.json must be placed inside '/visionAPI' folder to use ***
+
 // Imports the Google Cloud client library
 const vision = require('@google-cloud/vision');
     
