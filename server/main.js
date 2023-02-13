@@ -20,10 +20,14 @@ app.set("views", path.join(__dirname, "../client/views"));
 // -----------------
 // ----- pages -----
 
-// index
+// landing
 app.get('/', (req, res) => {
     res.render("index");
 })
+
+// end landing
+
+// results
 
 const userImagePath = path.join(__dirname, "../client/public/userImages/");
 
@@ -52,9 +56,9 @@ async function getUserImages() {
         image.labels = result.labelAnnotations;
     };
 
+    module.exports = userImages;
     return userImages;
 }
-
 
 app.get('/results', async (req, res) => { 
 
@@ -63,6 +67,8 @@ app.get('/results', async (req, res) => {
     res.render("results", {images: userImages});
     console.log(userImages);
 });
+
+// end results
 
 
 // port num for localhost
