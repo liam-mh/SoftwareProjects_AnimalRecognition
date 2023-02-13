@@ -13,14 +13,14 @@ function addData(userImages) {
             labels: element.labels.map(label => ({
                 description: label.description,
                 score: label.score
-              }))
+            }))
         };
         dataArray.push(data);
     });
 
     try {
         fs.writeFileSync('./dataStore/currentSearch.json', JSON.stringify(dataArray), 'utf-8');
-        console.log('Search data saved');
+        console.log('Current search data saved');
     } catch (error) {
         console.error(error);
     }
