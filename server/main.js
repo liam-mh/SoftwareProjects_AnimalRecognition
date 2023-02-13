@@ -10,7 +10,7 @@ const app = express();
 app.use(express.static('../client/public'));
 
 // built in express, looks at body of post requests
-app.use(express.urlencoded({extended: false}))
+app.use(express.urlencoded({extended: true}))
 
 // using the ejs templating engine 
 app.set("view engine", "ejs")
@@ -56,16 +56,19 @@ async function getUserImages() {
         image.labels = result.labelAnnotations;
     };
 
-    module.exports = userImages;
     return userImages;
 }
 
+
+const addData = require('./dataStore/currentSearch');
 app.get('/results', async (req, res) => { 
 
     const userImages = await getUserImages();
+    addData(userImages);
+    
     // Passes data to ejs page
     res.render("results", {images: userImages});
-    console.log(userImages);
+    //console.log(userImages);
 });
 
 // end results
