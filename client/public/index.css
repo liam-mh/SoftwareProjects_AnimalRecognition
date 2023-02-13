@@ -15,6 +15,7 @@ a {
   .overlay {
     display: none;
   }
+ 
   
   .logo {
     display: flex;
@@ -101,4 +102,20 @@ a {
     transition:0.25px;
     cursor:pointer;
     
+}
+
+.showcase-area .container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  align-items: center;
+  justify-content: center;
+}
+
+.big-title {
+  font-size: 1rem;
+  color: var(--darkOne);
+  text-transform: capitalize;
+  line-height: 1;
+  position: relative; left: 350px;
+  font-weight: bold;
 }

@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <title> Interactive Login Form</title>
     <link rel="stylesheet" href="index.css">
-    <script src ="admin-login.js"> </script>
+    <script src ="admin-login.ejs"> </script>
 
 
 
@@ -22,13 +22,37 @@
               <li><a href="#" class="btn">Sign up</a></li>
             </ul>
           </div>
-
+        </div>
           <div class="overlay"></div>
         </header>
+        <div class="showcase-area">
+          <div class="container">
+            <div class="left">
+              <div class="big-title">
+                <h1>ARTIFICIAL INTELLIGENCE ANIMAL SEARCH</h1>
+              </div>
+              <p class="text">
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                Delectus eius distinctio odit, magni magnam qui ex perferendis
+                vitae!
+              </p>
+            </div>
         <div class="box">
           <h2>image dropbox</h2>
           <div class="rectangle">
+            <label for="UploadFile">Upload File :</label>
             
+                <input type="file" accept="image/jpeg, image/png, image/jpg">
+                <output></output>
+            <script>
+              const input = document.querySelector("input")        
+              const output = document.querySelector("output") 
+              let imagesArray = []   
+              input.addEventListener("change", function(){}) 
+              input.addEventListener("change", () => { const file = input.files })
+              input.addEventListener("change", () => {const file = input.filesimagesArray.push(file[0])})
+            </script>
+            <input type="image" src="submit.jpg" alt="">
             <h3 style="position: absolute;top: 30px;left: 55px;">Press to take/upload photo</h3>
           </div>
           <div class="links">
