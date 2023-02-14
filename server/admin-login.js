@@ -6,7 +6,6 @@ if(username=="admin"&& password=="user")
 {
     alert("login succesfully");
     return false;
-
 }
 else
 {
