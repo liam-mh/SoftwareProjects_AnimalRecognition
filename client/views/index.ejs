@@ -4,31 +4,96 @@
     <meta charset="utf-8">
     <title> Interactive Login Form</title>
     <link rel="stylesheet" href="index.css">
-    <script src ="admin-login.js"> </script>
+    <script src ="admin-login.ejs"> </script>
 
 
 
 </head>
 
-<body>
+<body style="min-height: 1700px;">
     <header>
-        <div class="container">
-          <div class="logo">
-            <img src="frontEndImages/elanco.png" alt="Logo" />
+        <nav class="navbar">
+            <div class="navbar__container">
+              <a href="/" id="navbar__logo"><i class="fas fa-gem"></i><img src="frontEndImages/elanco.png" alt="Logo" /></a>
+              <div class="navbar__toggle" id="mobile-menu">
+                <span class="bar"></span> <span class="bar"></span>
+                <span class="bar"></span>
+              </div>
+              <ul class="navbar__menu">
+                <li class="navbar__item">
+                  <a href="/" class="navbar__links">Home</a>
+                </li>
+                <li class="navbar__item">
+                  <a href="/tech.html" class="navbar__links">Tech</a>
+                </li>
+                <li class="navbar__item">
+                  <a href="/" class="navbar__links">API</a>
+                </li>
+                <li class="navbar__item"><a href="/login" class="navbar__links">Sign Up</a></li>
+              </ul>
+            </div>
+          </nav>
+          <div class="main">
+            <div class="main__container">
+              <div class="main__content">
+                <h1>Welcome to Elanco</h1>
+                <p>Elanco is a global leader in animal health dedicated to innovating and delivering products and services to prevent and treat 
+                    disease in farm animals and pets, creating value for farmers, pet owners, veterinarians, stakeholders, and society
+                     as a whole.</p>
+                
+                <button class="main__btn"><a href="#">Get Started</a></button>
+              </div>
+              <div class="main__img--container">
+                
+                <img id="main__img" src="frontEndImages/hero.svg" alt="pic" id="main__img">
+            
+              
+              </div>
+            </div>
           </div>
+          
 
-          <div class="links">
+        <!---  <div class="links">
             <ul>
-              <li><a href="#" class="btn">Sign up</a></li>
+              <li><a href="admin-login.ejs" class="btn">Sign up</a></li>
             </ul>
           </div>
-
+        </div>
           <div class="overlay"></div>
         </header>
+        <div class="showcase-area">
+          <div class="container">
+            <div class="left">
+              <div class="big-title">
+                <h1>ARTIFICIAL INTELLIGENCE ANIMAL SEARCH</h1>
+              </div>
+            </div>
         <div class="box">
           <h2>image dropbox</h2>
-          <div class="rectangle">
+          <div class="rectangle">-->
             
+            <div class="main">
+              <div class="main__container">
+                <div class="main__content">
+                  <h2>Animal Recognition AI</h2>
+                  <li>1. Select Files of animals you would like to scan</li>
+                  <li>2. Press the scan button </li>
+                  <li>3. Recieve the results</li>
+            <div class="box">
+              <label for="UploadFile">Upload File </label>
+                <input type="file" accept="image/jpeg, image/png, image/jpg">
+                <button class="main2__btn"><a href="#bottom">Scan </a></button>
+                <output></output>
+            <script>
+              const input = document.querySelector("input")        
+              const output = document.querySelector("output") 
+              let imagesArray = []   
+              input.addEventListener("change", function(){}) 
+              input.addEventListener("change", () => { const file = input.files })
+              input.addEventListener("change", () => {const file = input.filesimagesArray.push(file[0])})
+            </script>
+            <input type="image" src="submit.jpg" alt="">
+            </div>
             <h3 style="position: absolute;top: 30px;left: 55px;">Press to take/upload photo</h3>
           </div>
           <div class="links">
