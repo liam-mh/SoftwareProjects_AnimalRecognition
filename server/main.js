@@ -20,6 +20,13 @@ app.set("views", path.join(__dirname, "../client/views"));
 // -----------------
 // ----- pages -----
 
+// admin login test
+
+app.get('/login', (req, res) => {
+    res.render("admin-login");
+})
+
+
 // landing
 app.get('/', (req, res) => {
     res.render("index");
