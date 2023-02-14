@@ -10,7 +10,7 @@ const app = express();
 app.use(express.static('../client/public'));
 
 // built in express, looks at body of post requests
-app.use(express.urlencoded({extended: false}))
+app.use(express.urlencoded({extended: true}))
 
 // using the ejs templating engine 
 app.set("view engine", "ejs")
@@ -25,51 +25,14 @@ app.get('/', (req, res) => {
     res.render("index");
 })
 
-// end landing
-
 // results
-
-const userImagePath = path.join(__dirname, "../client/public/userImages/");
-
-async function getUserImages() {
-    const fs = require("fs");
-    var userImages = [];
-
-    const readDirectory = new Promise((resolve, reject) => {
-        fs.readdir(userImagePath, (err, files) => {
-            if (err) reject(err);
-            files.forEach(file => {
-                userImages.push({
-                    path: file, 
-                    labels: []
-                });
-            });
-            resolve();
-        });
-    });
-    await readDirectory;
-
-    const client = require('./visionAPI/cloud.js');
-
-    for (let image of userImages) {
-        const [result] = await client.labelDetection(path.join(userImagePath, image.path));
-        image.labels = result.labelAnnotations;
-    };
-
-    module.exports = userImages;
-    return userImages;
-}
-
+const getImageLabels = require('./visionAPI/cloud.js')
+const addData = require('./dataStore/currentSearch.js');
 app.get('/results', async (req, res) => { 
-
-    const userImages = await getUserImages();
-    // Passes data to ejs page
+    const userImages = await getImageLabels();
+    addData(userImages);
     res.render("results", {images: userImages});
-    console.log(userImages);
 });
-
-// end results
-
 
 // port num for localhost
 app.listen(8000) 
