@@ -3,14 +3,14 @@
 <head>
     <meta charset="utf-8">
     <title> Interactive Login Form</title>
-    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="results.css">
     <script src ="admin-login.js"> </script>
 </head>
 
 <body>
 
-  <!-- nav bar -->
-  <header>
+  <!--- nav bar --->
+  
     <header>
       <nav class="navbar">
           <div class="navbar__container">
@@ -57,17 +57,10 @@
         <!-- right side -->
         <div class="main__img--container">
           
-          <img id="main__img" src="<%= path %>" alt="pic" id="main__img" width="250" height="250">
+          <img id="main__img" src="<%= path %>" alt="pic" id="main__img" width="300" height="300">
         
         </div>
       </div>
-    </div>
-
-        <div class="column">
-            <% for (let label of image.labels) { %>
-              <li>Score: <%= label.score %>, <%= label.description %></li>
-            <% } %>
-        </div>
     </div>
     <br>
   <% } %>
