@@ -39,6 +39,9 @@
 
   <h1>Results</h1>
 
+  <p>This page will display the labels from the Artificial Intelligence scanner, 
+    followed by how confident it is that it is correct.</p>
+
   <% for (let image of images) { %>
     <% var path = './userImages/' + image.path %>
 
@@ -48,23 +51,24 @@
         <!-- left side -->
         <div class="main__content">
 
+          <% if (image.containsAnimal) { %>
+            <p><strong>This image contains an animal</strong></p>
+          <% } else { %>
+            <p><strong>This image doesn't contain an animal</strong></p>
+          <% } %>
+
           <% for (let label of image.labels) { %>
             <li>
-              <div class="column">
-                <div class="row">
-                  <%= label.description %>
-                </div>
-                <div class="row">
-                  Confidence: 
-                  <% if (label.score > 0.9) { %>
-                    <span style="color: green">High</span>
-                  <% } else if (label.score > 0.7) { %> 
-                    <span style="color: yellow">Medium</span>
-                  <% } else { %> 
-                    <span style="color: red">Low</span>
-                  <% } %>
-                </div>
-              </div>  
+              <%= label.description %>
+            
+              <% if (label.score > 0.9) { %>
+                <span style="color: green">High</span>
+              <% } else if (label.score > 0.7) { %> 
+                <span style="color: yellow">Medium</span>
+              <% } else { %> 
+                <span style="color: red">Low</span>
+              <% } %>
+              
             </li>
           <% } %>
         
@@ -72,9 +76,7 @@
 
         <!-- right side -->
         <div class="main__img--container">
-          
           <img id="main__img" src="<%= path %>" alt="pic" id="main__img" width="300" height="300">
-        
         </div>
       </div>
     </div>
