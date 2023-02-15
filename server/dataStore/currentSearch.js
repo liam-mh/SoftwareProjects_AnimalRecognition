@@ -30,7 +30,7 @@ function readJsonFileToArray(fileName) {
     }
 };
 
-const dataFromFile = readJsonFileToArray('currentSearch.json');
+//const dataFromFile = readJsonFileToArray('currentSearch.json');
 
 const dummyData = 
 [
@@ -64,7 +64,7 @@ function updateUserValidation(original, update) {
     }
 };
 
-updateUserValidation(dataFromFile, dummyData);
+//updateUserValidation(dataFromFile, dummyData);
 
 
 
