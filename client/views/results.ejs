@@ -49,7 +49,23 @@
         <div class="main__content">
 
           <% for (let label of image.labels) { %>
-            <li>Score: <%= label.score %>, <%= label.description %></li>
+            <li>
+              <div class="column">
+                <div class="row">
+                  <%= label.description %>
+                </div>
+                <div class="row">
+                  Confidence: 
+                  <% if (label.score > 0.9) { %>
+                    <span style="color: green">High</span>
+                  <% } else if (label.score > 0.7) { %> 
+                    <span style="color: yellow">Medium</span>
+                  <% } else { %> 
+                    <span style="color: red">Low</span>
+                  <% } %>
+                </div>
+              </div>  
+            </li>
           <% } %>
         
         </div>
