@@ -131,3 +131,4 @@ dist
 
 # Google API key
 server/visionAPI/key.json
+server/dataStore/currentSearch.json

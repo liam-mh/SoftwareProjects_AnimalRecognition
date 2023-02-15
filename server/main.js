@@ -20,6 +20,13 @@ app.set("views", path.join(__dirname, "../client/views"));
 // -----------------
 // ----- pages -----
 
+// admin login test
+
+app.get('/login', (req, res) => {
+    res.render("admin-login");
+})
+
+
 // landing
 app.get('/', (req, res) => {
     res.render("index");
@@ -36,4 +43,11 @@ app.get('/results', async (req, res) => {
 
 // port num for localhost
 app.listen(8000) 
+
+
+var loadFile = function(event) {
+	var image = document.getElementById('output');
+	image.src = URL.createObjectURL(event.target.files[0]);
+};
+
  
