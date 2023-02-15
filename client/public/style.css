@@ -47,7 +47,7 @@ header .container {
 .btn{
   position: relative; right: 30px;
   border: 0;
-  background-color: #0367fd;
+  background-color: #04243C;
   display: block;
   margin: 20px auto;
   text-align: center;
@@ -90,15 +90,15 @@ opacity: 90%;
 .box input[type="text"],.box input[type="password"]
 {
 border: 0;
-background: none;
+background: white;
 display: block;
 margin: 20px auto;
 text-align: center;
-border:3px solid #0367fd;
+border:3px solid #04243C;
 padding:14px 10px;
 width:220px;
 outline: none;
-color: white;
+color: black;
 border-radius: 24px;
 transition:0.25px;
 }
@@ -106,14 +106,14 @@ transition:0.25px;
 .box input[type="text"]:focus,.box input[type="password"]:focus{
 
 width:270px;
-border-color: #ffc400ec;
+border-color: #5500ffec;
 
 }
 .box input[type="submit"]{
 
 
   border: 0;
-background-color: #0367fd;
+background-color: #04243C;
 display: block;
 margin: 20px auto;
 text-align: center;
@@ -127,7 +127,7 @@ cursor:pointer;
   
 }
 .box input[type="submit"]:hover{
-  background: #ffc400ec;
+  background: #5500ffec;
 }
 
 .navbar {
