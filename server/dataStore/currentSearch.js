@@ -32,7 +32,7 @@ function readJsonFileToArray(fileName) {
 
 const dataFromFile = readJsonFileToArray('currentSearch.json');
 
-dummyData = 
+const dummyData = 
 [
     {
         "path":"cat_dog.jpg",
@@ -49,26 +49,20 @@ function updateUserValidation(original, update) {
 
     for (let i = 0; i < original.length; i++) {
 
-        var o = original[i];
-        var u = update[i];
-        if (o.path != u.path) {continue;}
+        if (original[i].path != update[i].path) {continue;}
 
         for (let j = 0; j < original[i].labels.length; j++) {
 
-            o = o.labels[j];
-            u = u.labels[j];
-
-            if (!o || !u) {
+            if (!original[i].labels[j] || !update[i].labels[j]) {
                 continue;
             } 
-            if (o.description === u.description) {
-                o.userThinksValid = u.userThinksValid;
+            if (original[i].labels[j].description === update[i].labels[j].description) {
+                original[i].labels[j].userThinksValid = update[i].labels[j].userThinksValid;
             }
-            console.log('o: ', o.userThinksValid, ' u: ', u.userThinksValid); 
+            console.log('o: ', original[i].labels[j].userThinksValid, ' u: ', update[i].labels[j].userThinksValid); 
         }
     }
 };
-
 
 updateUserValidation(dataFromFile, dummyData);
 
