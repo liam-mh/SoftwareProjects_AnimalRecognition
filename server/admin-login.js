@@ -1,15 +1,15 @@
-function validate(event)
+function validate()
 {
-  event.preventDefault();
 var username=document.getElementById("username").value;
 var password=document.getElementById("password").value;
-if(username=="admin" && password=="user")
+if(username=="admin"&& password=="user")
 {
-  window.location.href = "/admin";
+    alert("login succesfully");
+    return false;
 }
 else
 {
-  alert("login failed");
+    alert("login failed");
 }
 
 

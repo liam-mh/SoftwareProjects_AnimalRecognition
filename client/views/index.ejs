@@ -86,7 +86,14 @@
                 <input type="file" accept="image/jpeg, image/png, image/jpg"  >
                 <button class="main2__btn"><a href="/results">Scan </a></button>
                 <output></output>
-
+            <script>
+              const input = document.querySelector("input")        
+              const output = document.querySelector("output") 
+              let imagesArray = []   
+              input.addEventListener("change", function(){}) 
+              input.addEventListener("change", () => { const file = input.files })
+              input.addEventListener("change", () => {const file = input.filesimagesArray.push(file[0])})
+            </script>
             <input type="image" src="submit.jpg" alt="">
             </div>
             <h3 style="position: absolute;top: 30px;left: 55px;">Press to take/upload photo</h3>

@@ -5,8 +5,8 @@
 }
 a {
     text-decoration: none;
-}
-header {
+  }
+  header {
     position: relative;
     z-index: 70;
   }
@@ -80,7 +80,6 @@ header {
   }
 
   .main2__btn {
-	margin: 0 auto;
 	font-size: 1rem;
 	background-image: linear-gradient(to top, #04243C 0%,#04243C 100%);
 	padding: 14px 32px;
@@ -96,13 +95,10 @@ header {
   }
   
   .main2__btn a {
-	margin: 0 auto;
 	position: relative;
 	z-index: 2;
 	color: #fff;
 	text-decoration: none;
-	display: block;
-	
   }
 
   .main2__btn:after {
