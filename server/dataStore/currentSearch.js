@@ -1,5 +1,5 @@
 /**
- * Receiving, formatting and saving the users current images with the search data
+ * Writing search data to a file
  */
 
 const fs = require('fs');
@@ -30,21 +30,6 @@ function readJsonFileToArray(fileName) {
     }
 };
 
-//const dataFromFile = readJsonFileToArray('currentSearch.json');
-
-const dummyData = 
-[
-    {
-        "path":"cat_dog.jpg",
-        "labels":[
-            {
-                "description":"Dog",
-                "userThinksValid":false
-            }
-        ],
-    }
-]
-
 function updateUserValidation(original, update) {
 
     for (let i = 0; i < original.length; i++) {
@@ -57,17 +42,31 @@ function updateUserValidation(original, update) {
                 continue;
             } 
             if (original[i].labels[j].description === update[i].labels[j].description) {
-                original[i].labels[j].userThinksValid = update[i].labels[j].userThinksValid;
+                if (original[i].labels[j].userThinksValid != update[i].labels[j].userThinksValid) {
+                    original[i].labels[j].userThinksValid = update[i].labels[j].userThinksValid;
+                    console.log("User invalidated label: ", original[i].labels[j].description )
+                }
             }
-            console.log('o: ', original[i].labels[j].userThinksValid, ' u: ', update[i].labels[j].userThinksValid); 
         }
     }
+
+    writeToFile('currentSearch.json' ,original);
 };
 
-//updateUserValidation(dataFromFile, dummyData);
+
+/**
+ * Test of updating data
+
+const dataFromFile = readJsonFileToArray('currentSearch.json');
+
+// sets cat_dog.jpg Dog label to false
+var dummyData = [{"path":"cat_dog.jpg","labels":[{"description":"Dog","userThinksValid":false}],}];
+
+dummyData = readJsonFileToArray('currentSearch.json');
+
+updateUserValidation(dataFromFile, dummyData);
+
+ */
 
 
 
-
-
-  
