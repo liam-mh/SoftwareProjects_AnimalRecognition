@@ -32,6 +32,11 @@ app.get('/', (req, res) => {
     res.render("index");
 })
 
+// admin index
+app.get('/admin', (req, res) => {
+    res.render("admin-index");
+})
+
 // results
 const getImageLabels = require('./visionAPI/cloud.js')
 const writeToFile = require('./dataStore/currentSearch.js');
