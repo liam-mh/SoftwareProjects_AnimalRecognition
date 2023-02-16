@@ -29,6 +29,8 @@ const storage = multer.diskStorage({
 })
 const upload = multer({storage: storage});
 
+const ds = require('./dataStore/dataStore.js');
+
 // -----------------
 // ----- pages -----
 
@@ -42,37 +44,18 @@ app.post('/upload', upload.single("image"), (req, res) => {
     res.redirect('/results');
 })
 
-// admin login 
-app.get('/login', (req, res) => {
-    res.render("admin-login");
-})
-
-// admin index
-app.get('/admin', (req, res) => {
-    res.render("admin-index");
-})
 
 // results
-const getImageLabels = require('./visionAPI/cloud.js')
-const writeToFile = require('./dataStore/currentSearch.js');
-
-
 app.get('/results', async (req, res) => { 
+    const getImageLabels = require('./visionAPI/cloud.js')
+    const writeToFile = require('./dataStore/currentSearch.js');
     const imageData = await getImageLabels();
     res.render("results", {images: imageData});
-
     writeToFile('currentSearch.json' ,imageData);
     // get user validation
-    writeToFile('currentSearch.json', updatedImageData);
+    //writeToFile('currentSearch.json', updatedImageData);
     //ds.save(); // save all 
 });
-
-// admin login 
-app.get('/login', (req, res) => {
-    res.render("admin-login");
-})
-
-const ds = require('./dataStore/dataStore.js');
 
 // Define the formatDate function
 function formatDate(dateString) {
@@ -82,6 +65,11 @@ function formatDate(dateString) {
     const year = date.getFullYear().toString();
     return `${day}/${month}/${year}`;
 }
+
+// admin login 
+app.get('/login', (req, res) => {
+    res.render("admin-login");
+})
 
 // admin index
 app.get('/admin', (req, res) => {
