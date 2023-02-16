@@ -20,13 +20,6 @@ app.set("views", path.join(__dirname, "../client/views"));
 // -----------------
 // ----- pages -----
 
-// admin login test
-
-app.get('/login', (req, res) => {
-    res.render("admin-login");
-})
-
-
 // landing
 app.get('/', (req, res) => {
     res.render("index");
@@ -35,12 +28,40 @@ app.get('/', (req, res) => {
 // results
 const getImageLabels = require('./visionAPI/cloud.js')
 const writeToFile = require('./dataStore/currentSearch.js');
+
+
 app.get('/results', async (req, res) => { 
     const imageData = await getImageLabels();
     res.render("results", {images: imageData});
 
     writeToFile('currentSearch.json' ,imageData);
+    // get user validation
+    writeToFile('currentSearch.json', updatedImageData);
+    //ds.save(); // save all 
 });
+
+// admin login 
+app.get('/login', (req, res) => {
+    res.render("admin-login");
+})
+
+const ds = require('./dataStore/dataStore.js');
+
+// Define the formatDate function
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear().toString();
+    return `${day}/${month}/${year}`;
+}
+
+// admin index
+app.get('/admin', (req, res) => {
+    const allData = ds.readJsonFileToArray('dataStore.json');
+    if (allData) {console.log('Data loaded from store')};
+    res.render("admin-index", {data: allData, formatDate: formatDate});
+})
 
 // port num for localhost
 app.listen(8000) 

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lan="en" and dir="Itr">
+<head>
+    <meta charset="utf-8">
+    <title> Interactive Login Form</title>
+    <link rel="stylesheet" href="results.css">
+    <script src ="admin-login.js"> </script>
+</head>
+
+<body>
+
+  <!--- nav bar --->
+  
+    <header>
+      <nav class="navbar">
+          <div class="navbar__container">
+            <a href="/" id="navbar__logo"><i class="fas fa-gem"></i><img src="frontEndImages/elanco.png" alt="Logo" /></a>
+            <div class="navbar__toggle" id="mobile-menu">
+              <span class="bar"></span> <span class="bar"></span>
+              <span class="bar"></span>
+            </div>
+            <ul class="navbar__menu">
+              <li class="navbar__item">
+                <a href="/" class="navbar__links">Home</a>
+              </li>
+              <li class="navbar__item">
+                <a href="/tech.html" class="navbar__links">Tech</a>
+              </li>
+              <li class="navbar__item">
+                <a href="/" class="navbar__links">API</a>
+              </li>
+              <li class="navbar__item"><a href="/login" class="navbar__links">Sign Up</a></li>
+            </ul>
+          </div>
+        </nav>
+    </header>
+
+    <!-- body of results page -->
+
+    <table>
+        <tr>
+            <th>Image Path</th>
+            <th>Search Date</th> 
+            <th>Image Contains Animal</th>
+            <th>AI Lables, with confide</th>
+        </tr>
+        <% for (let d of data) { %>
+            <tr>
+                <td><%= d.path %>e</td>
+                <td><%= formatDate(d.date) %></td> 
+                <td><%= d.containsAnimal %></td>
+                <% for (let l of d.labels) { %>
+                    <td><%= l.description %></td>
+                    <td><%= (l.score * 100).toFixed(2) %>%</td>
+                <% } %>
+                  
+            </tr>
+        <% } %>
+    </table>
+  
+
+
+</body>
+</html>

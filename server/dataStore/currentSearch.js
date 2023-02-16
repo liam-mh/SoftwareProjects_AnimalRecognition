@@ -1,5 +1,5 @@
 /**
- * Receiving, formatting and saving the users current images with the search data
+ * Writing search data to a file
  */
 
 const fs = require('fs');
@@ -30,23 +30,6 @@ function readJsonFileToArray(fileName) {
     }
 };
 
-const dataFromFile = readJsonFileToArray('currentSearch.json');
-
-var dummyData = 
-[
-    {
-        "path":"cat_dog.jpg",
-        "labels":[
-            {
-                "description":"Dog",
-                "userThinksValid":false
-            }
-        ],
-    }
-]
-
-dummyData = readJsonFileToArray('currentSearch.json');
-
 function updateUserValidation(original, update) {
 
     for (let i = 0; i < original.length; i++) {
@@ -66,11 +49,24 @@ function updateUserValidation(original, update) {
             }
         }
     }
+
+    writeToFile('currentSearch.json' ,original);
 };
+
+
+/**
+ * Test of updating data
+
+const dataFromFile = readJsonFileToArray('currentSearch.json');
+
+// sets cat_dog.jpg Dog label to false
+var dummyData = [{"path":"cat_dog.jpg","labels":[{"description":"Dog","userThinksValid":false}],}];
+
+dummyData = readJsonFileToArray('currentSearch.json');
 
 updateUserValidation(dataFromFile, dummyData);
 
-const ds = require('./dataStore.js');
-ds.saveToDataStore();
+ */
 
-ds.saveImages();
+
+

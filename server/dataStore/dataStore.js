@@ -83,17 +83,43 @@ function saveImages() {
     
             fs.rename(sourcePath, destPath, err => {
                 if (err) {
-                    console.error(`Failed to move ${sourcePath} to ${destPath}: ${err.message}`);
+                    console.error(`Failed to move ${file} to ${destPath}: ${err.message}`);
                 } else {
-                    console.log(`Moved ${sourcePath} to ${destPath}`);
+                    console.log(`Moved ${file} to dataStore`);
                 }
             });
         });
     });
 }
 
+function save() {
+    saveToDataStore();
+    saveImages();
+}
+
+/**
+ * Read all data from the the datastore into an array
+ */
+
+function readJsonFileToArray(fileName) {
+    try {
+        const dataPath = path.join(__dirname, fileName);
+        const jsonData = fs.readFileSync(dataPath, 'utf-8');
+        const data = JSON.parse(jsonData);
+        console.log(data);
+        return data;
+    } catch (err) {
+        console.error(err);
+    }
+}
+
 module.exports = {
-    saveToDataStore,
-    saveImages,
-  };
+    save,
+    readJsonFileToArray,
+};
+
+
+
+
+
   
