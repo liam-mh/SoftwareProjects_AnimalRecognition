@@ -37,8 +37,9 @@ const getImageLabels = require('./visionAPI/cloud.js')
 const writeToFile = require('./dataStore/currentSearch.js');
 app.get('/results', async (req, res) => { 
     const imageData = await getImageLabels();
-    writeToFile('currentSearch.json' ,imageData);
     res.render("results", {images: imageData});
+
+    writeToFile('currentSearch.json' ,imageData);
 });
 
 // port num for localhost

@@ -3,6 +3,7 @@
  */
 
 const fs = require('fs');
+const path = require('path');
 
 function saveToDataStore() {
 
@@ -54,4 +55,45 @@ function saveToDataStore() {
     });
 }
 
-module.exports = saveToDataStore;
+/**
+ * Moving images to dataStore
+ */
+
+function saveImages() {
+
+    console.log('saveImages called');
+
+    const sourceFolder = path.join(__dirname, '../../client/public/userImages');
+    const destFolder = './images';
+    
+    // read the files in the source folder
+    fs.readdir(sourceFolder, (err, files) => {
+        if (err) {
+            console.error(err);
+            return;
+        }
+    
+        // filter the .jpg files
+        const imageFiles = files.filter(file => path.extname(file) === '.jpg');
+    
+        // move each image file to the destination folder
+        imageFiles.forEach(file => {
+            const sourcePath = path.join(sourceFolder, file);
+            const destPath = path.join(destFolder, file);
+    
+            fs.rename(sourcePath, destPath, err => {
+                if (err) {
+                    console.error(`Failed to move ${sourcePath} to ${destPath}: ${err.message}`);
+                } else {
+                    console.log(`Moved ${sourcePath} to ${destPath}`);
+                }
+            });
+        });
+    });
+}
+
+module.exports = {
+    saveToDataStore,
+    saveImages,
+  };
+  

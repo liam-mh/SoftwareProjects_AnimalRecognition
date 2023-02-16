@@ -70,5 +70,7 @@ function updateUserValidation(original, update) {
 
 updateUserValidation(dataFromFile, dummyData);
 
-const saveToDataStore = require('./dataStore.js');
-saveToDataStore();
+const ds = require('./dataStore.js');
+ds.saveToDataStore();
+
+ds.saveImages();
