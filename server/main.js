@@ -33,11 +33,14 @@ const upload = multer({storage: storage});
 // ----- pages -----
 
 // admin login test
-
 app.get('/login', (req, res) => {
     res.render("admin-login");
 })
 
+// test landing
+app.get('/test', (req, res) => {
+    res.render("test");
+})
 
 // landing
 app.get('/', (req, res) => {
