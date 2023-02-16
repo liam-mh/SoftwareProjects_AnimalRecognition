@@ -32,16 +32,6 @@ const upload = multer({storage: storage});
 // -----------------
 // ----- pages -----
 
-// admin login test
-app.get('/login', (req, res) => {
-    res.render("admin-login");
-})
-
-// test landing
-app.get('/test', (req, res) => {
-    res.render("test");
-})
-
 // landing
 app.get('/', (req, res) => {
     res.render("index");
@@ -52,6 +42,11 @@ app.post('/upload', upload.single("image"), (req, res) => {
     res.redirect('/results');
 })
 
+// admin login 
+app.get('/login', (req, res) => {
+    res.render("admin-login");
+})
+
 // admin index
 app.get('/admin', (req, res) => {
     res.render("admin-index");
@@ -60,11 +55,40 @@ app.get('/admin', (req, res) => {
 // results
 const getImageLabels = require('./visionAPI/cloud.js')
 const writeToFile = require('./dataStore/currentSearch.js');
+
+
 app.get('/results', async (req, res) => { 
     const imageData = await getImageLabels();
-    writeToFile('currentSearch.json' ,imageData);
     res.render("results", {images: imageData});
+
+    writeToFile('currentSearch.json' ,imageData);
+    // get user validation
+    writeToFile('currentSearch.json', updatedImageData);
+    //ds.save(); // save all 
 });
+
+// admin login 
+app.get('/login', (req, res) => {
+    res.render("admin-login");
+})
+
+const ds = require('./dataStore/dataStore.js');
+
+// Define the formatDate function
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear().toString();
+    return `${day}/${month}/${year}`;
+}
+
+// admin index
+app.get('/admin', (req, res) => {
+    const allData = ds.readJsonFileToArray('dataStore.json');
+    if (allData) {console.log('Data loaded from store')};
+    res.render("admin-index", {data: allData, formatDate: formatDate});
+})
 
 // port num for localhost
 app.listen(8000) 

@@ -31,7 +31,7 @@
 
         <div class="main">
             <div class="main__container">
-              <!-- left side -->
+              
               <div class="main__content2">
                 <h1>Welcome to Admin</h1>
                 <p>Elanco is a global leader in animal health dedicated to innovating and delivering products and services to prevent and treat 
@@ -43,11 +43,34 @@
                 <button class="main__btn3"><a href="#">No Animal</a></button>
           
               </div>
-              <!-- right side -->
+              
               <div class="main__img--container">
                 <div class="box2">
+                
+                <table>
+                    <tr>
+                        <th>Image Path</th>
+                        <th>Search Date</th> 
+                        <th>Image Contains Animal</th>
+                        <th>AI Lables, with confide</th>
+                    </tr>
+                    <% for (let d of data) { %>
+                        <tr>
+                            <td><%= d.path %>e</td>
+                            <td><%= formatDate(d.date) %></td> 
+                            <td><%= d.containsAnimal %></td>
+                            <% for (let l of d.labels) { %>
+                                <td><%= l.description %></td>
+                                <td><%= (l.score * 100).toFixed(2) %>%</td>
+                            <% } %>
+
+                        </tr>
+                    <% } %>
+                </table>
+  
+                
+                </div>
               </div>
-            </div>
         </div>
 
         <div class="ocean">
