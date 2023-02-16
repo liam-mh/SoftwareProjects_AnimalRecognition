@@ -24,7 +24,7 @@ body{
  border-radius: 5px 5px 0 0;
  top: 105px;
  position: relative;
-
+ opacity: 0.8;
 }
 .center form{
  position: absolute;
@@ -35,6 +35,8 @@ body{
  border: 1px solid #040404;
  border-radius: 0 0 5px 5px;
  top: 200px;
+ z-index: 7;
+ opacity: 0.8;
 }
 form input{
  height: 50px;

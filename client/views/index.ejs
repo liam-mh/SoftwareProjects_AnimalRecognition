@@ -30,24 +30,19 @@
                 <li>1. Select Files of animals you would like to scan</li>
                 <li>2. Press the scan button </li>
                 <li>3. Recieve the results</li> 
-          <div class="box">
-            <label for="UploadFile">Upload File </label>
-              <input type="file" accept="image/jpeg, image/png, image/jpg"  >
-              <button class="main2__btn"><a href="/results">Scan </a></button>
-              <output></output>
-          <script>
-            const input = document.querySelector("input")        
-            const output = document.querySelector("output") 
-            let imagesArray = []   
-            input.addEventListener("change", function(){}) 
-            input.addEventListener("change", () => { const file = input.files })
-            input.addEventListener("change", () => {const file = input.filesimagesArray.push(file[0])})
-          </script>
-          <input type="image" src="submit.jpg" alt="">
-          </div>
+
+                <div class="box">
+                  <label>Upload File </label>
+
+                  <form method="POST" action="/upload" enctype="multipart/form-data">
+                    <input type="file" accept="image/jpeg, image/png, image/jpg" name="image">
+                    <button type="submit" class="main2__btn">Scan</button>
+                  </form>
+                </div>
+              </div>
+            </div>
         </div>
-       </div>
-      </div>
+        
       </script>
       <div class="ocean">
         <div class="wave"></div>
@@ -55,13 +50,12 @@
       </div>
    </body>
 
-       
-      <h1>LIAM TEST UPLOAD</h1>  
 
-      <form method="POST" action="/upload" enctype="multipart/form-data">
-        <input type="file" name="image">
-        <input type="submit">
-      </form>
+   <form method="POST" action="/upload" enctype="multipart/form-data">
+     <input type="file" name="image">
+     <input type="submit">
+   </form>
+      
         
 
       </body>
