@@ -30,9 +30,9 @@ function readJsonFileToArray(fileName) {
     }
 };
 
-//const dataFromFile = readJsonFileToArray('currentSearch.json');
+const dataFromFile = readJsonFileToArray('currentSearch.json');
 
-const dummyData = 
+var dummyData = 
 [
     {
         "path":"cat_dog.jpg",
@@ -44,6 +44,8 @@ const dummyData =
         ],
     }
 ]
+
+dummyData = readJsonFileToArray('currentSearch.json');
 
 function updateUserValidation(original, update) {
 
@@ -57,17 +59,16 @@ function updateUserValidation(original, update) {
                 continue;
             } 
             if (original[i].labels[j].description === update[i].labels[j].description) {
-                original[i].labels[j].userThinksValid = update[i].labels[j].userThinksValid;
+                if (original[i].labels[j].userThinksValid != update[i].labels[j].userThinksValid) {
+                    original[i].labels[j].userThinksValid = update[i].labels[j].userThinksValid;
+                    console.log("User invalidated label: ", original[i].labels[j].description )
+                }
             }
-            console.log('o: ', original[i].labels[j].userThinksValid, ' u: ', update[i].labels[j].userThinksValid); 
         }
     }
 };
 
-//updateUserValidation(dataFromFile, dummyData);
+updateUserValidation(dataFromFile, dummyData);
 
-
-
-
-
-  
+const saveToDataStore = require('./dataStore.js');
+saveToDataStore();
