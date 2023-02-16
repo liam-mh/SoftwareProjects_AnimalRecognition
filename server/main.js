@@ -16,6 +16,18 @@ app.use(express.urlencoded({extended: true}))
 app.set("view engine", "ejs")
 app.set("views", path.join(__dirname, "../client/views"));
 
+// Multer
+const multer = require('multer');
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, '/Users/liam/Documents/GitHub/SoftwareProjects_AnimalRecognition/client/public/userImages');
+    },
+    filename: (req, file, cb) => {
+        console.log(file)
+        cb(null, Date.now() + path.extname(file.originalname))
+    }
+})
+const upload = multer({storage: storage});
 
 // -----------------
 // ----- pages -----
@@ -30,6 +42,11 @@ app.get('/login', (req, res) => {
 // landing
 app.get('/', (req, res) => {
     res.render("index");
+})
+// upload image button
+app.post('/upload', upload.single("image"), (req, res) => {
+    console.log('image uploaded');
+    res.redirect('/results');
 })
 
 // admin index
