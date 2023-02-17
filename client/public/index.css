@@ -665,7 +665,7 @@ a {
  label{
 	position: relative;
 	top: 1px;
-	left: 130px;
+	left: 1px;
 	text-align: center;
 	font-size: large;
 	color: #04243C;
@@ -676,6 +676,7 @@ a {
 	position: relative;
 	top: 30px;
 	color: #04243C;
+	left: 35px;
  }
  
  @import url('https://fonts.googleapis.com/css?family=Noto+Sans+TC&display=swap');
@@ -800,7 +801,25 @@ body {
    z-index: 9;
   }
   
- 
+  table{
+	text-indent: 150px;
+	position: relative;
+	right: 100px;
+ }
+   
+
+ td{
+   white-space: nowrap;
+   font-size: 18px;
+   padding: 0.2rem;
+
+ }
+ th{
+   white-space: nowrap;
+   font-size: 18px;
+   padding: 0.2rem;
+
+ }
 
 
  
