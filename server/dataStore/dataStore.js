@@ -7,8 +7,8 @@ const path = require('path');
 
 function saveToDataStore() {
 
-    const sourceFile = './currentSearch.json';
-    const destinationFile = './dataStore.json';
+    const sourceFile = '/Users/liam/Documents/GitHub/SoftwareProjects_AnimalRecognition/server/dataStore/currentSearch.json';
+    const destinationFile = '/Users/liam/Documents/GitHub/SoftwareProjects_AnimalRecognition/server/dataStore/dataStore.json';
 
     // read the source file
     fs.readFile(sourceFile, 'utf8', (err, data) => {
@@ -58,13 +58,25 @@ function saveToDataStore() {
 /**
  * Moving images to dataStore
  */
+function clearFolder() {
+    const folderPath = '/Users/liam/Documents/GitHub/SoftwareProjects_AnimalRecognition/client/public/userImages';
+
+    // Get an array of file names in the folder
+    const fileNames = fs.readdirSync(folderPath);
+  
+    // Delete each file in the folder
+    fileNames.forEach((fileName) => {
+      const filePath = path.join(folderPath, fileName);
+      fs.unlinkSync(filePath);
+    });
+
+    console.log('userImages cleared')
+};
 
 function saveImages() {
 
-    console.log('saveImages called');
-
-    const sourceFolder = path.join(__dirname, '../../client/public/userImages');
-    const destFolder = './images';
+    const sourceFolder = '/Users/liam/Documents/GitHub/SoftwareProjects_AnimalRecognition/client/public/userImages';
+    const destFolder = '/Users/liam/Documents/GitHub/SoftwareProjects_AnimalRecognition/server/dataStore/images';
     
     // read the files in the source folder
     fs.readdir(sourceFolder, (err, files) => {
@@ -73,29 +85,27 @@ function saveImages() {
             return;
         }
     
-        // filter the .jpg files
-        const imageFiles = files.filter(file => path.extname(file) === '.jpg');
-    
-        // move each image file to the destination folder
-        imageFiles.forEach(file => {
+        // move each file to the destination folder
+        files.forEach(file => {
             const sourcePath = path.join(sourceFolder, file);
             const destPath = path.join(destFolder, file);
     
-            fs.rename(sourcePath, destPath, err => {
+            fs.copyFile(sourcePath, destPath, err => {
                 if (err) {
-                    console.error(`Failed to move ${file} to ${destPath}: ${err.message}`);
+                    console.error(`Failed to copy ${file} to ${destPath}: ${err.message}`);
                 } else {
-                    console.log(`Moved ${file} to dataStore`);
+                    console.log(`Copied ${file} to dataStore`);
                 }
             });
         });
     });
 }
 
+
 function save() {
-    saveToDataStore();
     saveImages();
-}
+    saveToDataStore();
+};
 
 /**
  * Read all data from the the datastore into an array
@@ -106,7 +116,8 @@ function readJsonFileToArray(fileName) {
         const dataPath = path.join(__dirname, fileName);
         const jsonData = fs.readFileSync(dataPath, 'utf-8');
         const data = JSON.parse(jsonData);
-        console.log(data);
+        console.log('Data read from:', fileName);
+        //console.log(data);
         return data;
     } catch (err) {
         console.error(err);
@@ -116,6 +127,7 @@ function readJsonFileToArray(fileName) {
 module.exports = {
     save,
     readJsonFileToArray,
+    clearFolder
 };
 
 

@@ -41,32 +41,65 @@
                 <button class="main__btn"><a href="#">Invalid Labels</a></button>
                 <button class="main__btn2"><a href="#">Most Common Animal</a></button>
                 <button class="main__btn3"><a href="#">No Animal</a></button>
+
+                <div class="popup">
+                  <img id="popupImage" src="" alt="popup image">
+                </div>
           
               </div>
               
               <div class="main__img--container">
                 <div class="box2">
+                  <style>
+                    .popup {
+                      position: fixed;
+                      top: 30%;
+                      left: 80%;
+                      transform: translate(-50%, -50%);
+                      width: 250px;
+                      height: 250px;
+                      background-color: white;
+                      border: 1px solid black;
+                      z-index: 999;
+                      display: none;
+                    }
+                  
+                    .popup img {
+                      max-width: 100%;
+                      max-height: 100%;
+                    }
+                  </style>                
+
+                  <script>
+                    function showImage(path) {
+                      const imageUrl = '/images/' + path;
+                      const image = document.getElementById('popupImage');
+                      image.src = imageUrl;
+                      const popup = document.querySelector('.popup');
+                      popup.style.display = 'block';
+                    }
+                  </script>
                 
-                <table>
+                  <table>
                     <tr>
-                        <th>Image Path</th>
-                        <th>Search Date</th> 
-                        <th>Image Contains Animal</th>
-                        <th>AI Lables, with confide</th>
+                      <th>Image</th>
+                      <th>Search Date</th> 
+                      <th>Image Contains Animal</th>
+                      <th>AI Labels, with confidence</th>
+                      <th>View Image</th>
                     </tr>
                     <% for (let d of data) { %>
-                        <tr>
-                            <td><%= d.path %>e</td>
-                            <td><%= formatDate(d.date) %></td> 
-                            <td><%= d.containsAnimal %></td>
-                            <% for (let l of d.labels) { %>
-                                <td><%= l.description %></td>
-                                <td><%= (l.score * 100).toFixed(2) %>%</td>
-                            <% } %>
-
-                        </tr>
+                    <tr>
+                      <td><button onclick="showImage('<%= d.path %>')">View <%= d.path %></button></td>
+                      <td><%= formatDate(d.date) %></td> 
+                      <td><%= d.containsAnimal %></td>
+                      <% for (let l of d.labels) { %>
+                      <td><%= l.description %>, <%= (l.score * 100).toFixed(2) %>%</td>
+                      <% } %>        
+                    </tr>
                     <% } %>
-                </table>
+                  </table>
+                  
   
                 
                 </div>

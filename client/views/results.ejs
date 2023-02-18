@@ -4,7 +4,6 @@
     <meta charset="utf-8">
     <title> Interactive Login Form</title>
     <link rel="stylesheet" href="results.css">
-    <script src ="admin-login.js"> </script>
 </head>
 
 <body>
@@ -42,23 +41,24 @@
 
         <!-- left side -->
         <div class="main__content">
-
-          <% if (image.containsAnimal) { %>
-            <p><strong>This image contains an animal</strong></p>
-          <% } else { %>
-            <p><strong>This image doesn't contain an animal</strong></p>
-          <% } %>
+          <li>
+            <% if (image.containsAnimal) { %>
+              <p><strong>This image contains an animal</strong></p>
+            <% } else { %>
+              <p><strong>This image doesn't contain an animal</strong></p>
+            <% } %>
+          </li>
 
           <% for (let label of image.labels) { %>
             <li>
               <%= label.description %>
             
               <% if (label.score > 0.9) { %>
-                <span style="color: green">High</span>
+                <span style="color: green"><strong>(High)</strong></span>
               <% } else if (label.score > 0.7) { %> 
-                <span style="color: yellow">Medium</span>
+                <span style="color: rgb(255, 204, 0)"><strong>(Medium)</strong></span>
               <% } else { %> 
-                <span style="color: red">Low</span>
+                <span style="color: red"><strong>(Low)</strong></span>
               <% } %>
               
             </li>
@@ -75,8 +75,6 @@
     <br>
   <% } %>
    
-  
-    
 
 </body>
 </html>
