@@ -75,8 +75,8 @@ function clearFolder() {
 
 function saveImages() {
 
-    const sourceFolder = '/Users/liam/Documents/GitHub/SoftwareProjects_AnimalRecognition/client/public/userImages';
-    const destFolder = '/Users/liam/Documents/GitHub/SoftwareProjects_AnimalRecognition/server/dataStore/images';
+    const sourceFolder = path.join(__dirname, '../../client/public/userImages');
+    const destFolder = path.join(__dirname, 'images');
     
     // read the files in the source folder
     fs.readdir(sourceFolder, (err, files) => {

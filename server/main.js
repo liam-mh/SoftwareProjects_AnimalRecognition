@@ -22,7 +22,8 @@ app.set("views", path.join(__dirname, "../client/views"));
 const multer = require('multer');
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, '/Users/liam/Documents/GitHub/SoftwareProjects_AnimalRecognition/client/public/userImages');
+        const destinationPath = path.join(__dirname, '../client/public/userImages');
+        cb(null, destinationPath);
     },
     filename: (req, file, cb) => {
         console.log('Image uploaded:', file.originalname);
