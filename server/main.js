@@ -8,6 +8,8 @@ const app = express();
 
 // middleware for file locations
 app.use(express.static('../client/public'));
+app.use('/images', express.static(path.join(__dirname, 'dataStore', 'images')));
+
 
 // built in express, looks at body of post requests
 app.use(express.urlencoded({extended: true}))
@@ -20,15 +22,18 @@ app.set("views", path.join(__dirname, "../client/views"));
 const multer = require('multer');
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, '/Users/liam/Documents/GitHub/SoftwareProjects_AnimalRecognition/client/public/userImages');
+        const destinationPath = path.join(__dirname, '../client/public/userImages');
+        cb(null, destinationPath);
     },
     filename: (req, file, cb) => {
-        console.log(file)
+        console.log('Image uploaded:', file.originalname);
         cb(null, Date.now() + path.extname(file.originalname))
     }
-})
+});
+
 const upload = multer({storage: storage});
 
+// dataStore methods
 const ds = require('./dataStore/dataStore.js');
 
 // -----------------
@@ -36,26 +41,32 @@ const ds = require('./dataStore/dataStore.js');
 
 // landing
 app.get('/', (req, res) => {
+    ds.clearFolder();
     res.render("index");
 })
 // upload image button
 app.post('/upload', upload.single("image"), (req, res) => {
-    console.log('image uploaded');
     res.redirect('/results');
 })
 
 
 // results
+const getImageLabels = require('./visionAPI/cloud.js')
+const writeToFile = require('./dataStore/currentSearch.js');
 app.get('/results', async (req, res) => { 
-    const getImageLabels = require('./visionAPI/cloud.js')
-    const writeToFile = require('./dataStore/currentSearch.js');
-    const imageData = await getImageLabels();
-    res.render("results", {images: imageData});
-    writeToFile('currentSearch.json' ,imageData);
-    // get user validation
-    //writeToFile('currentSearch.json', updatedImageData);
-    //ds.save(); // save all 
+    try {
+        const imageData = await getImageLabels();
+        await writeToFile('currentSearch.json' ,imageData);
+        res.render("results", {images: imageData});
+        ds.save(); // save all 
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('An error occurred.');
+    }
 });
+
+
+// ---------------
 
 // Define the formatDate function
 function formatDate(dateString) {
