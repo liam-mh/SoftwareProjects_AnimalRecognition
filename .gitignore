@@ -128,3 +128,9 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# Google API key
+server/visionAPI/key.json
+
+# Single search data
+server/dataStore/currentSearch.json
