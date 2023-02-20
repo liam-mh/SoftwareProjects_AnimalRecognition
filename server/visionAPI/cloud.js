@@ -20,12 +20,14 @@ async function readDirectory(userImagePath, imageArr) {
         fs.readdir(userImagePath, (err, files) => {
             if (err) reject(err);
             files.forEach(file => {
-                imageArr.push({
-                    path: file, 
-                    date: currentDate,
-                    containsAnimal: true,
-                    labels: []
-                });
+                if (file !== ".gitkeep") {
+                    imageArr.push({
+                        path: file, 
+                        date: currentDate,
+                        containsAnimal: true,
+                        labels: []
+                    });
+                }
             });
             resolve();
         });

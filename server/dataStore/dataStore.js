@@ -7,8 +7,8 @@ const path = require('path');
 
 function saveToDataStore() {
 
-    const sourceFile = '/Users/liam/Documents/GitHub/SoftwareProjects_AnimalRecognition/server/dataStore/currentSearch.json';
-    const destinationFile = '/Users/liam/Documents/GitHub/SoftwareProjects_AnimalRecognition/server/dataStore/dataStore.json';
+    const sourceFile = './dataStore/currentSearch.json';
+    const destinationFile = './dataStore/dataStore.json';
 
     // read the source file
     fs.readFile(sourceFile, 'utf8', (err, data) => {
@@ -64,10 +64,12 @@ function clearFolder() {
     // Get an array of file names in the folder
     const fileNames = fs.readdirSync(folderPath);
   
-    // Delete each file in the folder
+    // Delete each file in the folder, except for .gitkeep
     fileNames.forEach((fileName) => {
-      const filePath = path.join(folderPath, fileName);
-      fs.unlinkSync(filePath);
+        if (fileName !== ".gitkeep") {
+            const filePath = path.join(folderPath, fileName);
+            fs.unlinkSync(filePath);
+        }
     });
 
     console.log('userImages cleared')
