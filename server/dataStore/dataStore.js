@@ -59,7 +59,7 @@ function saveToDataStore() {
  * Moving images to dataStore
  */
 function clearFolder() {
-    const folderPath = '/Users/liam/Documents/GitHub/SoftwareProjects_AnimalRecognition/client/public/userImages';
+    const folderPath = path.join(__dirname, '../../client/public/userImages');
 
     // Get an array of file names in the folder
     const fileNames = fs.readdirSync(folderPath);
