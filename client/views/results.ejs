@@ -4,17 +4,15 @@
     <meta charset="utf-8">
     <title> Interactive Login Form</title>
     <link rel="stylesheet" href="results.css">
-    <script src ="admin-login.js"> </script>
 </head>
 
 <body>
-
   <!--- nav bar --->
   
     <header>
       <nav class="navbar">
           <div class="navbar__container">
-            <a href="/" id="navbar__logo"><i class="fas fa-gem"></i><img src="frontEndImages/elanco.png" alt="Logo" /></a>
+            <a href="/" id="navbar__logo"></i><img src="frontEndImages/elanco.png" alt="Logo" /></a>
             <div class="navbar__toggle" id="mobile-menu">
               <span class="bar"></span> <span class="bar"></span>
               <span class="bar"></span>
@@ -22,14 +20,7 @@
             <ul class="navbar__menu">
               <li class="navbar__item">
                 <a href="/" class="navbar__links">Home</a>
-              </li>
-              <li class="navbar__item">
-                <a href="/tech.html" class="navbar__links">Tech</a>
-              </li>
-              <li class="navbar__item">
-                <a href="/" class="navbar__links">API</a>
-              </li>
-              <li class="navbar__item"><a href="/login" class="navbar__links">Sign Up</a></li>
+              <li class="navbar__item"><a href="/login" class="navbar__links">Log In</a></li>
             </ul>
           </div>
         </nav>
@@ -50,23 +41,24 @@
 
         <!-- left side -->
         <div class="main__content">
-
-          <% if (image.containsAnimal) { %>
-            <p><strong>This image contains an animal</strong></p>
-          <% } else { %>
-            <p><strong>This image doesn't contain an animal</strong></p>
-          <% } %>
+          <li>
+            <% if (image.containsAnimal) { %>
+              <p><strong>This image contains an animal</strong></p>
+            <% } else { %>
+              <p><strong>This image doesn't contain an animal</strong></p>
+            <% } %>
+          </li>
 
           <% for (let label of image.labels) { %>
             <li>
               <%= label.description %>
             
               <% if (label.score > 0.9) { %>
-                <span style="color: green">High</span>
+                <span style="color: green"><strong>(High)</strong></span>
               <% } else if (label.score > 0.7) { %> 
-                <span style="color: yellow">Medium</span>
+                <span style="color: rgb(255, 204, 0)"><strong>(Medium)</strong></span>
               <% } else { %> 
-                <span style="color: red">Low</span>
+                <span style="color: red"><strong>(Low)</strong></span>
               <% } %>
               
             </li>
@@ -83,8 +75,6 @@
     <br>
   <% } %>
    
-  
-    
 
 </body>
 </html>

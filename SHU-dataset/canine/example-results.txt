@@ -1,0 +1,7 @@
+dog
+companion dog
+poodle
+puppy
+labrador
+borzoi
+german shepherd
