@@ -1,0 +1,59 @@
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Test</title>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    </head>
+
+    <body>
+      
+        <div>
+            <canvas id="mostCommonChart"></canvas>
+        </div>
+
+          
+        <script>
+            const labels = JSON.parse('<%- JSON.stringify(label) %>');
+            const data = JSON.parse('<%- JSON.stringify(frequency) %>');    
+
+            const canvas = document.getElementById('mostCommonChart');
+            const ctx = canvas.getContext('2d');
+            const backgroundColour = [];
+
+            data.forEach((element) => {
+                const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+                gradient.addColorStop(0, `rgba(100, 223, 223)`);
+                gradient.addColorStop(1, `rgba(94, 96, 206)`);
+                backgroundColour.push(gradient);
+            });
+
+            try {
+                // Chart creation code
+                const chart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'label detections',
+                            data: data,
+                            borderWidth: 1,
+                            backgroundColor: backgroundColour
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            } catch (error) {
+                // Log any errors that occur
+                console.error('Error creating chart:', error);
+            }
+        </script>
+          
+
+    </body>
+</html>

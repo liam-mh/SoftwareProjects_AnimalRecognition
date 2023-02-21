@@ -73,6 +73,7 @@ function clearFolder() {
     });
 
     console.log('userImages cleared')
+    getMostCommonAnimal();
 };
 
 function saveImages() {
@@ -126,10 +127,46 @@ function readJsonFileToArray(fileName) {
     }
 }
 
+function getMostCommonAnimal() {
+
+    const data = readJsonFileToArray('dataStore.json');
+    const animals = readJsonFileToArray('animals.json');
+    const animalFrequency = {};
+  
+    for (let image of data) {
+        // Check if animal is in image
+        const animalLabels = image.labels.filter(label => {
+            return animals.includes(label.description);
+        });
+  
+        // Count the frequency of each animal label
+        for (let label of animalLabels) {
+            if (animalFrequency[label.description]) {
+                animalFrequency[label.description]++;
+            } else {
+                animalFrequency[label.description] = 1;
+            }
+        };
+    }
+  
+    // Convert the animal frequency object into an array of objects with 'label' and 'frequency' properties
+    const animalFrequencyArray = Object.entries(animalFrequency).map(([label, frequency]) => ({
+        label,
+        frequency
+    }));
+  
+    // Sort the array by frequency in descending order
+    animalFrequencyArray.sort((a, b) => b.frequency - a.frequency);
+  
+    return animalFrequencyArray;
+};
+  
+
 module.exports = {
     save,
     readJsonFileToArray,
-    clearFolder
+    clearFolder,
+    getMostCommonAnimal
 };
 
 

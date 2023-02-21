@@ -48,7 +48,7 @@ async function getImageLabels() {
         image.labels = labels;
 
         // check if animal is in image and update bool if not
-        const animals = JSON.parse(fs.readFileSync(path.join(__dirname, 'animals.json'), 'utf8'));
+        const animals = JSON.parse(fs.readFileSync(path.join(__dirname, '../dataStore/animals.json'), 'utf8'));
         const animalLabels = labels.filter(label => {
             for (let animal of animals) {
                 if (label.description === animal) {

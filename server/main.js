@@ -84,18 +84,34 @@ app.get('/login', (req, res) => {
 
 // admin index
 app.get('/admin', (req, res) => {
+    
     const allData = ds.readJsonFileToArray('dataStore.json');
-    if (allData) {console.log('Data loaded from store')};
-    res.render("admin-index", {data: allData, formatDate: formatDate});
+    const animalFrequencyArray = ds.getMostCommonAnimal();
+    const label = animalFrequencyArray.map(obj => obj.label);
+    const frequency = animalFrequencyArray.map(obj => obj.frequency);
+
+    res.render("admin-index", {
+        data: allData, 
+        formatDate: formatDate,
+        label: label,
+        frequency: frequency
+    });
+})
+
+
+app.get('/test', (req, res) => {
+    const animalFrequencyArray = ds.getMostCommonAnimal();
+    const label = animalFrequencyArray.map(obj => obj.label);
+    const frequency = animalFrequencyArray.map(obj => obj.frequency);
+
+    res.render("test", {
+        label: label,
+        frequency: frequency
+    });
 })
 
 // port num for localhost
 app.listen(8000) 
 
-
-var loadFile = function(event) {
-	var image = document.getElementById('output');
-	image.src = URL.createObjectURL(event.target.files[0]);
-};
 
  
