@@ -5,7 +5,7 @@ const vision = require('@google-cloud/vision');
     
 // Creates a client
 const client = new vision.ImageAnnotatorClient({
-    keyFilename: "visionAPI/key.json"
+    keyFilename: "../../key.json"
 });    
 
 // Path to users images
