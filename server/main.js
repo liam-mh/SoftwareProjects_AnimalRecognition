@@ -7,7 +7,7 @@ const { dirname } = require('path');
 const app = express();
 
 // middleware for file locations
-app.use(express.static('../client/public'));
+app.use(express.static(path.join(__dirname, '../client/public')));
 app.use('/images', express.static(path.join(__dirname, 'dataStore', 'images')));
 
 
