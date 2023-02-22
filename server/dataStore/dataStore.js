@@ -82,13 +82,15 @@ function saveImages() {
     
     // read the files in the source folder
     fs.readdir(sourceFolder, (err, files) => {
-        if (err) {
-            console.error(err);
-            return;
-        }
+        
+        if (err) {console.error(err); return;}
     
         // move each file to the destination folder
         files.forEach(file => {
+
+            // skip the .gitkeep file
+            if (file === '.gitkeep') {return;}
+
             const sourcePath = path.join(sourceFolder, file);
             const destPath = path.join(destFolder, file);
     

@@ -130,6 +130,7 @@ dist
 .pnp.*
 
 # Google API key
+key.json
 server/visionAPI/key.json
 
 # Single search data

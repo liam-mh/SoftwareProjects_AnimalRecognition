@@ -1,15 +1,17 @@
 // *** key.json must be placed inside '/visionAPI' folder to use ***
 
+const path = require('path');
+
 // Imports the Google Cloud client library
 const vision = require('@google-cloud/vision');
     
 // Creates a client
+key = path.join(__dirname, '../../key.json');
 const client = new vision.ImageAnnotatorClient({
-    keyFilename: "../../key.json"
+    keyFilename: key
 });    
 
 // Path to users images
-const path = require('path');
 const userImagePath = path.join(__dirname, '../../client/public/userImages/');
 const fs = require("fs");
 
