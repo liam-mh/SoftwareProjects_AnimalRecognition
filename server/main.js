@@ -51,13 +51,15 @@ app.post('/upload', upload.single("image"), (req, res) => {
 
 
 // results
-const getImageLabels = require('./visionAPI/cloud.js')
+const cloud = require('./visionAPI/cloud.js')
 const writeToFile = require('./dataStore/currentSearch.js');
 app.get('/results', async (req, res) => { 
     try {
-        const imageData = await getImageLabels();
+        const imageData = await cloud.getImageLabels();
+        const animalInImage = await cloud.checkLabelsForAnimal(imageData[0].labels);
+        console.log(animalInImage);
         await writeToFile('currentSearch.json' ,imageData);
-        res.render("results", {images: imageData});
+        res.render("results", {images: imageData, animal: animalInImage });
         ds.save(); // save all 
     } catch (error) {
         console.error(error);

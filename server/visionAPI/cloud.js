@@ -15,7 +15,7 @@ const client = new vision.ImageAnnotatorClient({
 const userImagePath = path.join(__dirname, '../../client/public/userImages/');
 const fs = require("fs");
 
-// sub method
+// Setup array format and put the image in
 async function readDirectory(userImagePath, imageArr) {
     const currentDate = new Date();
     return new Promise((resolve, reject) => {
@@ -34,7 +34,21 @@ async function readDirectory(userImagePath, imageArr) {
             resolve();
         });
     });
-}
+};
+
+// Compares to animals.json
+function checkLabelsForAnimal(labels) {
+    const animals = JSON.parse(fs.readFileSync(path.join(__dirname, 'animals.json'), 'utf8'));
+    const animalLabels = labels.filter(label => {
+        for (let animal of animals) {
+            if (label.description === animal) {
+                return animal; // return the animal label when a match is found
+            }
+        }
+    });
+    return animalLabels.length > 0 ? animalLabels[0] : null; // return the first animal label found, or null if no matches
+};
+  
 
 // Return formatted array with labels
 async function getImageLabels() {
@@ -47,24 +61,20 @@ async function getImageLabels() {
         // Scan each image in public/userImages, add labels to array and bool
         const [result] = await client.labelDetection(path.join(userImagePath, image.path));
         const labels = result.labelAnnotations.map(label => ({ ...label, userThinksValid: true }));
-        image.labels = labels;
 
         // check if animal is in image and update bool if not
-        const animals = JSON.parse(fs.readFileSync(path.join(__dirname, 'animals.json'), 'utf8'));
-        const animalLabels = labels.filter(label => {
-            for (let animal of animals) {
-                if (label.description === animal) {
-                    return true;
-                }
-            }
-            return false;
-        });
-        image.containsAnimal = animalLabels.length > 0;
-        //console.log(image.containsAnimal);
+        image.labels = labels;
+        if (checkLabelsForAnimal(labels) === null) {
+            image.containsAnimal = false
+        };
+        console.log('Image contains animal:', image.containsAnimal);
     };
     
     return labelData;
-}
+};
 
-// Export function 
-module.exports = getImageLabels;
+// Export functions 
+module.exports = {
+    getImageLabels,
+    checkLabelsForAnimal,
+};

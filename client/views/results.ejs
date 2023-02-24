@@ -1,80 +1,108 @@
 <!DOCTYPE html>
 <html lan="en" and dir="Itr">
+
 <head>
     <meta charset="utf-8">
-    <title> Interactive Login Form</title>
-    <link rel="stylesheet" href="/results.css">
+    <title>Animal Recognition Results</title>
+    <link rel="stylesheet" href="/index.css">
 </head>
 
 <body>
-  <!--- nav bar --->
   
-    <header>
-      <nav class="navbar">
-          <div class="navbar__container">
-            <a href="/" id="navbar__logo"></i><img src="/frontEndImages/elanco.png" alt="Logo" /></a>
-            <div class="navbar__toggle" id="mobile-menu">
-              <span class="bar"></span> <span class="bar"></span>
-              <span class="bar"></span>
-            </div>
-            <ul class="navbar__menu">
-              <li class="navbar__item">
-                <a href="/" class="navbar__links">Home</a>
-              <li class="navbar__item"><a href="/login" class="navbar__links">Log In</a></li>
-            </ul>
+  <!-- Nav Bar -->
+  <header>
+    <nav class="navbar">
+       <div class="navbar__container">
+          <a href="/" id="navbar__logo"><img src="frontEndImages/elanco.png" alt="Logo" /></a>
+          <div class="navbar__toggle" id="mobile-menu">
+             <span class="bar"></span> <span class="bar"></span>
+             <span class="bar"></span>
           </div>
-        </nav>
+          <ul class="navbar__menu">
+             <li class="navbar__item">
+                <a href="/" class="navbar__links">Home</a>
+             </li>
+             <li class="navbar__item"><a href="/login" class="navbar__links">Log In</a></li>
+          </ul>
+       </div>
+    </nav>
   </header>
 
   <!-- body of results page -->
 
-  <h1>Results</h1>
 
-  <p>This page will display the labels from the Artificial Intelligence scanner, 
-    followed by how confident it is that it is correct.</p>
+  <div class="main__container">
+    <div class="main__content">
 
-  <% for (let image of images) { %>
-    <% var path = './userImages/' + image.path %>
+      <h1 style="position: absolute; top: 10%;">Results</h1>
 
-    <div class="main">
-      <div class="main__container">
+      <% for (let image of images) { %>
 
-        <!-- left side -->
-        <div class="main__content">
-          <li>
-            <% if (image.containsAnimal) { %>
-              <p><strong>This image contains an animal</strong></p>
-            <% } else { %>
-              <p><strong>This image doesn't contain an animal</strong></p>
-            <% } %>
-          </li>
+        <li style="position: absolute; top: 25%;">
+          <% if (image.containsAnimal) { %>
+            <% 
+              var color = 'red';
+              if (animal.score > 0.9) {
+                  color = 'green';
+              } else if (animal.score > 0.7) {
+                  color = 'orange';
+              }
+            %>
+            We are <strong><span style="color: <%= color %>;"><%= (animal.score * 100).toFixed(2) %>%</span></strong> sure that this image contains a <strong><%= animal.description %></strong>
+          <% } else { %>
+            We don't think that this image contains an animal
+          <% } %>  
+        </li>
 
-          <% for (let label of image.labels) { %>
-            <li>
-              <%= label.description %>
-            
-              <% if (label.score > 0.9) { %>
-                <span style="color: green"><strong>(High)</strong></span>
-              <% } else if (label.score > 0.7) { %> 
-                <span style="color: rgb(255, 204, 0)"><strong>(Medium)</strong></span>
-              <% } else { %> 
-                <span style="color: red"><strong>(Low)</strong></span>
+        <div class="results_box">
+          <img src="<%= './userImages/' + image.path %>" alt="pic" style="max-width: 60%; height: 100%; display: block; float: right; mask-image: linear-gradient(to left, rgba(0, 0, 0, 1.0) 60%, transparent 100%);">
+
+          <div style="position: absolute; top: 5px; left: 0px; z-index: 1; width: 200px;">
+            <ul>
+              <li><strong>Above 90%<br><span style="color: green">(High)</span></strong></li>
+              <% for (let i = 0; i < image.labels.length; i++) { %>
+                <% const label = image.labels[i]; %>
+                <% if (label.score > 0.9) { %>
+                  <li><%= label.description %></li>
+                <% } %>
               <% } %>
-              
-            </li>
-          <% } %>
-        
-        </div>
+            </ul>
+          </div>
 
-        <!-- right side -->
-        <div class="main__img--container">
-          <img id="main__img" src="<%= path %>" alt="pic" id="main__img" width="300" height="300">
-        </div>
-      </div>
-    </div>
-    <br>
-  <% } %>
-   
+          <div style="position: absolute; top: 5px; left: 220px; z-index: 1; width: 200px;">
+            <ul>
+              <li><strong>Above 70%<br><span style="color: orange">(Medium)</span></strong></li>
+              <% for (let i = 0; i < image.labels.length; i++) { %>
+                <% const label = image.labels[i]; %>
+                <% if (label.score > 0.7 && label.score <= 0.9) { %>
+                  <li><%= label.description %></li>
+                <% } %>
+              <% } %>
+            </ul>
+          </div>
+
+          <div style="position: absolute; top: 5px; left: 430px; z-index: 1; width: 200px;">
+            <ul>
+              <li><strong>Below 70%<br><span style="color: red">(Low)</span></strong></li>
+              <% for (let i = 0; i < image.labels.length; i++) { %>
+                <% const label = image.labels[i]; %>
+                <% if (label.score <= 0.7) { %>
+                  <li><%= label.description %></li>
+                <% } %>
+              <% } %>
+            </ul>
+          </div>
+        </div> <!-- results_box -->
+
+      <% } // Let image of images %> 
+
+    </div> <!-- main__content -->
+  </div> <!-- main__container -->
+ 
+  <div class="ocean">
+    <div class="wave"></div>
+    <div class="wave"></div>
+  </div>
 
 </body>
 </html>

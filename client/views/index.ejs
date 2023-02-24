@@ -1,63 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
-   <head>
-      <meta charset="UTF-8">
-      <title>Login Form</title>
-      <link rel="stylesheet"  href="/index.css">
-      <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css">
-   </head>
-   <body>
-    <header>
-      <nav class="navbar">
-          <div class="navbar__container">
-            <a href="#" id="navbar__logo"><img src="/frontEndImages/elanco.png" alt="Logo" /></a>
-            <div class="navbar__toggle" id="mobile-menu">
-              <span class="bar"></span> <span class="bar"></span>
-              <span class="bar"></span>
-            </div>
-            <ul class="navbar__menu">
-              <li class="navbar__item">
-                <a href="/" class="navbar__links">Home</a>
-              </li>
-              <li class="navbar__item"><a href="/login" class="navbar__links">Log In</a></li>
-            </ul>
+
+<head>
+  <meta charset="UTF-8">
+  <title>AI - Animal Recognition</title>
+  <link rel="stylesheet"  href="/index.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css">
+</head>
+
+<body>
+
+  <!-- Nav Bar -->
+  <header>
+    <nav class="navbar">
+       <div class="navbar__container">
+          <a href="/" id="navbar__logo"><img src="frontEndImages/elanco.png" alt="Logo" /></a>
+          <div class="navbar__toggle" id="mobile-menu">
+             <span class="bar"></span> <span class="bar"></span>
+             <span class="bar"></span>
           </div>
-        </nav>
-        <div class="main">
-            <div class="main__container">
-              <div class="main__content">
-                <h2>Animal Recognition AI</h2>
-                <li>1. Select Files of animals you would like to scan</li>
-                <li>2. Press the scan button </li>
-                <li>3. Recieve the results</li> 
+          <ul class="navbar__menu">
+             <li class="navbar__item">
+                <a href="/" class="navbar__links">Home</a>
+             </li>
+             <li class="navbar__item"><a href="/login" class="navbar__links">Log In</a></li>
+          </ul>
+       </div>
+    </nav>
+  </header>
 
-                <div class="box">
-                  <label>Upload File </label>
+  <div class="main">
+    <div class="main__container">
+      <div class="main__content">
 
-                  <form method="POST" action="/upload" enctype="multipart/form-data">
-                    <input type="file" accept="image/jpeg, image/png, image/jpg" name="image">
-                    <button type="submit" class="main2__btn">Scan</button>
-                  </form>
-                </div>
-              </div>
-            </div>
+        <h1>Animal Recognition AI</h1>
+        <li>1. Select Files of animals you would like to scan</li>
+        <li>2. Press the scan button </li>
+        <li>3. Recieve the results</li> 
+
+        <div class="box">
+          <label>Upload File </label>
+          <form method="POST" action="/upload" enctype="multipart/form-data">
+            <input type="file" accept="image/jpeg, image/png, image/jpg" name="image">
+            <button type="submit" class="main2__btn">Scan</button>
+          </form>
         </div>
-        
-      </script>
-      <div class="ocean">
-        <div class="wave"></div>
-        <div class="wave"></div>
+
       </div>
-   </body>
-
-
-   <form method="POST" action="/upload" enctype="multipart/form-data">
-     <input type="file" name="image">
-     <input type="submit">
-   </form>
+    </div>
+  </div>
       
-        
+  <div class="ocean">
+    <div class="wave"></div>
+    <div class="wave"></div>
+  </div>
 
-      </body>
-      </html>
+</body>
+
+</html>
 

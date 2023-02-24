@@ -5,13 +5,21 @@
 const fs = require('fs');
 
 function writeToFile(fileName, data) {
+    const filePath = './dataStore/' + fileName;
     try {
-        fs.writeFileSync('./dataStore/'+fileName, JSON.stringify(data), 'utf-8');
-        console.log('Data saved to:', fileName);
+        if (!fs.existsSync(filePath)) {
+            fs.mkdirSync('./dataStore');
+            fs.writeFileSync(filePath, JSON.stringify(data), 'utf-8');
+            console.log('File created:', fileName);
+        } else {
+            fs.writeFileSync(filePath, JSON.stringify(data), 'utf-8');
+            console.log('Data saved to:', fileName);
+        }
     } catch (error) {
         console.error(error);
     }
 }
+
 
 module.exports = writeToFile;
 

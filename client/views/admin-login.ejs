@@ -1,59 +1,67 @@
-
 <html lang="en">
-   <head>
-      <meta charset="UTF-8">
-      <title>Login Form</title>
-      <link rel="stylesheet" href="/style.css">
-      <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css">
-   </head>
-   <body>
-    <header>
+   
+<head>
+   <meta charset="UTF-8">
+   <title>Admin Login</title>
+   <link rel="stylesheet" href="/style.css">
+   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css">
+</head>
+
+<body>
+
+   <!-- Nav Bar -->
+   <header>
       <nav class="navbar">
-          <div class="navbar__container">
-            <a href="#" id="navbar__logo"><img src="/frontEndImages/elanco.png" alt="Logo" /></a>
+         <div class="navbar__container">
+            <a href="/" id="navbar__logo"><img src="frontEndImages/elanco.png" alt="Logo" /></a>
             <div class="navbar__toggle" id="mobile-menu">
-              <span class="bar"></span> <span class="bar"></span>
-              <span class="bar"></span>
+               <span class="bar"></span> <span class="bar"></span>
+               <span class="bar"></span>
             </div>
             <ul class="navbar__menu">
-              <li class="navbar__item">
-                <a href="/" class="navbar__links">Home</a>
-              </li>
-              <li class="navbar__item"><a href="/login" class="navbar__links">Log In</a></li>
+               <li class="navbar__item">
+                  <a href="/" class="navbar__links">Home</a>
+               </li>
+               <li class="navbar__item"><a href="/login" class="navbar__links">Log In</a></li>
             </ul>
-          </div>
-        </nav>
-  </header>
-      <div class="center">
-         <div class="header">
-            Login Form
          </div>
-         <form action="/admin">
-            <input type="text" placeholder="Email or Username">
-            <i class="far fa-envelope"></i>
-            <input id="pswrd" type="password" placeholder="Password">
-            <i class="fas fa-lock" onclick="show()"></i>
-            <input type="submit" value="Sign in">
-            <a href="#">Forgot Password?</a>
-         </form>
+      </nav>
+   </header>
+
+   <div class="center">
+      <div class="header">
+         Login Form
       </div>
-      <script>
-         function show(){
-          var pswrd = document.getElementById('pswrd');
-          var icon = document.querySelector('.fas');
-          if (pswrd.type === "password") {
-           pswrd.type = "text";
-           pswrd.style.marginTop = "20px";
-           icon.style.color = "#7f2092";
-          }else{
-           pswrd.type = "password";
-           icon.style.color = "grey";
-          }
+      <form action="/admin">
+         <input type="text" placeholder="Email or Username">
+         <i class="far fa-envelope"></i>
+         <input id="pswrd" type="password" placeholder="Password">
+         <i class="fas fa-lock" onclick="show()"></i>
+         <input type="submit" value="Sign in">
+         <a href="#">Forgot Password?</a>
+      </form>
+   </div>
+
+   <script>
+      function show(){
+         var pswrd = document.getElementById('pswrd');
+         var icon = document.querySelector('.fas');
+         if (pswrd.type === "password") {
+            pswrd.type = "text";
+            pswrd.style.marginTop = "20px";
+            icon.style.color = "#7f2092";
+         } else {
+            pswrd.type = "password";
+            icon.style.color = "grey";
          }
-      </script>
-      <div class="ocean">
-        <div class="wave"></div>
-        <div class="wave"></div>
-      </div>
-   </body>
+      }
+   </script>
+
+   <div class="ocean">
+      <div class="wave"></div>
+      <div class="wave"></div>
+   </div>
+
+</body>
+
 </html>

@@ -88,47 +88,6 @@ a {
 	list-style-type: none;  
   }
 
-  .main2__btn {
-	font-size: 1rem;
-	background-image: linear-gradient(to top, #04243C 0%,#04243C 100%);
-	padding: 14px 32px;
-	border: none;
-	border-radius: 4px;
-	color: white;
-	margin-top: 13rem;
-	cursor: pointer;
-	position: relative;
-	transition: all 0.35s;
-	outline: none;
-	width: 30%;
-  }
-  
-  .main2__btn a {
-	position: relative;
-	z-index: 2;
-	color: #fff;
-	text-decoration: none;
-  }
-
-  .main2__btn:after {
-	position: absolute;
-	content: '';
-	top: 0;
-	left: 0;
-	width: 0;
-	height: 100%;
-	background: #4837ff;
-	transition: all 0.35s;
-	border-radius: 4px;
-  }
-  
-  .main2__btn:hover {
-	color: white;
-  }
-  
-  .main2__btn:hover:after {
-	width: 100%;
-  }
   h1{
     font-size: 3rem;
     background-color: #04243C;
@@ -398,7 +357,7 @@ a {
 	z-index: 1;
 	width: 100%;
 	max-width: 1300px;
-  min-width: 1200px;
+    min-width: 1200px;
 	padding-right: 50px;
 	padding-left: 50px;
 	
