@@ -3,9 +3,10 @@
  */
 
 const fs = require('fs');
+const path = require('path');
 
 function writeToFile(fileName, data) {
-    const filePath = './dataStore/' + fileName;
+    const filePath = path.join(__dirname + '/' + fileName);
     try {
         if (!fs.existsSync(filePath)) {
             fs.mkdirSync('./dataStore');
@@ -19,7 +20,6 @@ function writeToFile(fileName, data) {
         console.error(error);
     }
 }
-
 
 module.exports = writeToFile;
 

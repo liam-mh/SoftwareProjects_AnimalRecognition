@@ -80,25 +80,29 @@
               }
             </script>
           
-            <table>
-              <tr>
-                <th>Image</th>
-                <th>Search Date</th> 
-                <th>Image Contains Animal</th>
-                <th>AI Labels, with confidence</th>
-                <th>View Image</th>
-              </tr>
-              <% for (let d of data) { %>
-              <tr>
-                <td><button onclick="showImage('<%= d.path %>')">View <%= d.path %></button></td>
-                <td><%= formatDate(d.date) %></td> 
-                <td><%= d.containsAnimal %></td>
-                <% for (let l of d.labels) { %>
-                <td><%= l.description %>, <%= (l.score * 100).toFixed(2) %>%</td>
-                <% } %>        
-              </tr>
-              <% } %>
-            </table>
+            <% if (data.length > 0) { %>
+              <table>
+                <tr>
+                  <th>Image</th>
+                  <th>Search Date</th> 
+                  <th>Image Contains Animal</th>
+                  <th>AI Labels, with confidence</th>
+                  <th>View Image</th>
+                </tr>
+                <% for (let d of data) { %>
+                <tr>
+                  <td><button onclick="showImage('<%= d.path %>')">View <%= d.path %></button></td>
+                  <td><%= formatDate(d.date) %></td> 
+                  <td><%= d.containsAnimal %></td>
+                  <% for (let l of d.labels) { %>
+                  <td><%= l.description %>, <%= (l.score * 100).toFixed(2) %>%</td>
+                  <% } %>        
+                </tr>
+                <% } %>
+              </table>
+            <% } else { %>
+              <li>No user data to display</li>
+            <% } %>
             
           </div>
         </div>

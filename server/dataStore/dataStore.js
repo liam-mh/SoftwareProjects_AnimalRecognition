@@ -7,8 +7,8 @@ const path = require('path');
 
 function saveToDataStore() {
 
-    const sourceFile = './dataStore/currentSearch.json';
-    const destinationFile = './dataStore/dataStore.json';
+    const sourceFile = path.join(__dirname + '/currentSearch.json');
+    const destinationFile = path.join(__dirname + '/dataStore.json');
 
     // read the source file
     fs.readFile(sourceFile, 'utf8', (err, data) => {
@@ -48,7 +48,7 @@ function saveToDataStore() {
                 // write the merged data to the destination file
                 fs.writeFile(destinationFile, JSON.stringify(mergedData), (err) => {
                     if (err) throw err;
-                    console.log('Data appended to', destinationFile);
+                    console.log('Data from: /currentSearch.json saved to: /dataStore.json');
                 });
             }
         });
@@ -120,8 +120,11 @@ function readJsonFileToArray(fileName) {
         const dataPath = path.join(__dirname, fileName);
         const jsonData = fs.readFileSync(dataPath, 'utf-8');
         const data = JSON.parse(jsonData);
-        console.log('Data read from:', fileName);
-        //console.log(data);
+        if (data && data.length > 0) {
+            console.log('Data read from:', fileName);
+        } else {
+            console.log('Data read from:', fileName, 'is empty');
+        }
         return data;
     } catch (err) {
         console.error(err);

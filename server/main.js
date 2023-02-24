@@ -57,7 +57,6 @@ app.get('/results', async (req, res) => {
     try {
         const imageData = await cloud.getImageLabels();
         const animalInImage = await cloud.checkLabelsForAnimal(imageData[0].labels);
-        console.log(animalInImage);
         await writeToFile('currentSearch.json' ,imageData);
         res.render("results", {images: imageData, animal: animalInImage });
         ds.save(); // save all 
@@ -87,17 +86,10 @@ app.get('/login', (req, res) => {
 // admin index
 app.get('/admin', (req, res) => {
     const allData = ds.readJsonFileToArray('dataStore.json');
-    if (allData) {console.log('Data loaded from store')};
     res.render("admin-index", {data: allData, formatDate: formatDate});
 })
 
 // port num for localhost
 app.listen(8000) 
-
-
-var loadFile = function(event) {
-	var image = document.getElementById('output');
-	image.src = URL.createObjectURL(event.target.files[0]);
-};
 
  
