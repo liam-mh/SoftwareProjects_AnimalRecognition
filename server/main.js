@@ -43,11 +43,11 @@ const ds = require('./dataStore/dataStore.js');
 app.get('/', (req, res) => {
     ds.clearFolder();
     res.render("index");
-})
+});
 // upload image button
 app.post('/upload', upload.single("image"), (req, res) => {
     res.redirect('/results');
-})
+});
 
 
 // results
@@ -76,20 +76,42 @@ function formatDate(dateString) {
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
     const year = date.getFullYear().toString();
     return `${day}/${month}/${year}`;
-}
+};
 
 // admin login 
 app.get('/login', (req, res) => {
     res.render("admin-login");
-})
+});
 
-// admin index
-app.get('/admin', (req, res) => {
+//  admin index
+ app.get('/admin', (req, res) => {
+
     const allData = ds.readJsonFileToArray('dataStore.json');
-    res.render("admin-index", {data: allData, formatDate: formatDate});
-})
+    const animalFrequencyArray = ds.getMostCommonAnimal();
+    const label = animalFrequencyArray.map(obj => obj.label);
+    const frequency = animalFrequencyArray.map(obj => obj.frequency);
+
+    res.render("admin-index", {
+        data: allData, 
+        formatDate: formatDate,
+        label: label,
+        frequency: frequency
+    });
+});
+
+
+app.get('/test', (req, res) => {
+    const animalFrequencyArray = ds.getMostCommonAnimal();
+    const label = animalFrequencyArray.map(obj => obj.label);
+    const frequency = animalFrequencyArray.map(obj => obj.frequency);
+
+    res.render("test", {
+        label: label,
+        frequency: frequency
+    });
+});
 
 // port num for localhost
-app.listen(8000) 
+app.listen(8000); 
 
  

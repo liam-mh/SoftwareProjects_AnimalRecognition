@@ -1,4 +1,4 @@
-// *** key.json must be placed inside '/visionAPI' folder to use ***
+// *** key.json must be placed inside directory to use ***
 
 const path = require('path');
 
