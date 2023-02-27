@@ -5,7 +5,6 @@
     <meta charset="utf-8">
     <title>Admin</title>
     <link rel="stylesheet" href="index.css">
-    <script src="../../server/admin-index.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
@@ -22,93 +21,67 @@
           </div>
           <ul class="navbar__menu">
              <li class="navbar__item">
-                <a href="/" class="navbar__links">Home</a>
+                <a href="/" class="navbar__links">Logout</a>
              </li>
-             <li class="navbar__item"><a href="/login" class="navbar__links">Log In</a></li>
           </ul>
        </div>
     </nav>
   </header>
 
-  <!-- END -->
-
   <div class="main">
-
     <div class="main__container">
 
       <div class="main__content2">
 
         <h1>Welcome to Admin</h1>
-        <p>Elanco is a global leader in animal health dedicated to innovating and delivering products and services to prevent and treat 
-            disease in farm animals and pets, creating value for farmers, pet owners, veterinarians, stakeholders, and society
-              as a whole.</p>
 
-        <button class="main__btn" onclick="filterTable('All Data')">All Data</button>
-        <button class="main__btn2" onclick="filterTable('No Animal')">No Animal</button>
-        <button class="main__btn3" onclick="filterTable('Most Common Animal')">Most Common Animal</button>
-
-        <style>
-          .popup {
-          position: fixed;
-          top: 30%;
-          left: 80%;
-          transform: translate(-50%, -50%);
-          max-width: 250px;
-          max-height: 250px;
-          background-color: white;
-          border: 1px solid black;
-          z-index: 999;
-          display: none;
-        }
-        .popup img {
-          max-width: 250px;
-          max-height: 250px;
-        }   
-        </style> 
+        <button class="main__btn" onclick="filterTable('All Data')">Filter by Contains Animal</button>
+        <button class="main__btn2" onclick="showContent()">Most Common Animal - Graph</button>
 
         <div class="popup">
           <img id="popupImage" src="" alt="popup image">
         </div>
       </div>
 
-      <div class="main__img--container">
-        <div class="box2">
+        <div class="admin_results_box">
 
-          <!-- Most common animal bar chart -->
-          <div>
+          <div id="content1">
+            <table id="myTable">
+              <tr>
+                <th>Image</th>
+                <th>Search Date</th> 
+                <th>Image Contains Animal</th>
+                <th>AI Labels, with confidence</th>
+              </tr>
+              <% for (let d of data) { %>
+                <tr class="data-row">
+                  <td><button onclick="showImage('<%= d.path %>')">View <%= d.path %></button></td>
+                  <td><%= formatDate(d.date) %></td> 
+                  <td><%= d.containsAnimal %></td>
+                  <td><button onclick="toggleLabels(this, <%= JSON.stringify(d.labels) %>)">Show Labels</button></td> 
+                </tr>
+              <% } %>
+            </table>
+          </div>
+
+          <!-- Most common animal bar chart --> 
+          <div id="content2" style="display:none; max-height: 100%; max-width: 100%;">
             <canvas id="mostCommonChart"></canvas>
           </div>
 
-          <table id="myTable">
-            <tr>
-              <th>Image</th>
-              <th>Search Date</th> 
-              <th>Image Contains Animal</th>
-              <th>AI Labels, with confidence</th>
-              <th>View Image</th>
-            </tr>
-            <% for (let d of data) { %>
-              <tr class="data-row">
-                <td><button onclick="showImage('<%= d.path %>')">View <%= d.path %></button></td>
-                <td><%= formatDate(d.date) %></td> 
-                <td><%= d.containsAnimal %></td>
-                <% for (let l of d.labels) { %>
-                <td><%= l.description %>, <%= (l.score * 100).toFixed(2) %>%</td>
-                <% } %>        
-              </tr>
-            <% } %>
-          </table>
-
         </div>
-    </div>
-
-  </div>    
+      </div>
+    </div>    
+  </div>  
 
   <div class="ocean">
       <div class="wave"></div>
       <div class="wave"></div>
   </div>
+
 </body>
+
+<!-- CSS and JS -->
 
 <!-- Chart.js - Unsure how to move to admin index yet -->
 <script>
@@ -152,16 +125,96 @@
 
 <script>
   function showImage(path) {
-    const imageUrl = '/images/' + path;
-    const image = document.getElementById('popupImage');
-    image.src = imageUrl;
-    const popup = document.querySelector('.popup');
-    popup.style.display = 'block';
-  };
+  const imageUrl = '/images/' + path;
+  const existingRow = event.target.closest('.data-row');
+  const existingNextRow = existingRow.nextSibling;
+  if (existingNextRow && existingNextRow.classList && existingNextRow.classList.contains('image-row')) {
+    // Image is already displayed, hide it and remove the row
+    existingNextRow.remove();
+    return;
+  }
+  const image = new Image();
+  image.src = imageUrl;
+  image.style.maxWidth = '300px';
+  image.style.maxHeight = '300px';
+  image.style.display = 'inline-block';
+  image.style.textAlign = 'left';
+  const newRow = document.createElement('tr');
+  newRow.classList.add('image-row');
+  const newCell = document.createElement('td');
+  newCell.colSpan = '2';
+  newCell.style.textAlign = 'center';
+  newCell.appendChild(image);
+  newRow.appendChild(newCell);
+  existingRow.parentNode.insertBefore(newRow, existingRow.nextSibling);
+}
+
 </script>
 
-  <!-- END -->
+<style>
+  .popup {
+  position: fixed;
+  top: 30%;
+  left: 80%;
+  transform: translate(-50%, -50%);
+  max-width: 250px;
+  max-height: 250px;
+  background-color: white;
+  border: 1px solid black;
+  z-index: 999;
+  display: none;
+}
+.popup img {
+  max-width: 250px;
+  max-height: 250px;
+}   
+</style> 
 
+<script>
+  function showContent() {
+    var content1 = document.getElementById("content1");
+    var content2 = document.getElementById("content2");
+    var button = document.querySelector('.main__btn2');
+    
+    if (content1.style.display === "none") {
+      content1.style.display = "block";
+      content2.style.display = "none";
+      button.innerHTML = "Most Common Animal - Graph";
+    } else {
+      content1.style.display = "none";
+      content2.style.display = "block";
+      button.innerHTML = "All Data";
+    }
+  };  
+</script>
 
+<script>
+  function toggleLabels(button, labels) {
+    // Get the current row
+    const row = button.parentNode.parentNode;
+    
+    // Check if the labels row already exists
+    const existingNextRow = row.nextElementSibling;
+    if (existingNextRow && existingNextRow.classList && existingNextRow.classList.contains('labels-row')) {
+      // Toggle the display of the labels row
+      existingNextRow.remove();
+      return;
+    } else {
+      // Create a new row for the labels
+      const labelsRow = document.createElement('tr');
+      labelsRow.classList.add('labels-row');
+      labelsRow.innerHTML = `
+        <td colspan="4">
+          <ul>
+            ${labels.map(l => `<li>${l.description}, ${(l.score * 100).toFixed(2)}%</li>`).join('')}
+          </ul>
+        </td>
+      `;
+      
+      // Insert the labels row after the current row
+      row.after(labelsRow);
+    }
+  };
+</script>
 
 </html>
