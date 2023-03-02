@@ -10,7 +10,6 @@ const app = express();
 app.use(express.static(path.join(__dirname, '../client/public')));
 app.use('/images', express.static(path.join(__dirname, 'dataStore', 'images')));
 
-
 // built in express, looks at body of post requests
 app.use(express.urlencoded({extended: true}))
 
@@ -35,6 +34,8 @@ const upload = multer({storage: storage});
 
 // dataStore methods
 const ds = require('./dataStore/dataStore.js');
+// cloud API methods
+const cloud = require('./visionAPI/cloud.js')
 
 // -----------------
 // ----- pages -----
@@ -51,14 +52,22 @@ app.post('/upload', upload.single("image"), (req, res) => {
 
 
 // results
-const cloud = require('./visionAPI/cloud.js')
 const writeToFile = require('./dataStore/currentSearch.js');
 app.get('/results', async (req, res) => { 
     try {
         const imageData = await cloud.getImageLabels();
         const animalInImage = await cloud.checkLabelsForAnimal(imageData[0].labels);
+        const imageObjects = await cloud.objectDetection(imageData[0].path);
+        const hazardsInObject = await cloud.checkObjectsForHazards(imageObjects);
         await writeToFile('currentSearch.json' ,imageData);
-        res.render("results", {images: imageData, animal: animalInImage });
+
+        res.render("results", {
+            images: imageData, 
+            animal: animalInImage,
+            objects: imageObjects,
+            hazards: hazardsInObject 
+        });
+
         ds.save(); // save all 
     } catch (error) {
         console.error(error);
