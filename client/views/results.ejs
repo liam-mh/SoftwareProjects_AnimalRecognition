@@ -36,6 +36,7 @@
     <div class="main__content">
 
       <h1 style="position: absolute; top: 10%;">Results</h1>
+      <button class="main__btn" style="right: 70px;" onclick="showContent()">Show Object Detection Results</button>
 
       <% for (let image of images) { %>
 
@@ -55,45 +56,78 @@
           <% } %>  
         </li>
 
-        <div class="results_box">
-          <img src="<%= './userImages/' + image.path %>" alt="pic" style="max-width: 60%; height: 100%; display: block; float: right; mask-image: linear-gradient(to left, rgba(0, 0, 0, 1.0) 60%, transparent 100%);">
+        <!-- Label data: toggle display with button -->
+        <div class="results_box" id="label_content">
+        
+            <img src="<%= './userImages/' + image.path %>" alt="pic" style="max-width: 60%; height: 100%; float: right; mask-image: linear-gradient(to left, rgba(0, 0, 0, 1.0) 80%, transparent 100%);">
+          
+            <div style="position: absolute; top: 5px; left: 0px; z-index: 1; width: 200px;">
+              <ul>
+                <li><strong>Above 90%<br><span style="color: green">(High)</span></strong></li>
+                <% for (let i = 0; i < image.labels.length; i++) { %>
+                  <% const label = image.labels[i]; %>
+                  <% if (label.score > 0.9) { %>
+                    <li><%= label.description %></li>
+                  <% } %>
+                <% } %>
+              </ul>
+            </div>
 
-          <div style="position: absolute; top: 5px; left: 0px; z-index: 1; width: 200px;">
+            <div style="position: absolute; top: 5px; left: 220px; z-index: 1; width: 200px;">
+              <ul>
+                <li><strong>Above 70%<br><span style="color: orange">(Medium)</span></strong></li>
+                <% for (let i = 0; i < image.labels.length; i++) { %>
+                  <% const label = image.labels[i]; %>
+                  <% if (label.score > 0.7 && label.score <= 0.9) { %>
+                    <li><%= label.description %></li>
+                  <% } %>
+                <% } %>
+              </ul>
+            </div>
+
+            <div style="position: absolute; top: 5px; left: 430px; z-index: 1; width: 200px;">
+              <ul>
+                <li><strong>Below 70%<br><span style="color: red">(Low)</span></strong></li>
+                <% for (let i = 0; i < image.labels.length; i++) { %>
+                  <% const label = image.labels[i]; %>
+                  <% if (label.score <= 0.7) { %>
+                    <li><%= label.description %></li>
+                  <% } %>
+                <% } %>
+              </ul>
+            </div>
+          </div>
+
+        </div> <!-- Label data -->
+
+        <!-- Object data: toggle display with button -->
+        <div class="results_box" id="object_content" style="display: none;">
+          
+          <img src="<%= './userImages/' + 'object_' + image.path %>" alt="pic" style="max-width: 60%; height: 100%; float: right; mask-image: linear-gradient(to left, rgba(0, 0, 0, 1.0) 80%, transparent 100%);">  
+
+          <div style="position: absolute; top: 5px; left: 0px; z-index: 1; width: 250px;">
             <ul>
-              <li><strong>Above 90%<br><span style="color: green">(High)</span></strong></li>
-              <% for (let i = 0; i < image.labels.length; i++) { %>
-                <% const label = image.labels[i]; %>
-                <% if (label.score > 0.9) { %>
-                  <li><%= label.description %></li>
+              <li><strong><span style="color: green">Animals Detected</span></strong></li>
+              <% for (let i = 0; i < objects.length; i++) { %>
+                  <li><%= objects[i].name %></li>
+              <% } %>
+            </ul>
+          </div>
+
+          <div style="position: absolute; top: 5px; left: 270px; z-index: 1; width: 250px;">
+            <ul>
+              <li><strong><span style="color: red">Hazards Detected</span></strong></li>
+              <% if (!hazards || hazards.length === 0) { %>
+                <li>No Hazards detected</li>
+              <% } else { %>
+                <% for (let i = 0; i < hazards.length; i++) { %>
+                  <li><%= hazards[i] %></li>
                 <% } %>
               <% } %>
             </ul>
           </div>
 
-          <div style="position: absolute; top: 5px; left: 220px; z-index: 1; width: 200px;">
-            <ul>
-              <li><strong>Above 70%<br><span style="color: orange">(Medium)</span></strong></li>
-              <% for (let i = 0; i < image.labels.length; i++) { %>
-                <% const label = image.labels[i]; %>
-                <% if (label.score > 0.7 && label.score <= 0.9) { %>
-                  <li><%= label.description %></li>
-                <% } %>
-              <% } %>
-            </ul>
-          </div>
-
-          <div style="position: absolute; top: 5px; left: 430px; z-index: 1; width: 200px;">
-            <ul>
-              <li><strong>Below 70%<br><span style="color: red">(Low)</span></strong></li>
-              <% for (let i = 0; i < image.labels.length; i++) { %>
-                <% const label = image.labels[i]; %>
-                <% if (label.score <= 0.7) { %>
-                  <li><%= label.description %></li>
-                <% } %>
-              <% } %>
-            </ul>
-          </div>
-        </div> <!-- results_box -->
+        </div>
 
       <% } // Let image of images %> 
 
@@ -106,4 +140,23 @@
   </div>
 
 </body>
+
+<script>
+  function showContent() {
+    var content1 = document.getElementById("label_content");
+    var content2 = document.getElementById("object_content");
+    var button = document.querySelector('.main__btn');
+    
+    if (content1.style.display === "none") {
+      content1.style.display = "block";
+      content2.style.display = "none";
+      button.innerHTML = "Show Object Detection Results";
+    } else {
+      content1.style.display = "none";
+      content2.style.display = "block";
+      button.innerHTML = "Show Label Detection Results";
+    }
+  };  
+</script>
+
 </html>
