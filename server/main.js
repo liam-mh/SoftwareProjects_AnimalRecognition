@@ -41,6 +41,7 @@ const ds = require('./dataStore/dataStore.js');
 
 // landing
 app.get('/', (req, res) => {
+    console.log("----------- Index")
     ds.clearFolder();
     res.render("index");
 });
@@ -55,6 +56,7 @@ const cloud = require('./visionAPI/cloud.js')
 const writeToFile = require('./dataStore/currentSearch.js');
 app.get('/results', async (req, res) => { 
     try {
+        console.log("----------- Results")
         const imageData = await cloud.getImageLabels();
         const animalInImage = await cloud.checkLabelsForAnimal(imageData[0].labels);
         await writeToFile('currentSearch.json' ,imageData);
@@ -80,11 +82,13 @@ function formatDate(dateString) {
 
 // admin login 
 app.get('/login', (req, res) => {
+    console.log("----------- Login")
     res.render("admin-login");
 });
 
 //  admin index
  app.get('/admin', (req, res) => {
+    console.log("----------- Admin-Index")
 
     const allData = ds.readJsonFileToArray('dataStore.json');
     const animalFrequencyArray = ds.getMostCommonAnimal();

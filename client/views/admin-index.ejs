@@ -35,8 +35,8 @@
 
         <h1>Welcome to Admin</h1>
 
-        <button class="main__btn" onclick="filterTable('All Data')">Filter by Contains Animal</button>
-        <button class="main__btn2" onclick="showContent()">Most Common Animal - Graph</button>
+        <button class="main__btn" onclick="filterByIsAnimalInImage()">Filter by Contains Animal</button>
+        <button class="main__btn2" onclick="showContent()">View Most Common Animal</button>
 
         <div class="popup">
           <img id="popupImage" src="" alt="popup image">
@@ -45,20 +45,23 @@
 
         <div class="admin_results_box">
 
+          <!-- Datastore data table -->
           <div id="content1">
-            <table id="myTable">
+            <table>
               <tr>
+                <th></th>
                 <th>Image</th>
                 <th>Search Date</th> 
                 <th>Image Contains Animal</th>
                 <th>AI Labels, with confidence</th>
               </tr>
-              <% for (let d of data) { %>
+              <% for (let i = 0; i < data.length; i++) { %>
                 <tr class="data-row">
-                  <td><button onclick="showImage('<%= d.path %>')">View <%= d.path %></button></td>
-                  <td><%= formatDate(d.date) %></td> 
-                  <td><%= d.containsAnimal %></td>
-                  <td><button onclick="toggleLabels(this, <%= JSON.stringify(d.labels) %>)">Show Labels</button></td> 
+                  <td><%= i+1 %></td>
+                  <td><button onclick="showImage('<%= data[i].path %>')">View <%= data[i].path %></button></td>
+                  <td><%= formatDate(data[i].date) %></td> 
+                  <td><%= data[i].containsAnimal %></td>
+                  <td><button onclick="showLabels(this, <%= JSON.stringify(data[i].labels) %>)">Show Labels</button></td> 
                 </tr>
               <% } %>
             </table>
@@ -123,34 +126,6 @@
   }
 </script>
 
-<script>
-  function showImage(path) {
-  const imageUrl = '/images/' + path;
-  const existingRow = event.target.closest('.data-row');
-  const existingNextRow = existingRow.nextSibling;
-  if (existingNextRow && existingNextRow.classList && existingNextRow.classList.contains('image-row')) {
-    // Image is already displayed, hide it and remove the row
-    existingNextRow.remove();
-    return;
-  }
-  const image = new Image();
-  image.src = imageUrl;
-  image.style.maxWidth = '300px';
-  image.style.maxHeight = '300px';
-  image.style.display = 'inline-block';
-  image.style.textAlign = 'left';
-  const newRow = document.createElement('tr');
-  newRow.classList.add('image-row');
-  const newCell = document.createElement('td');
-  newCell.colSpan = '2';
-  newCell.style.textAlign = 'center';
-  newCell.appendChild(image);
-  newRow.appendChild(newCell);
-  existingRow.parentNode.insertBefore(newRow, existingRow.nextSibling);
-}
-
-</script>
-
 <style>
   .popup {
   position: fixed;
@@ -179,17 +154,35 @@
     if (content1.style.display === "none") {
       content1.style.display = "block";
       content2.style.display = "none";
-      button.innerHTML = "Most Common Animal - Graph";
+      button.innerHTML = "View Most Common Animal";
     } else {
       content1.style.display = "none";
       content2.style.display = "block";
-      button.innerHTML = "All Data";
+      button.innerHTML = "View All Data";
     }
   };  
 </script>
 
 <script>
-  function toggleLabels(button, labels) {
+  let showAnimal = true;
+
+  function filterByIsAnimalInImage() {
+    showAnimal = !showAnimal;
+    const dataRows = document.querySelectorAll('.data-row');
+    dataRows.forEach(row => {
+      const containsAnimal = row.querySelector('td:nth-child(4)').textContent === 'false';
+      if (containsAnimal === showAnimal) {
+        row.style.display = '';
+      } else {
+        row.style.display = 'none';
+      }
+    });
+  }
+</script>
+
+
+<script>
+  function showLabels(button, labels) {
     // Get the current row
     const row = button.parentNode.parentNode;
     
@@ -204,10 +197,15 @@
       const labelsRow = document.createElement('tr');
       labelsRow.classList.add('labels-row');
       labelsRow.innerHTML = `
-        <td colspan="4">
-          <ul>
-            ${labels.map(l => `<li>${l.description}, ${(l.score * 100).toFixed(2)}%</li>`).join('')}
-          </ul>
+        <td colspan="5">
+          <table>
+            <tr>
+              ${labels.map(l => `<td>${l.description}</td>`).join('')}
+            </tr>
+            <tr>
+              ${labels.map(l => `<td>${(l.score * 100).toFixed(2)}%</td>`).join('')}
+            </tr>
+          </table>
         </td>
       `;
       
@@ -215,6 +213,33 @@
       row.after(labelsRow);
     }
   };
+</script>
+
+<script>
+  function showImage(path) {
+  const imageUrl = '/images/' + path;
+  const existingRow = event.target.closest('.data-row');
+  const existingNextRow = existingRow.nextSibling;
+  if (existingNextRow && existingNextRow.classList && existingNextRow.classList.contains('image-row')) {
+    // Image is already displayed, hide it and remove the row
+    existingNextRow.remove();
+    return;
+  }
+  const image = new Image();
+  image.src = imageUrl;
+  image.style.maxWidth = '300px';
+  image.style.maxHeight = '300px';
+  image.style.display = 'inline-block';
+  image.style.textAlign = 'left';
+  const newRow = document.createElement('tr');
+  newRow.classList.add('image-row');
+  const newCell = document.createElement('td');
+  newCell.colSpan = '5';
+  newCell.style.textAlign = 'center';
+  newCell.appendChild(image);
+  newRow.appendChild(newCell);
+  existingRow.parentNode.insertBefore(newRow, existingRow.nextSibling);
+}
 </script>
 
 </html>
