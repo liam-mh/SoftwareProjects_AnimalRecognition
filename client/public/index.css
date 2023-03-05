@@ -535,7 +535,6 @@ a {
 	position: absolute;
 	transition: all 0.35s;
 	outline: none;
-	left: 325px;
 	top: 25%;
   }
   
@@ -753,9 +752,10 @@ body {
 
   
   .results_box{
+	max-height: 60%;
 	height: 60%;
 	width: 90%;
-	background: white;
+	background: rgba(255, 255, 255, 0.7);
 	border-radius: 5px 5px 0 0;
 	display: block;
 	position: absolute;
@@ -770,7 +770,6 @@ body {
 	padding: 1px;
 	resize: vertical;
 	overflow: scroll;
-	opacity: 0.85;
 	z-index: 9;
   }
   
