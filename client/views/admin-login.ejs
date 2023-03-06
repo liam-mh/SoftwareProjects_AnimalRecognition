@@ -32,30 +32,39 @@
       <div class="header">
          Login Form
       </div>
-      <form action="/admin">
-         <input type="text" placeholder="Email or Username">
+      <form id="login-form" action="/admin" >
+         <input type="text" placeholder="Email or Username" id="username">
          <i class="far fa-envelope"></i>
-         <input id="pswrd" type="password" placeholder="Password">
-         <i class="fas fa-lock" onclick="show()"></i>
-         <input type="submit" value="Sign in">
+         <input id="pswrd" type="password" placeholder="Password" id="password">
+         <i class="fas fa-lock"></i>
+         <input type="submit" value="Sign in" >
          <a href="#">Forgot Password?</a>
       </form>
    </div>
 
    <script>
-      function show(){
-         var pswrd = document.getElementById('pswrd');
-         var icon = document.querySelector('.fas');
-         if (pswrd.type === "password") {
-            pswrd.type = "text";
-            pswrd.style.marginTop = "20px";
-            icon.style.color = "#7f2092";
-         } else {
-            pswrd.type = "password";
-            icon.style.color = "grey";
-         }
-      }
-   </script>
+      // get the form element
+      var signinForm = document.getElementById("login-form");
+    
+      // add event listener for form submission
+      signinForm.addEventListener("submit", function(event) {
+        // prevent the form from submitting
+        event.preventDefault();
+    
+        // get the username and password fields
+        var username = document.getElementById("username").value;
+        var password = document.getElementById("pswrd").value;
+    
+        // perform validation
+        if (username == "" || password == "") {
+          alert("Please fill in all fields.");
+          return false;
+        }
+    
+        // submit the form
+        signinForm.submit();
+      });
+    </script>
 
    <div class="ocean">
       <div class="wave"></div>
