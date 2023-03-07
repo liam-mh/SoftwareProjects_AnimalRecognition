@@ -58,16 +58,15 @@ app.get('/results', async (req, res) => {
     try {
         console.log("----------- Results")
         const imageData = await cloud.getImageLabels();
-        const animalInImage = await cloud.checkLabelsForAnimal(imageData[0].labels);
-        const imageObjects = await cloud.objectDetection(imageData[0].path);
-        const hazardsInObject = await cloud.checkObjectsForHazards(imageObjects);
         await writeToFile('currentSearch.json' ,imageData);
+
+        const imageObjects = await cloud.objectDetection(imageData[0].path);
+        const animalInImage = await cloud.checkLabelsForAnimal(imageData[0].labels);
 
         res.render("results", {
             images: imageData, 
             animal: animalInImage,
             objects: imageObjects,
-            hazards: hazardsInObject 
         });
 
         ds.save(); // save all 
@@ -107,18 +106,6 @@ app.get('/login', (req, res) => {
     res.render("admin-index", {
         data: allData, 
         formatDate: formatDate,
-        label: label,
-        frequency: frequency
-    });
-});
-
-
-app.get('/test', (req, res) => {
-    const animalFrequencyArray = ds.getMostCommonAnimal();
-    const label = animalFrequencyArray.map(obj => obj.label);
-    const frequency = animalFrequencyArray.map(obj => obj.frequency);
-
-    res.render("test", {
         label: label,
         frequency: frequency
     });
