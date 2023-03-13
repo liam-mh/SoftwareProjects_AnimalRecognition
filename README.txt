@@ -61,11 +61,15 @@ Runing this project locally:
 
 (2) Open in desired IDE, this demonstration is for Visual Studio Code
 
-(3) Run 'npm install' in your bash / command line
+(3) Create / have a google cloud account https://cloud.google.com/vision
+    
+(4) Setup and generate a key, save this as key.json and place it in the directory folder.
 
-(4) Run 'node server/main' in your bash / command line
+(5) Run 'npm install' in your bash / command line
 
-(5) On a web browser enter 'http://localhost:8000'
+(6) Run 'node server/main' in your bash / command line
+
+(7) On a web browser enter 'http://localhost:8000'
 
 ------------------
 5.  SUPPORT
