@@ -522,8 +522,7 @@ a {
 
 /* end main button */
 
-
-  .main__btn2 {
+.main__btn2 {
 	font-size: 1rem;
 	background-image: linear-gradient(to top, #04243C 0%,#04243C 100%);
 	padding: 14px 32px;
@@ -536,7 +535,8 @@ a {
 	transition: all 0.35s;
 	outline: none;
 	top: 25%;
-  }
+	margin-left: 260px;
+}
   
   .main__btn2 a {
 	position: relative;

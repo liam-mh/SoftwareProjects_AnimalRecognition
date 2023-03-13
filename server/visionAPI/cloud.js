@@ -83,14 +83,19 @@ async function objectDetection(imageName) {
     const request = {
         image: {content: fs.readFileSync(fileName)},
     };
-  
     const [result] = await client.objectLocalization(request);
     const objects = result.localizedObjectAnnotations;
   
-    // create canvas
-    await drawBoxes(imageName, objects);
+    // Check for hazards and animals
+    const hazards = await checkObjectsForHazards(objects);
+    const animals = await checkObjectsForAnimals(objects);
+    objects.forEach(obj => {
+        obj.containsHazard = hazards.includes(obj.name) ? 'true' : 'false';
+        obj.containsAnimal = animals.includes(obj.name) ? 'true' : 'false';
+    });
 
-    //console.log('Objects detected:', objects);
+    // highlight objects in image
+    await drawBoxes(imageName, objects);
 
     return objects;
 };
@@ -102,54 +107,84 @@ async function drawBoxes(imageName, objects) {
     const image = await loadImage(fileName);
     const canvas = createCanvas(image.width, image.height);
     const ctx = canvas.getContext('2d');
-  
-    // Draw image on canvas
     ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
-  
+
+    // Calculate font and box size for image pixels
+    const lineWidth = Math.round(canvas.width * 0.004);
+    const fontSize = Math.round(canvas.height * 0.03);
+
     // Draw boxes on canvas for each object
     for (let i = 0; i < objects.length; i++) {
-      const object = objects[i];
-      const vertices = object.boundingPoly.normalizedVertices;
-  
-      ctx.beginPath();
-      ctx.lineWidth = "4";
-      ctx.strokeStyle = "red";
-      ctx.rect(vertices[0].x * canvas.width, vertices[0].y * canvas.height, (vertices[1].x - vertices[0].x) * canvas.width, (vertices[2].y - vertices[0].y) * canvas.height);
-      ctx.stroke();
-  
-      // Add name and score to top left of bounding box
-      ctx.fillStyle = "red";
-      ctx.font = "Bold 15px Arial";
-      ctx.fillText(`${object.name}: ${object.score.toFixed(2)}%`, vertices[0].x * canvas.width, vertices[0].y * canvas.height - 5);
+        const object = objects[i];
+        const vertices = object.boundingPoly.normalizedVertices;
+        
+        let boxColor = "#ff00fb";
+        ctx.fillStyle = "rgba(0, 0, 0, 0)";
+
+        if (object.containsHazard === 'true') {
+            boxColor = "red";
+            ctx.fillStyle = "rgba(255, 0, 0, 0.3)";
+        } 
+
+        // Draw box
+        ctx.beginPath();
+        ctx.lineWidth = lineWidth;
+        ctx.strokeStyle = boxColor;
+        ctx.rect(
+            vertices[0].x * canvas.width,
+            vertices[0].y * canvas.height,
+            (vertices[1].x - vertices[0].x) * canvas.width,
+            (vertices[2].y - vertices[0].y) * canvas.height
+        );
+        ctx.stroke();
+        ctx.fillRect(
+            vertices[0].x * canvas.width,
+            vertices[0].y * canvas.height,
+            (vertices[1].x - vertices[0].x) * canvas.width,
+            (vertices[2].y - vertices[0].y) * canvas.height
+        );
+
+        // Add object and score
+        ctx.fillStyle = boxColor;
+        ctx.font = `bold ${fontSize}px Arial`;
+        ctx.fillText(
+            `${object.name} (${object.score.toFixed(2)*100}%)`,
+            vertices[0].x * canvas.width, 
+            vertices[0].y * canvas.height - fontSize/4
+        );
     }
   
     // Save new image with boxes
     return new Promise((resolve, reject) => {
-        // Save new image with boxes
         const out = fs.createWriteStream(`${userImagePath}object_${imageName}`);
         const stream = canvas.createJPEGStream({
             quality: 0.95,
             chromaSubsampling: false,
         });
         stream.pipe(out);
-
         out.on('finish', () => {
             console.log('Object boxes drawn on:', imageName);
             resolve();
         });
-
         out.on('error', (error) => {
             reject(error);
         });
     })
 };
 
-// Compares to animals.json
+// Compares to hazards.json
 async function checkObjectsForHazards(objects) {
     const hazards = new Set(JSON.parse(await fs.promises.readFile(path.join(__dirname, 'hazards.json'), 'utf8')));
     const hazardsInObject = objects.filter(obj => hazards.has(obj.name)).map(obj => obj.name);
     console.log('Hazards found in object: ', hazardsInObject);
     return hazardsInObject;
+};
+// Compares to animals.json
+async function checkObjectsForAnimals(objects) {
+    const animals = new Set(JSON.parse(await fs.promises.readFile(path.join(__dirname, 'animals.json'), 'utf8')));
+    const animalsInObject = objects.filter(obj => animals.has(obj.name)).map(obj => obj.name);
+    console.log('Animals found in object: ', animalsInObject);
+    return animalsInObject;
 };
 
 
@@ -158,6 +193,7 @@ module.exports = {
     getImageLabels,
     checkLabelsForAnimal,
     objectDetection,
-    checkObjectsForHazards
+    checkObjectsForHazards,
+    checkObjectsForAnimals
 };
 
