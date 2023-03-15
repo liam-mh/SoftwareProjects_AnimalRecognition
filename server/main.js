@@ -35,7 +35,9 @@ const upload = multer({storage: storage});
 // dataStore methods
 const ds = require('./dataStore/dataStore.js');
 // cloud API methods
-const cloud = require('./visionAPI/cloud.js')
+const cloud = require('./visionAPI/cloud.js');
+// firebase methods
+const fb = require('./dataStore/firebase.js');
 
 // -----------------
 // ----- pages -----
@@ -45,6 +47,7 @@ app.get('/', (req, res) => {
     console.log("----------- Index")
     ds.clearFolder();
     res.render("index");
+    fb.readAllFirebaseData();
 });
 // upload image button
 app.post('/upload', upload.single("image"), (req, res) => {
@@ -70,6 +73,8 @@ app.get('/results', async (req, res) => {
         });
 
         ds.save(); // save all 
+        fb.saveCurrentSearchToFirebase();
+
     } catch (error) {
         console.error(error);
         res.status(500).send('An error occurred.');
@@ -95,7 +100,7 @@ app.get('/login', (req, res) => {
 });
 
 //  admin index
- app.get('/admin', (req, res) => {
+app.get('/admin', (req, res) => {
     console.log("----------- Admin-Index")
 
     const allData = ds.readJsonFileToArray('dataStore.json');
@@ -111,7 +116,31 @@ app.get('/login', (req, res) => {
     });
 });
 
+app.get('/test', async (req, res) => {
+    try {
+        const allData = await fb.readAllFirebaseData();
+        const animalFrequencyArray = ds.getMostCommonAnimal();
+        const label = animalFrequencyArray.map(obj => obj.label);
+        const frequency = animalFrequencyArray.map(obj => obj.frequency);
+        console.log(allData);
+        res.render("test", {
+            data: allData, 
+            formatDate: formatDate,
+            label: label,
+            frequency: frequency
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Error retrieving data from Firebase");
+    }
+});
+
 // port num for localhost
 app.listen(8000); 
 
  
+/**
+ * TO DO:
+ * Change test ejs to display url images
+ * try and erase json datastore completely
+ */

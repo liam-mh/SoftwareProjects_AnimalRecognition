@@ -15,26 +15,33 @@ const client = new vision.ImageAnnotatorClient({
 const userImagePath = path.join(__dirname, '../../client/public/userImages/');
 const fs = require("fs");
 
-// Setup array format and put the image in
+const fb = require('../dataStore/firebase');
+
+// Setup array format and put the image in, saves image to firebase
 async function readDirectory(userImagePath, imageArr) {
     const currentDate = new Date();
-    return new Promise((resolve, reject) => {
-        fs.readdir(userImagePath, (err, files) => {
-            if (err) reject(err);
-            files.forEach(file => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const files = await fs.promises.readdir(userImagePath);
+            for (const file of files) {
                 if (file !== ".gitkeep") {
+                    const url = await fb.saveImageToFirebaseStorage(file);
                     imageArr.push({
                         path: file, 
+                        url: url,
                         date: currentDate,
                         containsAnimal: true,
                         labels: []
                     });
                 }
-            });
+            }
             resolve();
-        });
+        } catch (err) {
+            reject(err);
+        }
     });
 };
+
 
 // Compares to animals.json
 function checkLabelsForAnimal(labels) {
