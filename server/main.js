@@ -1,23 +1,19 @@
-// node path library
-const path = require('path');
-
 // express framework setup
+const path = require('path');
 const express = require('express');
 const { dirname } = require('path');
 const app = express();
+app.use(express.urlencoded({extended: true}))
 
 // middleware for file locations
 app.use(express.static(path.join(__dirname, '../client/public')));
 app.use('/images', express.static(path.join(__dirname, 'dataStore', 'images')));
 
-// built in express, looks at body of post requests
-app.use(express.urlencoded({extended: true}))
-
 // using the ejs templating engine 
 app.set("view engine", "ejs")
 app.set("views", path.join(__dirname, "../client/views"));
 
-// Multer
+// Multer (user image upload)
 const multer = require('multer');
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -29,56 +25,13 @@ const storage = multer.diskStorage({
         cb(null, Date.now() + path.extname(file.originalname))
     }
 });
-
 const upload = multer({storage: storage});
 
-// dataStore methods
-const ds = require('./dataStore/dataStore.js');
-// cloud API methods
-const cloud = require('./visionAPI/cloud.js')
-
-// -----------------
-// ----- pages -----
-
-// landing
-app.get('/', (req, res) => {
-    console.log("----------- Index")
-    ds.clearFolder();
-    res.render("index");
-});
-// upload image button
-app.post('/upload', upload.single("image"), (req, res) => {
-    res.redirect('/results');
-});
-
-
-// results
-const writeToFile = require('./dataStore/currentSearch.js');
-app.get('/results', async (req, res) => { 
-    try {
-        console.log("----------- Results")
-        const imageData = await cloud.getImageLabels();
-        await writeToFile('currentSearch.json' ,imageData);
-
-        const imageObjects = await cloud.objectDetection(imageData[0].path);
-        const animalInImage = await cloud.checkLabelsForAnimal(imageData[0].labels);
-
-        res.render("results", {
-            images: imageData, 
-            animal: animalInImage,
-            objects: imageObjects,
-        });
-
-        ds.save(); // save all 
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('An error occurred.');
-    }
-});
-
-
-// ---------------
-
+// Other file functions
+const cs = require('./dataStore/currentSearch.js'); // currentSearch
+const ds = require('./dataStore/dataStore.js');     // dataStore
+const cloud = require('./visionAPI/cloud.js');      // Cloud vision api
+const fb = require('./dataStore/firebase.js');      // Firebase 
 // Define the formatDate function
 function formatDate(dateString) {
     const date = new Date(dateString);
@@ -88,6 +41,41 @@ function formatDate(dateString) {
     return `${day}/${month}/${year}`;
 };
 
+
+/**
+ * User Pages
+ */
+
+// landing
+app.get('/', (req, res) => {
+    console.log("----------- Index");
+    ds.clearFolder();
+    res.render("index");
+});
+
+// upload image button
+app.post('/upload', upload.single("image"), (req, res) => {
+    res.redirect('/results');
+});
+
+// results
+app.get('/results', async (req, res) => { 
+    console.log("----------- Results");
+    try {
+        const imageData = await cloud.scan();
+        res.render("results", { images: imageData });
+        await cs.saveInJSON('currentSearch.json' ,imageData);
+        fb.saveCurrentSearchToFirebase();
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('An error occurred.');
+    }
+});
+
+/**
+ * Admin Pages
+ */
+
 // admin login 
 app.get('/login', (req, res) => {
     console.log("----------- Login")
@@ -95,20 +83,25 @@ app.get('/login', (req, res) => {
 });
 
 //  admin index
- app.get('/admin', (req, res) => {
+app.get('/admin', async (req, res) => {
     console.log("----------- Admin-Index")
-
-    const allData = ds.readJsonFileToArray('dataStore.json');
-    const animalFrequencyArray = ds.getMostCommonAnimal();
-    const label = animalFrequencyArray.map(obj => obj.label);
-    const frequency = animalFrequencyArray.map(obj => obj.frequency);
-
-    res.render("admin-index", {
-        data: allData, 
-        formatDate: formatDate,
-        label: label,
-        frequency: frequency
-    });
+    try {
+        const allData = await fb.readAllFirebaseData();
+        // Most common animal chart data
+        const animalFrequencyArray = ds.getMostCommonAnimal(allData);
+        const label = animalFrequencyArray.map(obj => obj.label);
+        const frequency = animalFrequencyArray.map(obj => obj.frequency);
+        
+        res.render("admin-index", {
+            data: allData, 
+            formatDate: formatDate,
+            label: label,
+            frequency: frequency
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Error retrieving data from Firebase");
+    }
 });
 
 // port num for localhost

@@ -41,19 +41,29 @@
       <% for (let image of images) { %>
 
         <li style="position: absolute; top: 25%;">
-          <% if (image.containsAnimal) { %>
+          <% if (image.containsAnimal[0]) { %>
             <% 
               var color = 'red';
-              if (animal.score > 0.9) {
+              if (image.containsAnimal[2] > 0.9) {
                   color = 'green';
-              } else if (animal.score > 0.7) {
+              } else if (image.containsAnimal[2] > 0.7) {
                   color = 'orange';
               }
             %>
-            We are <strong><span style="color: <%= color %>;"><%= (animal.score * 100).toFixed(2) %>%</span></strong> sure that this image contains a <strong><%= animal.description %></strong>
-          <% } else { %>
-            We don't think that this image contains <%=objects.length > 0 ? `an animal, but it may contain a ${objects[0]}` : "any animals"%>.
-          <% } %>  
+            We are <strong><span style="color: <%= color %>;"><%= (image.containsAnimal[2] * 100).toFixed(2) %>%</span></strong> sure that this image contains a <strong><%= image.containsAnimal[1] %></strong>
+            <% } else { %>
+              <% var objectDetectionMessage = '' %>
+              <% if (image.objectDetection.length > 0) { %>
+                <% for (let object of image.objectDetection) { %>
+                  <% if (object.containsAnimal) { %>
+                    <% objectDetectionMessage = `We think this image may contain an ${object.name}`; %>
+                  <% } %>
+                <% } %>
+              <% } else { %>
+                <% objectDetectionMessage = "We don't think this image contains any animals"; %>
+              <% } %>
+              <%= objectDetectionMessage %>.
+            <% } %>  
         </li>
 
         <!-- Label data: toggle display with button -->
@@ -108,8 +118,8 @@
           <div style="position: absolute; top: 5px; left: 0px; z-index: 1; width: 250px;">
             <ul>
                 <li><strong><span style="color: green">Animals Detected</span></strong></li>
-                <% for (let i = 0; i < objects.length; i++) { %>
-                    <li><%= objects[i].containsAnimal === 'true' ? objects[i].name : '' %></li>
+                <% for (let i = 0; i < image.objectDetection.length; i++) { %>
+                    <li><%= image.objectDetection[i].containsAnimal === 'true' ? image.objectDetection[i].name : '' %></li>
                 <% } %>
             </ul>
           </div>
@@ -117,8 +127,8 @@
           <div style="position: absolute; top: 5px; left: 270px; z-index: 1; width: 250px;">
             <ul>
                 <li><strong><span style="color: red">Hazards Detected</span></strong></li>
-                <% for (let i = 0; i < objects.length; i++) { %>
-                    <li><%= objects[i].containsHazard === 'true' ? objects[i].name : '' %></li>
+                <% for (let i = 0; i < image.objectDetection.length; i++) { %>
+                    <li><%= image.objectDetection[i].containsHazard === 'true' ? image.objectDetection[i].name : '' %></li>
                 <% } %>
             </ul>
           </div>

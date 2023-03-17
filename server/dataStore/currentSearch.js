@@ -5,7 +5,7 @@
 const fs = require('fs');
 const path = require('path');
 
-function writeToFile(fileName, data) {
+function saveInJSON(fileName, data) {
     const filePath = path.join(__dirname + '/' + fileName);
     try {
         if (!fs.existsSync(filePath)) {
@@ -21,7 +21,7 @@ function writeToFile(fileName, data) {
     }
 }
 
-module.exports = writeToFile;
+module.exports = { saveInJSON };
 
 /**
  * Updating the data with the user validated labels
@@ -58,7 +58,7 @@ function updateUserValidation(original, update) {
         }
     }
 
-    writeToFile('currentSearch.json' ,original);
+    //writeToFile('currentSearch.json' ,original);
 };
 
 
