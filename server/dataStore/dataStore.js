@@ -131,9 +131,9 @@ function readJsonFileToArray(fileName) {
     }
 }
 
-function getMostCommonAnimal() {
+function getMostCommonAnimal(data) {
 
-    const data = readJsonFileToArray('dataStore.json');
+    // const data = readJsonFileToArray('dataStore.json');
     const animals = readJsonFileToArray('../visionAPI/animals.json');
     const animalFrequency = {};
 
@@ -160,7 +160,7 @@ function getMostCommonAnimal() {
     }));
 
     // Sort the array by frequency in descending order
-    animalFrequencyArray.sort((a, b) => b.frequency - a.frequency);
+    animalFrequencyArray.sort((a, b) => a.label.localeCompare(b.label));
 
     return animalFrequencyArray;
 };
