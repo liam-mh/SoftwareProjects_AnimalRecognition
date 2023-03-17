@@ -472,8 +472,9 @@ a {
   }
 
  
-  
-  .main__btn {
+/* main button */
+
+.main__btn {
 	font-size: 1rem;
 	background-image: linear-gradient(to top, #04243C 0%,#04243C 100%);
 	padding: 14px 32px;
@@ -485,17 +486,17 @@ a {
 	position: absolute;
 	transition: all 0.35s;
 	outline: none;
-	top: 300px;
-  }
-  
-  .main__btn a {
+	top: 25%;
+}
+
+.main__btn a {
 	position: relative;
 	z-index: 2;
 	color: #fff;
 	text-decoration: none;
-  }
-  
-  .main__btn:after {
+}
+
+.main__btn:after {
 	position: absolute;
 	content: '';
 	top: 0;
@@ -505,17 +506,23 @@ a {
 	background: #4837ff;
 	transition: all 0.35s;
 	border-radius: 4px;
-  }
-  
-  .main__btn:hover {
-	color: white;
-  }
-  
-  .main__btn:hover:after {
-	width: 100%;
-  }
+}
 
-  .main__btn2 {
+.main__btn:hover {
+	background-color: #4837ff;
+}
+
+.main__btn:hover a {
+	color: white;
+}
+
+.main__btn:hover:after {
+	width: 100%;
+}  
+
+/* end main button */
+
+.main__btn2 {
 	font-size: 1rem;
 	background-image: linear-gradient(to top, #04243C 0%,#04243C 100%);
 	padding: 14px 32px;
@@ -527,9 +534,9 @@ a {
 	position: absolute;
 	transition: all 0.35s;
 	outline: none;
-	left: 325px;
-	top: 300px;
-  }
+	top: 25%;
+	margin-left: 260px;
+}
   
   .main__btn2 a {
 	position: relative;
@@ -558,48 +565,7 @@ a {
 	width: 100%;
   }
 
-  .main__btn3 {
-	font-size: 1rem;
-	background-image: linear-gradient(to top, #04243C 0%,#04243C 100%);
-	padding: 14px 32px;
-	border: none;
-	border-radius: 4px;
-	color: #fff;
-	margin-top: 2rem;
-	cursor: pointer;
-	position: absolute;
-	transition: all 0.35s;
-	outline: none;
-	left: 600px;
-	top: 300px;
-  }
-  
-  .main__btn3 a {
-	position: relative;
-	z-index: 2;
-	color: #fff;
-	text-decoration: none;
-  }
-  
-  .main__btn3:after {
-	position: absolute;
-	content: '';
-	top: 0;
-	left: 0;
-	width: 0;
-	height: 100%;
-	background: #4837ff;
-	transition: all 0.35s;
-	border-radius: 4px;
-  }
-  
-  .main__btn3:hover {
-	color: white;
-  }
-  
-  .main__btn3:hover:after {
-	width: 100%;
-  }
+
   
   .main__img--container {
 	text-align: center;
@@ -778,38 +744,18 @@ body {
   font-size: 25px;
   transform: translate(-50%, -50%);
   box-sizing: border-box;
- border: 2px solid #040404;
- border-radius: 5px;
- padding: 10px;
- opacity: 0.7;
+	border: 2px solid #040404;
+	border-radius: 5px;
+	padding: 10px;
+	opacity: 0.7;
 }
 
-.box2{
-	height: 50%;
-	width: 90%;
-	background: white;
-	border-radius: 5px 5px 0 0;
-	display: block;
-	position: absolute;
-	top: 72%;
-	left: 50%;
-	line-height: 62px;
-	font-size: 25px;
-	transform: translate(-50%, -50%);
-	box-sizing: border-box;
-   border: 2px solid #040404;
-   border-radius: 5px;
-   padding: 1px;
-   resize: vertical;
-   overflow: scroll;
-   opacity: 0.7;
-   z-index: 9;
-  }
   
   .results_box{
+	max-height: 60%;
 	height: 60%;
 	width: 90%;
-	background: white;
+	background: rgba(255, 255, 255, 0.7);
 	border-radius: 5px 5px 0 0;
 	display: block;
 	position: absolute;
@@ -824,32 +770,77 @@ body {
 	padding: 1px;
 	resize: vertical;
 	overflow: scroll;
-	opacity: 0.85;
 	z-index: 9;
   }
   
-  table{
+
+/* Old table content 
+
+table{
 	text-indent: 150px;
 	position: relative;
 	right: 100px;
- }
-   
+}
 
- td{
-   white-space: nowrap;
-   font-size: 18px;
-   padding: 0.2rem;
+td{
+	white-space: nowrap;
+	font-size: 18px;
+	padding: 0.2rem;
+}
+th{
+	white-space: nowrap;
+	font-size: 18px;
+	padding: 0.2rem;
+}
 
- }
- th{
-   white-space: nowrap;
-   font-size: 18px;
-   padding: 0.2rem;
-
- }
-
+*/
 
 
+/* Admin index results */
+.admin_results_box{
+	height: 60%;
+	width: 90%;
+	background: rgba(255, 255, 255, 0.7);
+	border-radius: 5px 5px 0 0;
+	display: block;
+	position: absolute;
+	top: 36%;
+	line-height: 62px;
+	font-size: 25px;
+	box-sizing: border-box;
+	border: 2px solid #040404;
+	border-radius: 5px;
+	padding: 1px;
+	resize: vertical;
+	overflow: scroll;
+	z-index: 9;
+	text-align: center;
+}
+
+.admin_results_box table {
+	border-collapse: collapse;
+	width: 100%;
+	margin: 0 auto;
+	white-space: nowrap;
+	font-size: 15px;
+}
+.admin_results_box th,
+.admin_results_box td {
+	text-align: center;
+	height: 50px;
+
+}
+.admin_results_box tr:hover {
+	background-color:  #04243c6c;
+}
+.admin_results_box th {
+	background-color: #04243C;
+	color: white;
+}
+
+.admin_results_box li {
+	font-size: 15px;
+}
 
  
 
