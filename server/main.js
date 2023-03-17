@@ -32,6 +32,8 @@ const storage = multer.diskStorage({
 
 const upload = multer({storage: storage});
 
+// current search method
+const cs = require('./dataStore/currentSearch.js');
 // dataStore methods
 const ds = require('./dataStore/dataStore.js');
 // cloud API methods
@@ -39,40 +41,33 @@ const cloud = require('./visionAPI/cloud.js');
 // firebase methods
 const fb = require('./dataStore/firebase.js');
 
-// -----------------
-// ----- pages -----
+
+// ---------------------------------------------------
+// ----- pages ---------------------------------------
 
 // landing
 app.get('/', (req, res) => {
-    console.log("----------- Index")
+    console.log("----------- Index");
     ds.clearFolder();
     res.render("index");
-    fb.readAllFirebaseData();
 });
+
 // upload image button
 app.post('/upload', upload.single("image"), (req, res) => {
     res.redirect('/results');
 });
 
-
 // results
-const writeToFile = require('./dataStore/currentSearch.js');
 app.get('/results', async (req, res) => { 
+    console.log("----------- Results");
     try {
-        console.log("----------- Results")
-        const imageData = await cloud.getImageLabels();
-        await writeToFile('currentSearch.json' ,imageData);
-
-        const imageObjects = await cloud.objectDetection(imageData[0].path);
-        const animalInImage = await cloud.checkLabelsForAnimal(imageData[0].labels);
+        const imageData = await cloud.scan();
 
         res.render("results", {
-            images: imageData, 
-            animal: animalInImage,
-            objects: imageObjects,
+            images: imageData
         });
 
-        ds.save(); // save all 
+        await cs.writeToFile('currentSearch.json' ,imageData);
         fb.saveCurrentSearchToFirebase();
 
     } catch (error) {
@@ -135,12 +130,67 @@ app.get('/test', async (req, res) => {
     }
 });
 
+app.get('/table', (req, res) => {
+    const data = [
+        { id: 1, value: true },
+        { id: 2, value: false },
+        { id: 3, value: true },
+        { id: 4, value: false },
+        { id: 5, value: true }
+    ];
+
+    res.send(`
+      <html>
+        <head>
+          <title>Table with Filtering</title>
+        </head>
+        <body>
+          <button id="toggle-btn">Toggle Filter</button>
+          <table id="data-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Value</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${data.map((item, index) => `
+                <tr class="data-row ${item.value ? 'show' : 'hide'}" data-index="${index}">
+                  <td>${item.id}</td>
+                  <td>${item.value}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+          <script>
+            const btn = document.querySelector('#toggle-btn');
+            const rows = document.querySelectorAll('.data-row');
+            let showValue = true;
+  
+            function toggleFilter() {
+              showValue = !showValue;
+              rows.forEach(row => {
+                if (row.querySelector('td:nth-child(2)').textContent === 'true' && showValue) {
+                  row.classList.remove('hide');
+                  row.classList.add('show');
+                } else if (row.querySelector('td:nth-child(2)').textContent === 'false' && !showValue) {
+                  row.classList.remove('hide');
+                  row.classList.add('show');
+                } else {
+                  row.classList.remove('show');
+                  row.classList.add('hide');
+                }
+              });
+            }
+  
+            btn.addEventListener('click', toggleFilter);
+          </script>
+        </body>
+      </html>
+    `);
+  });
+
 // port num for localhost
 app.listen(8000); 
 
  
-/**
- * TO DO:
- * Change test ejs to display url images
- * try and erase json datastore completely
- */

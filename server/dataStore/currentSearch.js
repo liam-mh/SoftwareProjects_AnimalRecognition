@@ -21,7 +21,7 @@ function writeToFile(fileName, data) {
     }
 }
 
-module.exports = writeToFile;
+module.exports = { writeToFile };
 
 /**
  * Updating the data with the user validated labels

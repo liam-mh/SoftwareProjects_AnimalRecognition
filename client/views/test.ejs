@@ -60,9 +60,12 @@
               <% for (let i = 0; i < data.length; i++) { %>
                 <tr class="data-row">
                   <td><%= i+1 %></td>
-                  <td><button onclick="showImage('<%= data[i].url %>')">View <%= data[i].path %></button></td>
+                  <td><button onclick="showImage(<%= JSON.stringify(data[i].url) %>)">View <%= data[i].path %></button></td>
                   <td><%= formatDate(data[i].date) %></td> 
-                  <td><%= data[i].containsAnimal %></td>
+                  <td style="color: <%= data[i].containsAnimal[0] ? 'green' : 'red' %>">
+                    <%= data[i].containsAnimal[0] %>
+                    <%= data[i].containsAnimal[1] != null ? ', ' + data[i].containsAnimal[1] : '' %>
+                  </td>                  
                   <td><button onclick="showLabels(this, <%= JSON.stringify(data[i].labels) %>)">Show Labels</button></td> 
                 </tr>
               <% } %>
@@ -166,20 +169,22 @@
 </script>
 
 <script>
-  let showAnimal = true;
+let showAnimal = true;
 
-  function filterByIsAnimalInImage() {
-    showAnimal = !showAnimal;
-    const dataRows = document.querySelectorAll('.data-row');
-    dataRows.forEach(row => {
-      const containsAnimal = row.querySelector('td:nth-child(4)').textContent === 'false';
-      if (containsAnimal === showAnimal) {
-        row.style.display = '';
-      } else {
-        row.style.display = 'none';
-      }
-    });
-  }
+function filterByIsAnimalInImage() {
+  showAnimal = !showAnimal;
+  const dataRows = document.querySelectorAll('.data-row');
+  dataRows.forEach(row => {
+    console.log(row.querySelector('td:nth-child(4)'));
+    const containsAnimal = row.querySelector('td:nth-child(4)').style.color === 'red';
+    if (containsAnimal === showAnimal) {
+      row.style.display = '';
+    } else {
+      row.style.display = 'none';
+    }
+  });
+}
+
 </script>
 
 
@@ -218,30 +223,42 @@
 </script>
 
 <script>
-  function showImage(path) {
-  const imageUrl = path;
+
+function showImage(urls) {
   const existingRow = event.target.closest('.data-row');
   const existingNextRow = existingRow.nextSibling;
   if (existingNextRow && existingNextRow.classList && existingNextRow.classList.contains('image-row')) {
-    // Image is already displayed, hide it and remove the row
+    // Images are already displayed, hide them and remove the row
     existingNextRow.remove();
     return;
   }
-  const image = new Image();
-  image.src = imageUrl;
-  image.style.maxWidth = '300px';
-  image.style.maxHeight = '300px';
-  image.style.display = 'inline-block';
-  image.style.textAlign = 'left';
   const newRow = document.createElement('tr');
   newRow.classList.add('image-row');
-  const newCell = document.createElement('td');
-  newCell.colSpan = '5';
-  newCell.style.textAlign = 'center';
-  newCell.appendChild(image);
-  newRow.appendChild(newCell);
+  const newCell1 = document.createElement('td');
+  const newCell2 = document.createElement('td');
+  newCell1.colSpan = '3';
+  newCell2.colSpan = '3';
+  newCell1.style.textAlign = 'center';
+  newCell2.style.textAlign = 'center';
+  const image1 = new Image();
+  const image2 = new Image();
+  image1.src = urls[0];
+  image2.src = urls[1];
+  image1.style.maxWidth = '300px';
+  image1.style.maxHeight = '300px';
+  image1.style.display = 'inline-block';
+  image1.style.textAlign = 'left';
+  image2.style.maxWidth = '300px';
+  image2.style.maxHeight = '300px';
+  image2.style.display = 'inline-block';
+  image2.style.textAlign = 'left';
+  newCell1.appendChild(image1);
+  newCell2.appendChild(image2);
+  newRow.appendChild(newCell1);
+  newRow.appendChild(newCell2);
   existingRow.parentNode.insertBefore(newRow, existingRow.nextSibling);
 }
+
 </script>
 
 </html>

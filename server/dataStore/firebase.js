@@ -69,31 +69,42 @@ function saveCurrentSearchToFirebase() {
  */
 
 // Save image to Firebase Storage
-async function saveImageToFirebaseStorage(fileName) {
+  
+// const saveImageToFirebaseStorage = async (fileName) => {
+//     try {
+//         const filePath = path.join(__dirname, '../../client/public/userImages', fileName);
+//         const bucket = admin.storage().bucket();
+//         await bucket.upload(filePath, { destination: `images/${fileName}`, public: true });
+//         const file = bucket.file(`images/${fileName}`);
+//         const [metadata] = await file.getMetadata();
+//         const trimUrl = metadata.mediaLink.split("&token=")[0];
+//         console.log(`File saved to Firebase Storage: ${trimUrl}`);
+//         return trimUrl;
+//     } catch (error) {
+//         console.error(`Error uploading file to Firebase Storage: ${error}`);
+//         throw error;
+//     }
+// };
+
+const saveImageToFirebaseStorage = async (fileName) => {
     try {
-        const sourcePath = path.join(__dirname, '../../client/public/userImages', fileName);
-        console.log(sourcePath);
-        const image = fs.readFileSync(sourcePath);
-
         const bucket = admin.storage().bucket();
-        const storagePath = path.join('images/', fileName);
-        const file = bucket.file(storagePath);
-        await file.save(image, { public: true });
+        const [file] = await bucket.upload(
+            path.join(__dirname, "../../client/public/userImages", fileName),
+            { destination: `${fileName}`, public: true }
+        );
+        const [metadata] = await file.getMetadata();
+        const url = metadata.mediaLink;
 
-        console.log(`Image saved to Firebase Storage at ${storagePath}`);
-
-        // Get public URL of saved file
-        const [url] = await file.getSignedUrl({
-            action: 'read',
-            expires: '03-15-2033'
-        });
-        console.log(url);
-        return url; 
+        console.log(`Image saved to Firebase Storage:`, fileName);
+        return url;
     } catch (error) {
-        console.error(`Error saving image to Firebase Storage: ${error}`);
+        console.error(`Error uploading file to Firebase Storage: ${error}`);
+        throw error;
     }
 };
   
+
 module.exports = {
     saveImageToFirebaseStorage,
     saveCurrentSearchToFirebase,

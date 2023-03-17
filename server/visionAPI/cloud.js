@@ -1,11 +1,8 @@
 // *** key.json must be placed inside directory to use ***
 
+// Connect to API
 const path = require('path');
-
-// Imports the Google Cloud client library
 const vision = require('@google-cloud/vision');
-    
-// Creates a client
 key = path.join(__dirname, '../../key.json');
 const client = new vision.ImageAnnotatorClient({
     keyFilename: key
@@ -15,27 +12,26 @@ const client = new vision.ImageAnnotatorClient({
 const userImagePath = path.join(__dirname, '../../client/public/userImages/');
 const fs = require("fs");
 
-const fb = require('../dataStore/firebase');
-
-// Setup array format and put the image in, saves image to firebase
-async function readDirectory(userImagePath, imageArr) {
+// Setup array format and put the image name in
+async function readDirectory(userImagePath) {
+    const array = [];
     const currentDate = new Date();
     return new Promise(async (resolve, reject) => {
         try {
             const files = await fs.promises.readdir(userImagePath);
             for (const file of files) {
                 if (file !== ".gitkeep") {
-                    const url = await fb.saveImageToFirebaseStorage(file);
-                    imageArr.push({
+                    array.push({
                         path: file, 
-                        url: url,
+                        url: [],
                         date: currentDate,
-                        containsAnimal: true,
-                        labels: []
+                        containsAnimal: [false],
+                        labels: [],
+                        objectDetection: []
                     });
                 }
             }
-            resolve();
+            resolve(array);
         } catch (err) {
             reject(err);
         }
@@ -57,54 +53,59 @@ function checkLabelsForAnimal(labels) {
 };
   
 
-// Return formatted array with labels
-async function getImageLabels() {
-    
-    var labelData = [];
-    await readDirectory(userImagePath, labelData);
+// Scan for labels and update containsAnimal
+async function getImageLabels(array) {
 
-    for (let image of labelData) {
+    for (let image of array) {
 
         // Scan each image in public/userImages, add labels to array and bool
         const [result] = await client.labelDetection(path.join(userImagePath, image.path));
-        const labels = result.labelAnnotations.map(label => ({ ...label, userThinksValid: true }));
+        image.labels = result.labelAnnotations.map(label => ({ ...label, userThinksValid: true }));
 
-        // check if animal is in image and update bool if not
-        image.labels = labels;
-        if (checkLabelsForAnimal(labels) === null) {
-            image.containsAnimal = false
-        };
-        console.log('Image contains animal:', image.containsAnimal);
+        // Check if animal is in image
+        const animalLabel = checkLabelsForAnimal(image.labels);
+        if (animalLabel !== null) {
+            array[0].containsAnimal = ([true, animalLabel.description, animalLabel.score]);
+        }
+    
+        console.log('Image contains animal:', image.containsAnimal[0]);
     };
     
-    return labelData;
+    return array;
 };
 
 // Object Detection -----------------------------------------------------------
 
 const { createCanvas, loadImage } = require('canvas');
 
-async function objectDetection(imageName) {
-    console.log('Detecting objects in:', imageName);
-    const fileName = path.join(userImagePath, imageName);
-    const request = {
-        image: {content: fs.readFileSync(fileName)},
+async function objectDetection(array) {
+
+    for (let image of array) {
+
+        console.log('Detecting objects in:', image.path);
+        const fileName = path.join(userImagePath, image.path);
+        const request = {
+            image: {content: fs.readFileSync(fileName)},
+        };
+        const [result] = await client.objectLocalization(request);
+        const objects = result.localizedObjectAnnotations;
+    
+        // Check for hazards and animals
+        const hazards = await checkObjectsForHazards(objects);
+        const animals = await checkObjectsForAnimals(objects);
+        objects.forEach(obj => {
+            obj.containsHazard = hazards.includes(obj.name) ? 'true' : 'false';
+            obj.containsAnimal = animals.includes(obj.name) ? 'true' : 'false';
+        });
+
+        // add objects to array
+        image.objectDetection = objects;
+
+        // Create new image with highlighted objects
+        await drawBoxes(image.path, objects);
     };
-    const [result] = await client.objectLocalization(request);
-    const objects = result.localizedObjectAnnotations;
-  
-    // Check for hazards and animals
-    const hazards = await checkObjectsForHazards(objects);
-    const animals = await checkObjectsForAnimals(objects);
-    objects.forEach(obj => {
-        obj.containsHazard = hazards.includes(obj.name) ? 'true' : 'false';
-        obj.containsAnimal = animals.includes(obj.name) ? 'true' : 'false';
-    });
 
-    // highlight objects in image
-    await drawBoxes(imageName, objects);
-
-    return objects;
+    return array;
 };
   
 async function drawBoxes(imageName, objects) {
@@ -195,12 +196,26 @@ async function checkObjectsForAnimals(objects) {
 };
 
 
-// Export functions 
-module.exports = {
-    getImageLabels,
-    checkLabelsForAnimal,
-    objectDetection,
-    checkObjectsForHazards,
-    checkObjectsForAnimals
+// Firebase
+const fb = require('../dataStore/firebase');
+
+async function scan() {
+    try {
+        data = await readDirectory(userImagePath);
+        data = await getImageLabels(data);
+        data = await objectDetection(data);
+        for (let image of data) {
+            image.url[0] = await fb.saveImageToFirebaseStorage(image.path);
+            image.url[1] = await fb.saveImageToFirebaseStorage('object_'+image.path);
+        }
+        //console.log(data);
+        return data;
+    } catch (err) {
+      console.error(err);
+    }
 };
 
+// Export functions 
+module.exports = {
+    scan
+};
