@@ -805,7 +805,7 @@ th{
 	display: block;
 	position: absolute;
 	top: 36%;
-	line-height: 62px;
+	line-height: 20px;
 	font-size: 25px;
 	box-sizing: border-box;
 	border: 2px solid #040404;

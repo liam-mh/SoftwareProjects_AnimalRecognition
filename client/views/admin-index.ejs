@@ -20,9 +20,12 @@
              <span class="bar"></span>
           </div>
           <ul class="navbar__menu">
-             <li class="navbar__item">
-                <a href="/" class="navbar__links">Logout</a>
-             </li>
+            <li class="navbar__item">
+              <a href="/admin-logs" class="navbar__links">Audit Trail</a>
+            </li>
+            <li class="navbar__item">
+              <a href="/" class="navbar__links">Logout</a>
+            </li>
           </ul>
        </div>
     </nav>
@@ -32,16 +35,10 @@
     <div class="main__container">
 
       <div class="main__content2">
-
         <h1>Welcome to Admin</h1>
-
         <div style="display:inline-block;">
           <button class="main__btn" onclick="filterByIsAnimalInImage()">Filter by Contains Animal</button>
           <button class="main__btn2" onclick="showContent()">View Most Common Animal</button>
-        </div>
-
-        <div class="popup">
-          <img id="popupImage" src="" alt="popup image">
         </div>
       </div>
 

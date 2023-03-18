@@ -195,18 +195,17 @@ async function checkObjectsForAnimals(objects) {
     return animalsInObject;
 };
 
-
 // Firebase
-const fb = require('../dataStore/firebase');
+const { saveImageToFirebaseStorage } = require('../dataStore/firebase');
 
-async function scan() {
+async function scanImages() {
     try {
         data = await readDirectory(userImagePath);
         data = await getImageLabels(data);
         data = await objectDetection(data);
         for (let image of data) {
-            image.url[0] = await fb.saveImageToFirebaseStorage(image.path);
-            image.url[1] = await fb.saveImageToFirebaseStorage('object_'+image.path);
+            image.url[0] = await saveImageToFirebaseStorage(image.path);
+            image.url[1] = await saveImageToFirebaseStorage('object_'+image.path);
         }
         //console.log(data);
         return data;
@@ -217,5 +216,5 @@ async function scan() {
 
 // Export functions 
 module.exports = {
-    scan
+    scanImages
 };

@@ -16,8 +16,8 @@ const db = admin.database();
  * Reading from the database
  */
 
-function readAllFirebaseData() {
-    const read = db.ref('labelData');
+function readFirebaseData(reference) {
+    const read = db.ref(reference);
     return read.once('value')
     .then((snapshot) => {
         const data = [];
@@ -63,6 +63,16 @@ function saveCurrentSearchToFirebase() {
     });
 };
 
+function saveErrorToFirebase(error) {
+    const write = db.ref('errorLogs');
+    write.push(error, (error) => {
+        if (error) {
+            console.log('Error data could not be saved to Firebase:', error);
+        } else {
+            console.log('Error data saved successfully to Firebase.');
+        }
+    });
+};
 
 /**
  * Saving images
@@ -70,22 +80,6 @@ function saveCurrentSearchToFirebase() {
 
 // Save image to Firebase Storage
   
-// const saveImageToFirebaseStorage = async (fileName) => {
-//     try {
-//         const filePath = path.join(__dirname, '../../client/public/userImages', fileName);
-//         const bucket = admin.storage().bucket();
-//         await bucket.upload(filePath, { destination: `images/${fileName}`, public: true });
-//         const file = bucket.file(`images/${fileName}`);
-//         const [metadata] = await file.getMetadata();
-//         const trimUrl = metadata.mediaLink.split("&token=")[0];
-//         console.log(`File saved to Firebase Storage: ${trimUrl}`);
-//         return trimUrl;
-//     } catch (error) {
-//         console.error(`Error uploading file to Firebase Storage: ${error}`);
-//         throw error;
-//     }
-// };
-
 const saveImageToFirebaseStorage = async (fileName) => {
     try {
         const bucket = admin.storage().bucket();
@@ -108,5 +102,6 @@ const saveImageToFirebaseStorage = async (fileName) => {
 module.exports = {
     saveImageToFirebaseStorage,
     saveCurrentSearchToFirebase,
-    readAllFirebaseData
+    saveErrorToFirebase,
+    readFirebaseData
 };
