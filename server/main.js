@@ -1,5 +1,5 @@
-const cs = require('./dataStore/currentSearch.js'); // currentSearch
-const ds = require('./dataStore/dataStore.js');     // dataStore
+const cs = require('./dataStore/currentSearch.js'); 
+const ds = require('./dataStore/dataStore.js');     
 const { scanImages } = require('./visionAPI/cloud.js');   
 const { saveCurrentSearchToFirebase, readFirebaseData } = require('./dataStore/firebase.js');      
 const { handleError } = require('./errorHandling');
@@ -9,6 +9,8 @@ const { app, upload, formatDate } = require('./config');
  * User Pages
  * ==============================================================================================
  */
+
+let imageData = [];
 
 // landing
 app.get('/', (req, res) => {
@@ -22,15 +24,21 @@ app.get('/', (req, res) => {
 });
 
 // upload image button
-app.post('/upload', upload.single("image"), (req, res) => {
-    res.redirect('/results');
+app.post('/upload', upload.single("image"), async (req, res) => {
+    try {
+        console.log("----------- Upload");
+        res.locals.image = req.file;
+        res.render("upload"); 
+        imageData = await scanImages();
+    } catch (error) {
+        handleError(error, req, res);
+    }
 });
 
 // results
 app.get('/results', async (req, res) => { 
     console.log("----------- Results");
     try {
-        const imageData = await scanImages();
         res.render("results", { images: imageData });
         await cs.saveInJSON('currentSearch.json' ,imageData);
         saveCurrentSearchToFirebase();
@@ -92,6 +100,9 @@ app.get('/testError', (req, res) => {
     } catch (error) {
         handleError(error, req, res);
     }
+});
+app.get('/test', (req, res) => {
+    res.render("test");
 });
 
 /**

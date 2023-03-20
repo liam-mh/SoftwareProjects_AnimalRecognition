@@ -47,7 +47,7 @@
           <!-- Datastore data table -->
           <div id="content1">
             <table>
-              <tr>
+              <tr style="position: sticky; top: 0;">
                 <th></th>
                 <th>Image</th>
                 <th>Search Date</th> 
@@ -56,7 +56,7 @@
               </tr>
               <% for (let i = 0; i < data.length; i++) { %>
                 <tr class="data-row">
-                  <td><%= i+1 %></td>
+                  <td style="border-right: 2px solid #04243C;"><%= i+1 %></td>
                   <td><button onclick="showImage(<%= JSON.stringify(data[i].url) %>)">View <%= data[i].path %></button></td>
                   <td><%= formatDate(data[i].date) %></td> 
                   <td style="color: <%= data[i].containsAnimal[0] ? 'green' : 'red' %>">
@@ -189,7 +189,6 @@ function filterByIsAnimalInImage() {
   function showLabels(button, labels) {
     // Get the current row
     const row = button.parentNode.parentNode;
-    
     // Check if the labels row already exists
     const existingNextRow = row.nextElementSibling;
     if (existingNextRow && existingNextRow.classList && existingNextRow.classList.contains('labels-row')) {
@@ -201,7 +200,8 @@ function filterByIsAnimalInImage() {
       const labelsRow = document.createElement('tr');
       labelsRow.classList.add('labels-row');
       labelsRow.innerHTML = `
-        <td colspan="5">
+        <td colspan="1" style="border-right: 2px solid #04243C;"></td>
+        <td colspan="4">
           <table>
             <tr>
               ${labels.map(l => `<td>${l.description}</td>`).join('')}
@@ -212,7 +212,7 @@ function filterByIsAnimalInImage() {
           </table>
         </td>
       `;
-      
+
       // Insert the labels row after the current row
       row.after(labelsRow);
     }
@@ -231,30 +231,35 @@ function showImage(urls) {
   }
   const newRow = document.createElement('tr');
   newRow.classList.add('image-row');
+  const emptyCell = document.createElement('td');
   const newCell1 = document.createElement('td');
   const newCell2 = document.createElement('td');
-  newCell1.colSpan = '3';
-  newCell2.colSpan = '3';
+  emptyCell.colSpan = '1';
+  emptyCell.style.borderRight = '2px solid #04243C';
+  newCell1.colSpan = '2';
+  newCell2.colSpan = '2';
   newCell1.style.textAlign = 'center';
   newCell2.style.textAlign = 'center';
   const image1 = new Image();
   const image2 = new Image();
   image1.src = urls[0];
   image2.src = urls[1];
-  image1.style.maxWidth = '300px';
-  image1.style.maxHeight = '300px';
+  image1.style.maxWidth = '500px';
+  image1.style.maxHeight = '400px';
   image1.style.display = 'inline-block';
   image1.style.textAlign = 'left';
-  image2.style.maxWidth = '300px';
-  image2.style.maxHeight = '300px';
+  image2.style.maxWidth = '500px';
+  image2.style.maxHeight = '400px';
   image2.style.display = 'inline-block';
   image2.style.textAlign = 'left';
   newCell1.appendChild(image1);
   newCell2.appendChild(image2);
+  newRow.appendChild(emptyCell);
   newRow.appendChild(newCell1);
   newRow.appendChild(newCell2);
   existingRow.parentNode.insertBefore(newRow, existingRow.nextSibling);
 }
+
 
 </script>
 
