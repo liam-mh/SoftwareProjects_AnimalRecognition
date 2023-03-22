@@ -47,6 +47,17 @@ app.get('/results', async (req, res) => {
     }
 });
 
+// return updated user labels
+app.post('/userLabels', async (req, res) => {
+    try {
+        const labelsUserThinksInvalid = JSON.parse(req.body.labelsUserThinksInvalid);
+        console.log(labelsUserThinksInvalid);
+        // need to update userthinks valid bool for the array items
+    } catch (error) {
+        handleError(error, req, res);
+    }
+});
+
 /**
  * Admin Pages
  * ==============================================================================================

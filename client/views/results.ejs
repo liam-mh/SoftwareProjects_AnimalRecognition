@@ -20,10 +20,10 @@
              <span class="bar"></span>
           </div>
           <ul class="navbar__menu">
-             <li class="navbar__item">
-                <a href="/" class="navbar__links">Home</a>
-             </li>
-             <li class="navbar__item"><a href="/login" class="navbar__links">Log In</a></li>
+            <li class="navbar__item">
+              <a href="/" class="navbar__links">Home</a>
+            </li>
+            <li class="navbar__item"><a href="/login" class="navbar__links">Log In</a></li>
           </ul>
        </div>
     </nav>
@@ -66,7 +66,7 @@
             <% } %>  
             <br>
             <br>We have highlighted any labels we feel are relevant to the animal
-            <br>To help our AI imporve, please toggle the labels if you think the results are incorrect
+            <br>To help our AI improve, please toggle the ✅ / ❌ if you think that label is correct
         </li>
 
         <!-- Label data: toggle display with button -->
@@ -80,12 +80,12 @@
                 <% for (let i = 0; i < image.labels.length; i++) { %>
                   <% const label = image.labels[i]; %>
                   <% if (label.score > 0.9) { %>
-                    <li>
+                    <li>   
                       <% if (label.validAgainstList) { %>
-                        <span style="font-size: 0.9rem;">&#x2705;</span> 
+                        <button class="toggle-button" onclick="toggleButton(this); addToArray('<%= label.description %>')"></button>
                       <% } else { %>
-                        <span style="font-size: 0.9rem;">&#x274C;</span> 
-                      <% } %>
+                        <button class="toggle-button active" onclick="toggleButton(this); addToArray('<%= label.description %>')"></button>
+                      <% } %>             
                       <%= label.description %>
                     </li>
                   <% } %>
@@ -93,18 +93,18 @@
               </ul>
             </div>
 
-            <div style="position: absolute; top: 5px; left: 220px; z-index: 1; width: 210px;">
+            <div style="position: absolute; top: 5px; left: 200px; z-index: 1; width: 230px;">
               <ul>
                 <li><strong>Above 70%<br><span style="color: orange">(Medium)</span></strong></li>
                 <% for (let i = 0; i < image.labels.length; i++) { %>
                   <% const label = image.labels[i]; %>
                   <% if (label.score > 0.7 && label.score <= 0.9) { %>
-                    <li>
+                    <li>   
                       <% if (label.validAgainstList) { %>
-                        <span style="font-size: 0.9rem;">&#x2705;</span> 
+                        <button class="toggle-button" onclick="toggleButton(this); addToArray('<%= label.description %>')"></button>
                       <% } else { %>
-                        <span style="font-size: 0.9rem;">&#x274C;</span> 
-                      <% } %>
+                        <button class="toggle-button active" onclick="toggleButton(this); addToArray('<%= label.description %>')"></button>
+                      <% } %>             
                       <%= label.description %>
                     </li>
                   <% } %>
@@ -112,26 +112,31 @@
               </ul>
             </div>
 
-            <div style="position: absolute; top: 5px; left: 430px; z-index: 1; width: 200px;">
+            <div style="position: absolute; top: 5px; left: 440px; z-index: 1; width: 200px;">
               <ul>
                 <li><strong>Below 70%<br><span style="color: red">(Low)</span></strong></li>
                 <% for (let i = 0; i < image.labels.length; i++) { %>
                   <% const label = image.labels[i]; %>
                   <% if (label.score <= 0.7) { %>
-                    <li>
+                    <li>   
                       <% if (label.validAgainstList) { %>
-                        <span style="font-size: 0.9rem;">&#x2705;</span> 
+                        <button class="toggle-button" onclick="toggleButton(this); addToArray('<%= label.description %>')"></button>
                       <% } else { %>
-                        <span style="font-size: 0.9rem;">&#x274C;</span> 
-                      <% } %>
+                        <button class="toggle-button active" onclick="toggleButton(this); addToArray('<%= label.description %>')"></button>
+                      <% } %>             
                       <%= label.description %>
                     </li>
                   <% } %>
                 <% } %>
               </ul>
             </div>
-          </div>
 
+            <form id="confirmForm" action="/userLabels" method="POST" style="position: absolute; bottom: 20px; left: 20px; display: none;">
+              <input type="hidden" name="labelsUserThinksInvalid" value="">
+              <button class="confirm_btn">Confirm Changes</button> 
+            </form>
+
+          </div>
         </div> <!-- Label data -->
 
         <!-- Object data: toggle display with button -->
@@ -171,6 +176,26 @@
 
 </body>
 
+<style>
+span {
+  font-size: 1rem;
+}
+
+.toggle-button {
+  font-size: 0.8rem;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+.toggle-button.active::before {
+  content: '\274C';
+}
+.toggle-button:not(.active)::before {
+  content: '\2705';
+}
+
+</style>
+
 <script>
   function showContent() {
     var content1 = document.getElementById("label_content");
@@ -187,6 +212,41 @@
       button.innerHTML = "Show Label Detection Results";
     }
   };  
+
+  function toggleButton(el) {
+    el.classList.toggle('active');
+  }
+
+  let labelsUserThinksInvalid = [];
+
+  const confirmForm = document.getElementById('confirmForm');
+  function updateConfirmFormVisibility() {
+    if (labelsUserThinksInvalid.length > 0) {
+        confirmForm.style.display = 'block';
+    } else {
+        confirmForm.style.display = 'none';
+    }
+  }
+  
+  function addToArray(label) {
+    const index = labelsUserThinksInvalid.indexOf(label);
+    if (index !== -1) {
+      labelsUserThinksInvalid.splice(index, 1);
+    } else {
+      labelsUserThinksInvalid.push(label);
+    }
+    updateConfirmFormVisibility();
+  };
+  
+  function onSubmit(event) {
+    event.preventDefault();
+    const input = document.querySelector('input[name="labelsUserThinksInvalid"]');
+    input.value = JSON.stringify(labelsUserThinksInvalid);
+    event.target.submit();
+  }
+
+  document.querySelector('form').addEventListener('submit', onSubmit);
+
 </script>
 
 </html>

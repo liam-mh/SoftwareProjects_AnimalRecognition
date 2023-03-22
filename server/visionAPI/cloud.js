@@ -80,7 +80,7 @@ async function getImageLabels(array) {
         const [result] = await client.labelDetection(path.join(userImagePath, image.path));
         image.labels = result.labelAnnotations.map(label => ({ 
             ...label, 
-            userThinksValid: null, 
+            userThinksCorrect: true, 
             validAgainstList: false 
         }));
 

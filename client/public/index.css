@@ -834,7 +834,29 @@ body {
 }
   
 
-
+/* confirm button on results page */
+.confirm_btn {
+    font-size: 1rem;
+    background-color: #4CAF50;
+    padding: 14px 32px;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.35s;
+    outline: none;
+    position: relative;
+}
+.confirm_btn:hover {
+    background-color: #3e8e41;
+}
+.confirm_btn:focus {
+    outline: none;
+}
+.confirm_btn:active {
+    background-color: #3e8e41;
+    transform: translateY(2px);
+}
  
 
   
