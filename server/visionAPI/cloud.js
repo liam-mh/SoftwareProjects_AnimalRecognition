@@ -126,9 +126,12 @@ async function drawBoxes(imageName, objects) {
         const object = objects[i];
         const vertices = object.boundingPoly.normalizedVertices;
         
-        let boxColor = "#ff00fb";
+        let boxColor = "rgba(0, 0, 0, 0";
         ctx.fillStyle = "rgba(0, 0, 0, 0)";
 
+        if (object.containsAnimal === 'true') {
+            boxColor = "#ff00fb";
+        }
         if (object.containsHazard === 'true') {
             boxColor = "red";
             ctx.fillStyle = "rgba(255, 0, 0, 0.3)";
