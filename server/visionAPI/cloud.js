@@ -51,7 +51,25 @@ function checkLabelsForAnimal(labels) {
     });
     return animalLabels.length > 0 ? animalLabels[0] : null; // return the first animal label found, or null if no matches
 };
-  
+// Compares to labelValidation.json
+async function checkIfLabelIsValidForAnimal(animal, label) {
+    const validLabels = JSON.parse(await fs.promises.readFile(path.join(__dirname, 'labelValidation.json'), 'utf8'));
+    for (let animalObject of validLabels) {
+        const animalName = Object.keys(animalObject)[0];
+        if (animalName === animal) {
+            for (let value of animalObject[animalName]) {
+                if (value === label) {
+                    return true;
+                }
+            }
+            // If the label was not found in the animalObject
+            return false;
+        }
+    }
+    // If the animal was not found in the validLabels
+    return false;
+};
+
 
 // Scan for labels and update containsAnimal
 async function getImageLabels(array) {
@@ -60,14 +78,23 @@ async function getImageLabels(array) {
 
         // Scan each image in public/userImages, add labels to array and bool
         const [result] = await client.labelDetection(path.join(userImagePath, image.path));
-        image.labels = result.labelAnnotations.map(label => ({ ...label, userThinksValid: true }));
+        image.labels = result.labelAnnotations.map(label => ({ 
+            ...label, 
+            userThinksValid: null, 
+            validAgainstList: false 
+        }));
 
         // Check if animal is in image
         const animalLabel = checkLabelsForAnimal(image.labels);
         if (animalLabel !== null) {
             array[0].containsAnimal = ([true, animalLabel.description, animalLabel.score]);
+            // Update label relevance to animal
+            for (let label of image.labels) {
+                label.validAgainstList = await checkIfLabelIsValidForAnimal(animalLabel.description, label.description);
+                console.log(label.description, label.validAgainstList);
+            }
         }
-    
+
         console.log('Image contains animal:', image.containsAnimal[0]);
     };
     

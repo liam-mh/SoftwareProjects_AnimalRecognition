@@ -2,7 +2,7 @@
 <html lan="en" and dir="Itr">
 
 <head>
-  <meta charset="utf-8">
+  <meta charset="UTF-8">
   <title>Animal Recognition Results</title>
   <link rel="stylesheet" href="index.css">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css">
@@ -40,7 +40,7 @@
 
       <% for (let image of images) { %>
 
-        <li style="position: absolute; top: 25%;">
+        <li style="position: absolute; top: 22%;">
           <% if (image.containsAnimal[0]) { %>
             <% 
               var color = 'red';
@@ -64,6 +64,9 @@
               <% } %>
               <%= objectDetectionMessage %>.
             <% } %>  
+            <br>
+            <br>We have highlighted any labels we feel are relevant to the animal
+            <br>To help our AI imporve, please toggle the labels if you think the results are incorrect
         </li>
 
         <!-- Label data: toggle display with button -->
@@ -71,25 +74,39 @@
         
             <img src="<%= './userImages/' + image.path %>" alt="pic" style="max-width: 60%; height: 100%; float: right; mask-image: linear-gradient(to left, rgba(0, 0, 0, 1.0) 80%, transparent 100%);">
           
-            <div style="position: absolute; top: 5px; left: 0px; z-index: 1; width: 200px;">
+            <div style="position: absolute; top: 5px; left: 0px; z-index: 1; width: 210px;">
               <ul>
                 <li><strong>Above 90%<br><span style="color: green">(High)</span></strong></li>
                 <% for (let i = 0; i < image.labels.length; i++) { %>
                   <% const label = image.labels[i]; %>
                   <% if (label.score > 0.9) { %>
-                    <li><%= label.description %></li>
+                    <li>
+                      <% if (label.validAgainstList) { %>
+                        <span style="font-size: 0.9rem;">&#x2705;</span> 
+                      <% } else { %>
+                        <span style="font-size: 0.9rem;">&#x274C;</span> 
+                      <% } %>
+                      <%= label.description %>
+                    </li>
                   <% } %>
                 <% } %>
               </ul>
             </div>
 
-            <div style="position: absolute; top: 5px; left: 220px; z-index: 1; width: 200px;">
+            <div style="position: absolute; top: 5px; left: 220px; z-index: 1; width: 210px;">
               <ul>
                 <li><strong>Above 70%<br><span style="color: orange">(Medium)</span></strong></li>
                 <% for (let i = 0; i < image.labels.length; i++) { %>
                   <% const label = image.labels[i]; %>
                   <% if (label.score > 0.7 && label.score <= 0.9) { %>
-                    <li><%= label.description %></li>
+                    <li>
+                      <% if (label.validAgainstList) { %>
+                        <span style="font-size: 0.9rem;">&#x2705;</span> 
+                      <% } else { %>
+                        <span style="font-size: 0.9rem;">&#x274C;</span> 
+                      <% } %>
+                      <%= label.description %>
+                    </li>
                   <% } %>
                 <% } %>
               </ul>
@@ -101,7 +118,14 @@
                 <% for (let i = 0; i < image.labels.length; i++) { %>
                   <% const label = image.labels[i]; %>
                   <% if (label.score <= 0.7) { %>
-                    <li><%= label.description %></li>
+                    <li>
+                      <% if (label.validAgainstList) { %>
+                        <span style="font-size: 0.9rem;">&#x2705;</span> 
+                      <% } else { %>
+                        <span style="font-size: 0.9rem;">&#x274C;</span> 
+                      <% } %>
+                      <%= label.description %>
+                    </li>
                   <% } %>
                 <% } %>
               </ul>
