@@ -1,4 +1,5 @@
-// *** key.json must be placed inside directory to use ***
+const { saveImageToFirebaseStorage } = require('../dataStore/firebase');
+const fs = require("fs");
 
 // Connect to API
 const path = require('path');
@@ -10,7 +11,6 @@ const client = new vision.ImageAnnotatorClient({
 
 // Path to users images
 const userImagePath = path.join(__dirname, '../../client/public/userImages/');
-const fs = require("fs");
 
 // Setup array format and put the image name in
 async function readDirectory(userImagePath) {
@@ -91,11 +91,10 @@ async function getImageLabels(array) {
             // Update label relevance to animal
             for (let label of image.labels) {
                 label.validAgainstList = await checkIfLabelIsValidForAnimal(animalLabel.description, label.description);
-                console.log(label.description, label.validAgainstList);
             }
         }
 
-        console.log('Image contains animal:', image.containsAnimal[0]);
+        console.log('Image contains animal:', image.containsAnimal);
     };
     
     return array;
@@ -118,11 +117,11 @@ async function objectDetection(array) {
         const objects = result.localizedObjectAnnotations;
     
         // Check for hazards and animals
-        const hazards = await checkObjectsForHazards(objects);
         const animals = await checkObjectsForAnimals(objects);
+        const hazards = await checkObjectsForHazards(objects);
         objects.forEach(obj => {
-            obj.containsHazard = hazards.includes(obj.name) ? 'true' : 'false';
             obj.containsAnimal = animals.includes(obj.name) ? 'true' : 'false';
+            obj.containsHazard = hazards.includes(obj.name) ? 'true' : 'false';
         });
 
         // add objects to array
@@ -221,9 +220,6 @@ async function checkObjectsForAnimals(objects) {
     console.log('Animals found in object: ', animalsInObject);
     return animalsInObject;
 };
-
-// Firebase
-const { saveImageToFirebaseStorage } = require('../dataStore/firebase');
 
 async function scanImages() {
     try {

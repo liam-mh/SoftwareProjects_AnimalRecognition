@@ -46,7 +46,7 @@
 
           <!-- Datastore data table -->
           <div id="content1">
-            <table>
+            <table style="line-height: 3; width: 100%;">
               <tr style="position: sticky; top: 0;">
                 <th></th>
                 <th>Image</th>
@@ -201,20 +201,46 @@ function filterByIsAnimalInImage() {
       labelsRow.classList.add('labels-row');
       labelsRow.innerHTML = `
         <td colspan="1" style="border-right: 2px solid #04243C;"></td>
-        <td colspan="4">
-          <table>
+        <td colspan="4" >
+          <table style="line-height: 1; width: 60%;">
             <tr>
-              ${labels.map(l => `<td>${l.description}</td>`).join('')}
+              <th>Label</th>
+              <th>Score %</th>
+              <th>Animal-Related Label</th>
+              <th>User Agree/Disagree</th>
             </tr>
-            <tr>
-              ${labels.map(l => `<td>${(l.score * 100).toFixed(2)}%</td>`).join('')}
-            </tr>
+            ${labels.map(l => `
+              <tr style="color: ${l.userThinksCorrect ? 'black' : 'red'}; line-height: 1;">
+                <td style="text-align: left;">${l.description}</td>
+                <td>${(l.score * 100).toFixed(2)}</td>
+                <td>${l.validAgainstList}</td>
+                <td>${l.userThinksCorrect}</td>
+              </tr>
+            `).join('')}
           </table>
         </td>
       `;
 
       // Insert the labels row after the current row
       row.after(labelsRow);
+
+      // labelsRow.innerHTML = `
+      //   <td colspan="1" style="border-right: 2px solid #04243C;"></td>
+      //   <td colspan="4">
+      //     <table>
+      //       <tr>
+      //         ${labels.map(l => `
+      //           <td style="color: ${l.userThinksCorrect ? 'black' : 'red'};">
+      //             ${l.validAgainstList ? '&#x2705;' : '&#x274C;'}
+      //             ${l.description}
+      //           </td>`).join('')}
+      //       </tr>
+      //       <tr>
+      //         ${labels.map(l => `<td>${(l.score * 100).toFixed(2)}%</td>`).join('')}
+      //       </tr>
+      //     </table>
+      //   </td>
+      // `;
     }
   };
 </script>

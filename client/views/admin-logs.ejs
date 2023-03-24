@@ -45,11 +45,11 @@
 
           <!-- Datastore data table -->
           <div id="content1">
-            <table>
+            <table style="line-height: 3; width: 100%;">
               <tr style="position: sticky; top: 0;">
                 <th></th>
                 <th>Log Date</th>
-                <th>Error Message</th> 
+                <th>Error Message (first 50 characters)</th> 
                 <th>Response</th> 
                 <th>Page Accessing</th>
                 <th>Operating System</th>
@@ -59,7 +59,7 @@
                 <tr class="data-row">
                   <td style="border-right: 2px solid #04243C;"><%= i+1 %></td>
                   <td><%= formatDate(data[i].timestamp) %></td> 
-                  <td>"<%= data[i].message %>"</td>
+                  <td>"<%= data[i].message.substring(0, 50) %>"</td>
                   <td>HTTP status code: <%= data[i].response.status %></td>
                   <td><%= data[i].request.url %></td>
                   <td><%= data[i].systemInfo.os %></td>
@@ -124,6 +124,7 @@ function showData(data) {
 
   const newCell = document.createElement('td');
   newCell.colSpan = '6';
+  newCell.style.lineHeight = "1";
   const dataDetails = document.createElement('pre');
   dataDetails.textContent = JSON.stringify(data, null, 2);
   dataDetails.style.maxWidth = '100%';

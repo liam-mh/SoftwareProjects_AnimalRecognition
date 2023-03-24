@@ -1,4 +1,4 @@
-const cs = require('./dataStore/currentSearch.js'); 
+const { saveToCurrentSearch, updateUserValidation } = require('./dataStore/currentSearch.js'); 
 const ds = require('./dataStore/dataStore.js');     
 const { scanImages } = require('./visionAPI/cloud.js');   
 const { saveCurrentSearchToFirebase, readFirebaseData } = require('./dataStore/firebase.js');      
@@ -40,7 +40,7 @@ app.get('/results', async (req, res) => {
     console.log("----------- Results");
     try {
         res.render("results", { images: imageData });
-        await cs.saveInJSON('currentSearch.json' ,imageData);
+        await saveToCurrentSearch(imageData);
         saveCurrentSearchToFirebase();
     } catch (error) {
         handleError(error, req, res);
@@ -52,7 +52,9 @@ app.post('/userLabels', async (req, res) => {
     try {
         const labelsUserThinksInvalid = JSON.parse(req.body.labelsUserThinksInvalid);
         console.log(labelsUserThinksInvalid);
-        // need to update userthinks valid bool for the array items
+        updateUserValidation(imageData, labelsUserThinksInvalid);
+        saveToCurrentSearch(imageData);
+        saveCurrentSearchToFirebase();
     } catch (error) {
         handleError(error, req, res);
     }
