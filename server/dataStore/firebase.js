@@ -1,7 +1,7 @@
 // Connecting to the firebase account
 const admin = require("firebase-admin");
 const path = require('path');
-const key = path.join(__dirname, './firebaseKey.json');
+const key = path.join(__dirname, '../../firebaseKey.json');
 admin.initializeApp({
     credential: admin.credential.cert(key),
     databaseURL: 'https://test-vision-376115-default-rtdb.europe-west1.firebasedatabase.app/',

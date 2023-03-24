@@ -129,9 +129,7 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
-# Google API key
+# API keys
 key.json
-
-# Firebase API key
-server/dataStore/firebaseKey.json
+firebaseKey.json
 
