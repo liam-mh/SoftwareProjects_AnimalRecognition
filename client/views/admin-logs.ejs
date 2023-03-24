@@ -37,13 +37,13 @@
       <div class="main__content2">
         <h1>Welcome to Admin</h1>
         <div style="display:inline-block;">
-          <button class="main__btn" onclick="showContent()">View Admin Logins</button>
+          <button class="main__btn" onclick="showContent()">View User Label Invalidation</button>
         </div>
       </div>
 
         <div class="admin_results_box">
 
-          <!-- Datastore data table -->
+          <!-- Error Logs -->
           <div id="content1">
             <table style="line-height: 3; width: 100%;">
               <tr style="position: sticky; top: 0;">
@@ -55,23 +55,55 @@
                 <th>Operating System</th>
                 <th>All Error Data</th>
               </tr>
-              <% for (let i = 0; i < data.length; i++) { %>
+              <% for (let i = 0; i < errors.length; i++) { %>
                 <tr class="data-row">
                   <td style="border-right: 2px solid #04243C;"><%= i+1 %></td>
-                  <td><%= formatDate(data[i].timestamp) %></td> 
-                  <td>"<%= data[i].message.substring(0, 50) %>"</td>
-                  <td>HTTP status code: <%= data[i].response.status %></td>
-                  <td><%= data[i].request.url %></td>
-                  <td><%= data[i].systemInfo.os %></td>
-                  <td><button onclick="showData(<%= JSON.stringify(data[i]) %>)">View error</button></td>
+                  <td><%= formatDate(errors[i].timestamp) %></td> 
+                  <td>"<%= errors[i].message.substring(0, 50) %>"</td>
+                  <td>HTTP status code: <%= errors[i].response.status %></td>
+                  <td><%= errors[i].request.url %></td>
+                  <td><%= errors[i].systemInfo.os %></td>
+                  <td><button onclick="showData(<%= JSON.stringify(errors[i]) %>)">View error</button></td>
                 </tr>
               <% } %>
             </table>
           </div>
 
-          <div id="content2" style="display:none; max-height: 100%; max-width: 100%;">
-            
+          <!-- Invalid labels -->
+          <div id="content2" style="display:none;">
+            <table style="line-height: 1; width: 100%;">
+              <tr style="position: sticky; top: 0; line-height: 3;">
+                <th>Animal</th>
+                <th>Label Description</th>
+                <th>Current Label Relation Status</th>
+                <th>User Thinks</th>
+                <th>Frequency</th>
+                <th>Update Relation List?</th>
+              </tr>
+              <% for (let animal in invalidations) { %>
+                <tr>
+                  <td rowspan="<%= invalidations[animal].length + 1 %>"><%= animal %></td>
+                  <td>
+                    <% for (let i = 0; i < invalidations[animal].length; i++) { %>
+                      <tr>                          
+                        <td style="text-align: left;"><%= invalidations[animal][i].description %></td>    
+                        <td><%= invalidations[animal][i].validAgainstList %></td>                        
+                        <td><%= invalidations[animal][i].validAgainstList ? 'false' : 'true' %></td>
+                        <td style="border-right: 2px solid #04243C;"><%= invalidations[animal][i].frequency %></td>
+                        <td>
+                          <button>Approve</button>
+                          <button>Decline</button>
+                        </td>
+                      </tr>
+                    <% } %>
+                  </td>
+                </tr>
+                <td colspan="6;" style="border-top: 2px solid #04243C;"></td>
+              <% } %>
+              
+            </table>
           </div>
+          
 
         </div>
       </div>
@@ -96,7 +128,7 @@
     if (content1.style.display === "none") {
       content1.style.display = "block";
       content2.style.display = "none";
-      button.innerHTML = "View Admin Logins";
+      button.innerHTML = "View User Label Invalidation";
     } else {
       content1.style.display = "none";
       content2.style.display = "block";

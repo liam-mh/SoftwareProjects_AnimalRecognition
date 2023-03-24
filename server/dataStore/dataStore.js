@@ -132,7 +132,6 @@ function readJsonFileToArray(fileName) {
 }
 
 function getMostCommonAnimal(data) {
-
     const animalFrequency = {};
     for (let image of data) {
         if (typeof image.containsAnimal === 'object' && image.containsAnimal[1]) {
@@ -147,11 +146,43 @@ function getMostCommonAnimal(data) {
     return animalFrequencyArray;
 };
 
+function getUserInvalidation(data) {
+    const invalidLabels = {};
+    for (let d of data) {
+        if (typeof d.containsAnimal === 'object' && d.containsAnimal[1]) {
+            for (let l of d.labels) {
+                if (l.userThinksCorrect === false) {
+                    // Check if the current label description and validAgainstList
+                    // already exist in the invalidLabels object for the current animal
+                    const existingLabel = invalidLabels[d.containsAnimal[1]]?.find((label) => 
+                        label.description === l.description && label.validAgainstList === l.validAgainstList
+                    );
+                    if (existingLabel) {
+                        existingLabel.frequency++;
+                    } else {
+                        const newLabel = {
+                            description: l.description,
+                            validAgainstList: l.validAgainstList,
+                            frequency: 1
+                        };
+                        invalidLabels[d.containsAnimal[1]] = invalidLabels[d.containsAnimal[1]] || [];
+                        invalidLabels[d.containsAnimal[1]].push(newLabel);
+                    }
+                }
+            }      
+        }
+    }
+    console.log(invalidLabels);
+    return invalidLabels;
+};
+  
+
 module.exports = {
     save,
     readJsonFileToArray,
     clearFolder,
-    getMostCommonAnimal
+    getMostCommonAnimal,
+    getUserInvalidation
 };
 
 

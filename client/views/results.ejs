@@ -131,10 +131,18 @@
               </ul>
             </div>
 
-            <form id="confirmForm" action="/userLabels" method="POST" style="position: absolute; bottom: 20px; left: 20px; display: none;">
-              <input type="hidden" name="labelsUserThinksInvalid" value="">
-              <button class="confirm_btn">Confirm Changes</button> 
-            </form>
+            <!-- submit changes and responce -->
+            <% if (labelsUpdated) { %>
+              <div class="success-box" style="position: absolute; bottom: 20px; left: 20px;" >
+                <span>Submission Success: Thank you for your help</span>
+              </div>
+            <% } else { %>
+              <form id="confirmForm" action="/userLabels" method="POST" style="position: absolute; bottom: 20px; left: 20px; display: none;">
+                <input type="hidden" name="labelsUserThinksInvalid" value="">
+                <button class="confirm_btn">Confirm Changes: Only one submission is allowed!</button> 
+              </form>
+            <% } %>  
+           
 
           </div>
         </div> <!-- Label data -->
@@ -192,6 +200,19 @@ span {
 }
 .toggle-button:not(.active)::before {
   content: '\2705';
+}
+
+.success-box {
+  font-size: 1rem;
+  background-color: #4CAF50;
+  padding: 14px 32px;
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.35s;
+  outline: none;
+  position: relative;
 }
 
 </style>
