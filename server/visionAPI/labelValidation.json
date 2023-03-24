@@ -1,0 +1,65 @@
+[
+    {"Cat" : [
+        "Cat",  
+        "Kitten",  
+        "Tabby",  
+        "Siamese",  
+        "Persian",  
+        "Maine Coon",  
+        "Ragdoll",  
+        "British Shorthair",  
+        "Sphynx",  
+        "Abyssinian", 
+        "American Shorthair",  
+        "Bengal",  
+        "Birman",  
+        "Burmese",  
+        "Devon Rex",  
+        "Exotic Shorthair",  
+        "Himalayan",  
+        "Japanese Bobtail",  
+        "Manx",  
+        "Norwegian Forest Cat",
+        "Small to medium-sized cats",
+        "Whiskers",
+        "Tail"
+    ]},
+    {"Cow" : [
+        "Calf",
+        "Cow",
+        "Calf",
+        "Dairy cow",
+        "Cowbell",
+        "Pasture",
+        "Livestock",
+        "Working animal"
+    ]},
+    {"Dairy Cow" : [
+        "Calf",
+        "Cow",
+        "Calf",
+        "Dairy cow",
+        "Cowbell",
+        "Pasture",
+        "Livestock",
+        "Working animal"
+    ]},
+    {"Dog" : [
+        "Dog",
+        "Canine",
+        "Companion dog",
+        "Tail",
+        "Ball",
+        "Dog collar",
+        "Collar",
+        "Snout",
+        "Puppy"
+    ]},
+    {"Sheep" : [
+        "Sheep",
+        "Lamb",
+        "Ewe",
+        "Ram",
+        "Grazing"
+    ]}
+]

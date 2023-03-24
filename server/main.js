@@ -1,4 +1,4 @@
-const cs = require('./dataStore/currentSearch.js'); 
+const { saveToCurrentSearch, updateUserValidation } = require('./dataStore/currentSearch.js'); 
 const ds = require('./dataStore/dataStore.js');     
 const { scanImages } = require('./visionAPI/cloud.js');   
 const { saveCurrentSearchToFirebase, readFirebaseData } = require('./dataStore/firebase.js');      
@@ -39,8 +39,22 @@ app.post('/upload', upload.single("image"), async (req, res) => {
 app.get('/results', async (req, res) => { 
     console.log("----------- Results");
     try {
-        res.render("results", { images: imageData });
-        await cs.saveInJSON('currentSearch.json' ,imageData);
+        const labelsUpdated = req.query.labelsUpdated === 'true';
+        res.render("results", { images: imageData, labelsUpdated });
+        await saveToCurrentSearch(imageData);
+        saveCurrentSearchToFirebase();
+    } catch (error) {
+        handleError(error, req, res);
+    }
+});
+
+// return updated user labels
+app.post('/userLabels', async (req, res) => {
+    try {
+        res.redirect('/results?labelsUpdated=true');
+        const labelsUserThinksInvalid = JSON.parse(req.body.labelsUserThinksInvalid);
+        updateUserValidation(imageData, labelsUserThinksInvalid);
+        saveToCurrentSearch(imageData);
         saveCurrentSearchToFirebase();
     } catch (error) {
         handleError(error, req, res);
@@ -52,6 +66,8 @@ app.get('/results', async (req, res) => {
  * ==============================================================================================
  */
 
+let data = [];
+
 // admin login 
 app.get('/login', (req, res) => {
     console.log("----------- Login")
@@ -62,7 +78,7 @@ app.get('/login', (req, res) => {
 app.get('/admin', async (req, res) => {
     console.log("----------- Admin-Index")
     try {
-        const data = await readFirebaseData('labelData');
+        data = await readFirebaseData('labelData');
         // Most common animal chart data
         const animalFrequencyArray = ds.getMostCommonAnimal(data);
         const label = animalFrequencyArray.map(obj => obj.label);
@@ -83,9 +99,11 @@ app.get('/admin', async (req, res) => {
 app.get('/admin-logs', async (req, res) => {
     console.log("----------- Admin-Logs")
     try {
-        const data = await readFirebaseData('errorLogs');
+        const errors = await readFirebaseData('errorLogs');
+        const invalidLabels = ds.getUserInvalidation(data);
         res.render("admin-logs", {
-            data: data, 
+            invalidations: invalidLabels,
+            errors: errors, 
             formatDate: formatDate
         });
     } catch (error) {
@@ -100,9 +118,6 @@ app.get('/testError', (req, res) => {
     } catch (error) {
         handleError(error, req, res);
     }
-});
-app.get('/test', (req, res) => {
-    res.render("test");
 });
 
 /**

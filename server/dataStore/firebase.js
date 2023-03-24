@@ -11,7 +11,6 @@ admin.initializeApp({
 // Link to the database
 const db = admin.database();
 
-
 /**
  * Reading from the database
  */
@@ -36,7 +35,6 @@ function readFirebaseData(reference) {
     });
 };
   
-
 // read.once('value', (snapshot) => {
 //     const data = snapshot.val();           // all table data
 //     const keys = Object.keys(data);        // each row
@@ -54,7 +52,7 @@ const fs = require('fs');
 function saveCurrentSearchToFirebase() {
     const currentSearch = JSON.parse(fs.readFileSync('server/dataStore/currentSearch.json', 'utf8'));
     const write = db.ref('labelData');
-    write.push(currentSearch, (error) => {
+    write.child(currentSearch[0].path.substring(0, 13)).set(currentSearch, (error) => {
         if (error) {
             console.log('Current search data could not be saved to Firebase:', error);
         } else {
@@ -73,12 +71,6 @@ function saveErrorToFirebase(error) {
         }
     });
 };
-
-/**
- * Saving images
- */
-
-// Save image to Firebase Storage
   
 const saveImageToFirebaseStorage = async (fileName) => {
     try {
@@ -98,10 +90,9 @@ const saveImageToFirebaseStorage = async (fileName) => {
     }
 };
   
-
 module.exports = {
     saveImageToFirebaseStorage,
     saveCurrentSearchToFirebase,
     saveErrorToFirebase,
-    readFirebaseData
+    readFirebaseData,
 };

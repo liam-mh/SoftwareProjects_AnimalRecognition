@@ -2,7 +2,7 @@
 <html lan="en" and dir="Itr">
 
 <head>
-  <meta charset="utf-8">
+  <meta charset="UTF-8">
   <title>Animal Recognition Results</title>
   <link rel="stylesheet" href="index.css">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css">
@@ -20,10 +20,10 @@
              <span class="bar"></span>
           </div>
           <ul class="navbar__menu">
-             <li class="navbar__item">
-                <a href="/" class="navbar__links">Home</a>
-             </li>
-             <li class="navbar__item"><a href="/login" class="navbar__links">Log In</a></li>
+            <li class="navbar__item">
+              <a href="/" class="navbar__links">Home</a>
+            </li>
+            <li class="navbar__item"><a href="/login" class="navbar__links">Log In</a></li>
           </ul>
        </div>
     </nav>
@@ -40,7 +40,7 @@
 
       <% for (let image of images) { %>
 
-        <li style="position: absolute; top: 25%;">
+        <li style="position: absolute; top: 22%;">
           <% if (image.containsAnimal[0]) { %>
             <% 
               var color = 'red';
@@ -64,6 +64,9 @@
               <% } %>
               <%= objectDetectionMessage %>.
             <% } %>  
+            <br>
+            <br>We have highlighted any labels we feel are relevant to the animal
+            <br>To help our AI improve, please toggle the ✅ / ❌ if you think that label is correct
         </li>
 
         <!-- Label data: toggle display with button -->
@@ -71,43 +74,77 @@
         
             <img src="<%= './userImages/' + image.path %>" alt="pic" style="max-width: 60%; height: 100%; float: right; mask-image: linear-gradient(to left, rgba(0, 0, 0, 1.0) 80%, transparent 100%);">
           
-            <div style="position: absolute; top: 5px; left: 0px; z-index: 1; width: 200px;">
+            <div style="position: absolute; top: 5px; left: 0px; z-index: 1; width: 210px;">
               <ul>
                 <li><strong>Above 90%<br><span style="color: green">(High)</span></strong></li>
                 <% for (let i = 0; i < image.labels.length; i++) { %>
                   <% const label = image.labels[i]; %>
                   <% if (label.score > 0.9) { %>
-                    <li><%= label.description %></li>
+                    <li>   
+                      <% if (label.validAgainstList) { %>
+                        <button class="toggle-button" onclick="toggleButton(this); addToArray('<%= label.description %>')"></button>
+                      <% } else { %>
+                        <button class="toggle-button active" onclick="toggleButton(this); addToArray('<%= label.description %>')"></button>
+                      <% } %>             
+                      <%= label.description %>
+                    </li>
                   <% } %>
                 <% } %>
               </ul>
             </div>
 
-            <div style="position: absolute; top: 5px; left: 220px; z-index: 1; width: 200px;">
+            <div style="position: absolute; top: 5px; left: 200px; z-index: 1; width: 230px;">
               <ul>
                 <li><strong>Above 70%<br><span style="color: orange">(Medium)</span></strong></li>
                 <% for (let i = 0; i < image.labels.length; i++) { %>
                   <% const label = image.labels[i]; %>
                   <% if (label.score > 0.7 && label.score <= 0.9) { %>
-                    <li><%= label.description %></li>
+                    <li>   
+                      <% if (label.validAgainstList) { %>
+                        <button class="toggle-button" onclick="toggleButton(this); addToArray('<%= label.description %>')"></button>
+                      <% } else { %>
+                        <button class="toggle-button active" onclick="toggleButton(this); addToArray('<%= label.description %>')"></button>
+                      <% } %>             
+                      <%= label.description %>
+                    </li>
                   <% } %>
                 <% } %>
               </ul>
             </div>
 
-            <div style="position: absolute; top: 5px; left: 430px; z-index: 1; width: 200px;">
+            <div style="position: absolute; top: 5px; left: 440px; z-index: 1; width: 200px;">
               <ul>
                 <li><strong>Below 70%<br><span style="color: red">(Low)</span></strong></li>
                 <% for (let i = 0; i < image.labels.length; i++) { %>
                   <% const label = image.labels[i]; %>
                   <% if (label.score <= 0.7) { %>
-                    <li><%= label.description %></li>
+                    <li>   
+                      <% if (label.validAgainstList) { %>
+                        <button class="toggle-button" onclick="toggleButton(this); addToArray('<%= label.description %>')"></button>
+                      <% } else { %>
+                        <button class="toggle-button active" onclick="toggleButton(this); addToArray('<%= label.description %>')"></button>
+                      <% } %>             
+                      <%= label.description %>
+                    </li>
                   <% } %>
                 <% } %>
               </ul>
             </div>
-          </div>
 
+            <!-- submit changes and responce -->
+            <% if (labelsUpdated) { %>
+              <div class="success-box" style="position: absolute; bottom: 20px; left: 20px;" >
+                <span>Submission Success: Thank you for your help</span>
+              </div>
+            <% } else { %>
+              <form id="confirmForm" action="/userLabels" method="POST" style="position: absolute; bottom: 20px; left: 20px; display: none;">
+                <input type="hidden" name="labelsUserThinksInvalid" value="">
+                <button class="confirm_btn">Confirm Changes: Only one submission is allowed!</button> 
+              </form>
+            <% } %>  
+           
+
+          </div>
         </div> <!-- Label data -->
 
         <!-- Object data: toggle display with button -->
@@ -147,6 +184,39 @@
 
 </body>
 
+<style>
+span {
+  font-size: 1rem;
+}
+
+.toggle-button {
+  font-size: 0.8rem;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+.toggle-button.active::before {
+  content: '\274C';
+}
+.toggle-button:not(.active)::before {
+  content: '\2705';
+}
+
+.success-box {
+  font-size: 1rem;
+  background-color: #4CAF50;
+  padding: 14px 32px;
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.35s;
+  outline: none;
+  position: relative;
+}
+
+</style>
+
 <script>
   function showContent() {
     var content1 = document.getElementById("label_content");
@@ -163,6 +233,41 @@
       button.innerHTML = "Show Label Detection Results";
     }
   };  
+
+  function toggleButton(el) {
+    el.classList.toggle('active');
+  }
+
+  let labelsUserThinksInvalid = [];
+
+  const confirmForm = document.getElementById('confirmForm');
+  function updateConfirmFormVisibility() {
+    if (labelsUserThinksInvalid.length > 0) {
+        confirmForm.style.display = 'block';
+    } else {
+        confirmForm.style.display = 'none';
+    }
+  }
+  
+  function addToArray(label) {
+    const index = labelsUserThinksInvalid.indexOf(label);
+    if (index !== -1) {
+      labelsUserThinksInvalid.splice(index, 1);
+    } else {
+      labelsUserThinksInvalid.push(label);
+    }
+    updateConfirmFormVisibility();
+  };
+  
+  function onSubmit(event) {
+    event.preventDefault();
+    const input = document.querySelector('input[name="labelsUserThinksInvalid"]');
+    input.value = JSON.stringify(labelsUserThinksInvalid);
+    event.target.submit();
+  }
+
+  document.querySelector('form').addEventListener('submit', onSubmit);
+
 </script>
 
 </html>
