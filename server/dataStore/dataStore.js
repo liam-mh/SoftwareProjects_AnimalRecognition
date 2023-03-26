@@ -172,7 +172,7 @@ function getUserInvalidation(data) {
             }      
         }
     }
-    console.log(invalidLabels);
+    //console.log(invalidLabels);
     return invalidLabels;
 };
   

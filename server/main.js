@@ -43,7 +43,6 @@ app.get('/results', async (req, res) => {
         res.render("results", { images: imageData, labelsUpdated });
         await saveToCurrentSearch(imageData);
         saveCurrentSearchToFirebase();
-        clearCurrentSearch();
     } catch (error) {
         handleError(error, req, res);
     }
@@ -57,7 +56,6 @@ app.post('/userLabels', async (req, res) => {
         updateUserValidation(imageData, labelsUserThinksInvalid);
         saveToCurrentSearch(imageData);
         saveCurrentSearchToFirebase();
-        clearCurrentSearch();
     } catch (error) {
         handleError(error, req, res);
     }
