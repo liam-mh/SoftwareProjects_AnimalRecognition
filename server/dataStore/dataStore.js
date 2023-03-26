@@ -132,45 +132,57 @@ function readJsonFileToArray(fileName) {
 }
 
 function getMostCommonAnimal(data) {
-
-    // const data = readJsonFileToArray('dataStore.json');
-    const animals = readJsonFileToArray('../visionAPI/animals.json');
     const animalFrequency = {};
-
     for (let image of data) {
-        // Check if animal is in image
-        const animalLabels = image.labels.filter(label => {
-            return animals.includes(label.description);
-        });
-
-        // Count the frequency of each animal label
-        for (let label of animalLabels) {
-            if (animalFrequency[label.description]) {
-                animalFrequency[label.description]++;
-            } else {
-                animalFrequency[label.description] = 1;
-            }
-        };
+        if (typeof image.containsAnimal === 'object' && image.containsAnimal[1]) {
+            animalFrequency[image.containsAnimal[1]] = (animalFrequency[image.containsAnimal[1]] || 0) + 1;
+        }
     }
-
-    // Convert the animal frequency object into an array of objects with 'label' and 'frequency' properties
     const animalFrequencyArray = Object.entries(animalFrequency).map(([label, frequency]) => ({
         label,
         frequency
     }));
-
-    // Sort the array by frequency in descending order
     animalFrequencyArray.sort((a, b) => a.label.localeCompare(b.label));
-
     return animalFrequencyArray;
 };
 
+function getUserInvalidation(data) {
+    const invalidLabels = {};
+    for (let d of data) {
+        if (typeof d.containsAnimal === 'object' && d.containsAnimal[1]) {
+            for (let l of d.labels) {
+                if (l.userThinksCorrect === false) {
+                    // Check if the current label description and validAgainstList
+                    // already exist in the invalidLabels object for the current animal
+                    const existingLabel = invalidLabels[d.containsAnimal[1]]?.find((label) => 
+                        label.description === l.description && label.validAgainstList === l.validAgainstList
+                    );
+                    if (existingLabel) {
+                        existingLabel.frequency++;
+                    } else {
+                        const newLabel = {
+                            description: l.description,
+                            validAgainstList: l.validAgainstList,
+                            frequency: 1
+                        };
+                        invalidLabels[d.containsAnimal[1]] = invalidLabels[d.containsAnimal[1]] || [];
+                        invalidLabels[d.containsAnimal[1]].push(newLabel);
+                    }
+                }
+            }      
+        }
+    }
+    console.log(invalidLabels);
+    return invalidLabels;
+};
+  
 
 module.exports = {
     save,
     readJsonFileToArray,
     clearFolder,
-    getMostCommonAnimal
+    getMostCommonAnimal,
+    getUserInvalidation
 };
 
 

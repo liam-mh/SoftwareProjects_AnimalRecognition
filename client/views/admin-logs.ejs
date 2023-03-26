@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lan="en" and dir="Itr">
+
+<head>
+    <meta charset="utf-8">
+    <title>Admin-Logs</title>
+    <link rel="stylesheet" href="index.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body style="min-height: 1700px;">
+
+  <!-- Nav Bar -->
+  <header>
+    <nav class="navbar">
+       <div class="navbar__container">
+          <a href="/" id="navbar__logo"><img src="frontEndImages/elanco.png" alt="Logo" /></a>
+          <div class="navbar__toggle" id="mobile-menu">
+             <span class="bar"></span> <span class="bar"></span>
+             <span class="bar"></span>
+          </div>
+          <ul class="navbar__menu">
+            <li class="navbar__item">
+              <a href="/admin" class="navbar__links">Search Data</a>
+            </li>
+            <li class="navbar__item">
+              <a href="/" class="navbar__links">Logout</a>
+            </li>
+          </ul>
+       </div>
+    </nav>
+  </header>
+
+  <div class="main">
+    <div class="main__container">
+
+      <div class="main__content2">
+        <h1>Welcome to Admin</h1>
+        <div style="display:inline-block;">
+          <button class="main__btn" onclick="showContent()">View User Label Invalidation</button>
+        </div>
+      </div>
+
+        <div class="admin_results_box">
+
+          <!-- Error Logs -->
+          <div id="content1">
+            <table style="line-height: 3; width: 100%;">
+              <tr style="position: sticky; top: 0;">
+                <th></th>
+                <th>Log Date</th>
+                <th>Error Message (first 50 characters)</th> 
+                <th>Response</th> 
+                <th>Page Accessing</th>
+                <th>Operating System</th>
+                <th>All Error Data</th>
+              </tr>
+              <% for (let i = 0; i < errors.length; i++) { %>
+                <tr class="data-row">
+                  <td style="border-right: 2px solid #04243C;"><%= i+1 %></td>
+                  <td><%= formatDate(errors[i].timestamp) %></td> 
+                  <td>"<%= errors[i].message.substring(0, 50) %>"</td>
+                  <td>HTTP status code: <%= errors[i].response.status %></td>
+                  <td><%= errors[i].request.url %></td>
+                  <td><%= errors[i].systemInfo.os %></td>
+                  <td><button onclick="showData(<%= JSON.stringify(errors[i]) %>)">View error</button></td>
+                </tr>
+              <% } %>
+            </table>
+          </div>
+
+          <!-- Invalid labels -->
+          <div id="content2" style="display:none;">
+            <table style="line-height: 1; width: 100%;">
+              <tr style="position: sticky; top: 0; line-height: 3;">
+                <th>Animal</th>
+                <th>Label Description</th>
+                <th>Current Label Relation Status</th>
+                <th>User Thinks</th>
+                <th>Frequency</th>
+                <th>Update Relation List?</th>
+              </tr>
+              <% for (let animal in invalidations) { %>
+                <tr>
+                  <td rowspan="<%= invalidations[animal].length + 1 %>"><%= animal %></td>
+                  <td>
+                    <% for (let i = 0; i < invalidations[animal].length; i++) { %>
+                      <tr>                          
+                        <td style="text-align: left;"><%= invalidations[animal][i].description %></td>    
+                        <td><%= invalidations[animal][i].validAgainstList %></td>                        
+                        <td><%= invalidations[animal][i].validAgainstList ? 'false' : 'true' %></td>
+                        <td style="border-right: 2px solid #04243C;"><%= invalidations[animal][i].frequency %></td>
+                        <td>
+                          <button>Approve</button>
+                          <button>Decline</button>
+                        </td>
+                      </tr>
+                    <% } %>
+                  </td>
+                </tr>
+                <td colspan="6;" style="border-top: 2px solid #04243C;"></td>
+              <% } %>
+              
+            </table>
+          </div>
+          
+
+        </div>
+      </div>
+    </div>    
+  </div>  
+
+  <div class="ocean">
+      <div class="wave"></div>
+      <div class="wave"></div>
+  </div>
+
+</body>
+
+<!-- CSS and JS -->
+
+<script>
+  function showContent() {
+    var content1 = document.getElementById("content1");
+    var content2 = document.getElementById("content2");
+    var button = document.querySelector('.main__btn');
+    
+    if (content1.style.display === "none") {
+      content1.style.display = "block";
+      content2.style.display = "none";
+      button.innerHTML = "View User Label Invalidation";
+    } else {
+      content1.style.display = "none";
+      content2.style.display = "block";
+      button.innerHTML = "View Error Logs";
+    }
+  };  
+</script>
+
+<script>
+
+function showData(data) {
+  const existingRow = event.target.closest('.data-row');
+  const existingNextRow = existingRow.nextSibling;
+  if (existingNextRow && existingNextRow.classList && existingNextRow.classList.contains('data-row-details')) {
+    // Details are already displayed, hide them and remove the row
+    existingNextRow.remove();
+    return;
+  }
+  const newRow = document.createElement('tr');
+  newRow.classList.add('data-row-details');
+
+  const emptyCell = document.createElement('td');
+  emptyCell.colSpan = '1';
+  emptyCell.style.borderRight = '2px solid #04243C';
+
+  const newCell = document.createElement('td');
+  newCell.colSpan = '6';
+  newCell.style.lineHeight = "1";
+  const dataDetails = document.createElement('pre');
+  dataDetails.textContent = JSON.stringify(data, null, 2);
+  dataDetails.style.maxWidth = '100%';
+  dataDetails.style.whiteSpace = 'pre-wrap';
+  dataDetails.style.textAlign = 'left';
+  newCell.appendChild(dataDetails);
+  newRow.appendChild(emptyCell);
+  newRow.appendChild(newCell);
+  existingRow.parentNode.insertBefore(newRow, existingRow.nextSibling);
+}
+
+</script>
+
+</html>

@@ -1,4 +1,5 @@
-// *** key.json must be placed inside directory to use ***
+const { saveImageToFirebaseStorage } = require('../dataStore/firebase');
+const fs = require("fs");
 
 // Connect to API
 const path = require('path');
@@ -10,7 +11,6 @@ const client = new vision.ImageAnnotatorClient({
 
 // Path to users images
 const userImagePath = path.join(__dirname, '../../client/public/userImages/');
-const fs = require("fs");
 
 // Setup array format and put the image name in
 async function readDirectory(userImagePath) {
@@ -51,7 +51,25 @@ function checkLabelsForAnimal(labels) {
     });
     return animalLabels.length > 0 ? animalLabels[0] : null; // return the first animal label found, or null if no matches
 };
-  
+// Compares to labelValidation.json
+async function checkIfLabelIsValidForAnimal(animal, label) {
+    const validLabels = JSON.parse(await fs.promises.readFile(path.join(__dirname, 'labelValidation.json'), 'utf8'));
+    for (let animalObject of validLabels) {
+        const animalName = Object.keys(animalObject)[0];
+        if (animalName === animal) {
+            for (let value of animalObject[animalName]) {
+                if (value === label) {
+                    return true;
+                }
+            }
+            // If the label was not found in the animalObject
+            return false;
+        }
+    }
+    // If the animal was not found in the validLabels
+    return false;
+};
+
 
 // Scan for labels and update containsAnimal
 async function getImageLabels(array) {
@@ -60,15 +78,23 @@ async function getImageLabels(array) {
 
         // Scan each image in public/userImages, add labels to array and bool
         const [result] = await client.labelDetection(path.join(userImagePath, image.path));
-        image.labels = result.labelAnnotations.map(label => ({ ...label, userThinksValid: true }));
+        image.labels = result.labelAnnotations.map(label => ({ 
+            ...label, 
+            userThinksCorrect: true, 
+            validAgainstList: false 
+        }));
 
         // Check if animal is in image
         const animalLabel = checkLabelsForAnimal(image.labels);
         if (animalLabel !== null) {
             array[0].containsAnimal = ([true, animalLabel.description, animalLabel.score]);
+            // Update label relevance to animal
+            for (let label of image.labels) {
+                label.validAgainstList = await checkIfLabelIsValidForAnimal(animalLabel.description, label.description);
+            }
         }
-    
-        console.log('Image contains animal:', image.containsAnimal[0]);
+
+        console.log('Image contains animal:', image.containsAnimal);
     };
     
     return array;
@@ -91,11 +117,11 @@ async function objectDetection(array) {
         const objects = result.localizedObjectAnnotations;
     
         // Check for hazards and animals
-        const hazards = await checkObjectsForHazards(objects);
         const animals = await checkObjectsForAnimals(objects);
+        const hazards = await checkObjectsForHazards(objects);
         objects.forEach(obj => {
-            obj.containsHazard = hazards.includes(obj.name) ? 'true' : 'false';
             obj.containsAnimal = animals.includes(obj.name) ? 'true' : 'false';
+            obj.containsHazard = hazards.includes(obj.name) ? 'true' : 'false';
         });
 
         // add objects to array
@@ -126,9 +152,12 @@ async function drawBoxes(imageName, objects) {
         const object = objects[i];
         const vertices = object.boundingPoly.normalizedVertices;
         
-        let boxColor = "#ff00fb";
+        let boxColor = "rgba(0, 0, 0, 0";
         ctx.fillStyle = "rgba(0, 0, 0, 0)";
 
+        if (object.containsAnimal === 'true') {
+            boxColor = "#ff00fb";
+        }
         if (object.containsHazard === 'true') {
             boxColor = "red";
             ctx.fillStyle = "rgba(255, 0, 0, 0.3)";
@@ -195,18 +224,14 @@ async function checkObjectsForAnimals(objects) {
     return animalsInObject;
 };
 
-
-// Firebase
-const fb = require('../dataStore/firebase');
-
-async function scan() {
+async function scanImages() {
     try {
         data = await readDirectory(userImagePath);
         data = await getImageLabels(data);
         data = await objectDetection(data);
         for (let image of data) {
-            image.url[0] = await fb.saveImageToFirebaseStorage(image.path);
-            image.url[1] = await fb.saveImageToFirebaseStorage('object_'+image.path);
+            image.url[0] = await saveImageToFirebaseStorage(image.path);
+            image.url[1] = await saveImageToFirebaseStorage('object_'+image.path);
         }
         //console.log(data);
         return data;
@@ -217,5 +242,5 @@ async function scan() {
 
 // Export functions 
 module.exports = {
-    scan
+    scanImages
 };

@@ -772,32 +772,11 @@ body {
 	overflow: scroll;
 	z-index: 9;
   }
-  
-
-/* Old table content 
-
-table{
-	text-indent: 150px;
-	position: relative;
-	right: 100px;
-}
-
-td{
-	white-space: nowrap;
-	font-size: 18px;
-	padding: 0.2rem;
-}
-th{
-	white-space: nowrap;
-	font-size: 18px;
-	padding: 0.2rem;
-}
-
-*/
 
 
 /* Admin index results */
 .admin_results_box{
+	max-width: 100%;
 	height: 60%;
 	width: 90%;
 	background: rgba(255, 255, 255, 0.7);
@@ -805,7 +784,6 @@ th{
 	display: block;
 	position: absolute;
 	top: 36%;
-	line-height: 62px;
 	font-size: 25px;
 	box-sizing: border-box;
 	border: 2px solid #040404;
@@ -819,29 +797,63 @@ th{
 
 .admin_results_box table {
 	border-collapse: collapse;
-	width: 100%;
 	margin: 0 auto;
 	white-space: nowrap;
 	font-size: 15px;
 }
+  
 .admin_results_box th,
 .admin_results_box td {
 	text-align: center;
-	height: 50px;
-
+	padding: 0 10px;
 }
+  
+.admin_results_box td:first-child {
+	width: 1;
+	max-width: 1;
+}
+  
+.admin_results_box td:not(:first-child) {
+	width: auto;
+}
+  
 .admin_results_box tr:hover {
 	background-color:  #04243c6c;
 }
+  
 .admin_results_box th {
 	background-color: #04243C;
 	color: white;
 }
-
+  
 .admin_results_box li {
 	font-size: 15px;
 }
+  
 
+/* confirm button on results page */
+.confirm_btn {
+    font-size: 1rem;
+    background-color: #4CAF50;
+    padding: 14px 32px;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.35s;
+    outline: none;
+    position: relative;
+}
+.confirm_btn:hover {
+    background-color: #3e8e41;
+}
+.confirm_btn:focus {
+    outline: none;
+}
+.confirm_btn:active {
+    background-color: #3e8e41;
+    transform: translateY(2px);
+}
  
 
   
