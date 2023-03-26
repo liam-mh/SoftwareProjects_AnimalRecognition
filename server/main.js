@@ -1,4 +1,4 @@
-const { saveToCurrentSearch, updateUserValidation } = require('./dataStore/currentSearch.js'); 
+const { saveToCurrentSearch, updateUserValidation, clearCurrentSearch } = require('./dataStore/currentSearch.js'); 
 const ds = require('./dataStore/dataStore.js');     
 const { scanImages } = require('./visionAPI/cloud.js');   
 const { saveCurrentSearchToFirebase, readFirebaseData } = require('./dataStore/firebase.js');      
@@ -16,17 +16,17 @@ let imageData = [];
 app.get('/', (req, res) => {
     console.log("----------- Index");
     try {
-        ds.clearFolder();
+        clearCurrentSearch();
         res.render("index");
     } catch (error) {
         handleError(error, req, res);
     }
 });
 
-// upload image button
+// upload
 app.post('/upload', upload.single("image"), async (req, res) => {
+    console.log("----------- Upload");
     try {
-        console.log("----------- Upload");
         res.locals.image = req.file;
         res.render("upload"); 
         imageData = await scanImages();
@@ -43,12 +43,13 @@ app.get('/results', async (req, res) => {
         res.render("results", { images: imageData, labelsUpdated });
         await saveToCurrentSearch(imageData);
         saveCurrentSearchToFirebase();
+        clearCurrentSearch();
     } catch (error) {
         handleError(error, req, res);
     }
 });
 
-// return updated user labels
+// user validates labels, redirects to results
 app.post('/userLabels', async (req, res) => {
     try {
         res.redirect('/results?labelsUpdated=true');
@@ -56,6 +57,7 @@ app.post('/userLabels', async (req, res) => {
         updateUserValidation(imageData, labelsUserThinksInvalid);
         saveToCurrentSearch(imageData);
         saveCurrentSearchToFirebase();
+        clearCurrentSearch();
     } catch (error) {
         handleError(error, req, res);
     }

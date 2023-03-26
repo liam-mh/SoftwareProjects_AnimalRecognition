@@ -1,28 +1,23 @@
 const fs = require('fs');
 const path = require('path');
 
-/**
- * Writing search data to a file
- */
+// currentSearch file location
+const dataPath = path.join(__dirname, 'currentSearch.json');
+const imagePath = path.join(__dirname, '../../client/public/userImages');
 
 function saveToCurrentSearch(data) {
-    const filePath = path.join(__dirname, 'currentSearch.json');
     try {
-        if (!fs.existsSync(filePath)) {
-            fs.writeFileSync(filePath, JSON.stringify(data), 'utf-8');
+        if (!fs.existsSync(dataPath)) {
+            fs.writeFileSync(dataPath, JSON.stringify(data), 'utf-8');
             console.log('File created: currentSearch.json');
         } else {
-            fs.writeFileSync(filePath, JSON.stringify(data), 'utf-8');
+            fs.writeFileSync(dataPath, JSON.stringify(data), 'utf-8');
             console.log('Data saved to: currentSearch.json');
         }
     } catch (error) {
         console.error(error);
     }
 };
-
-/**
- * Updating the data with the user validated labels
- */
 
 function updateUserValidation(original, update) {
     for (let label of original[0].labels) {
@@ -36,7 +31,29 @@ function updateUserValidation(original, update) {
 
 };
 
+function clearCurrentSearchData() {
+    const emptyData = {};
+    fs.writeFileSync(dataPath, JSON.stringify(emptyData));
+};
+
+function clearImageFolder() {
+    const fileNames = fs.readdirSync(imagePath);
+    fileNames.forEach((fileName) => {
+        if (fileName !== ".gitkeep") {
+            const filePath = path.join(imagePath, fileName);
+            fs.unlinkSync(filePath);
+        }
+    });
+};
+
+function clearCurrentSearch() {
+    clearCurrentSearchData();
+    clearImageFolder();
+    console.log('Current search data and images erased');
+}
+
 module.exports = { 
     saveToCurrentSearch,
-    updateUserValidation
+    updateUserValidation,
+    clearCurrentSearch
 };
