@@ -41,8 +41,8 @@
         <div class="box">
           <label>Upload File </label>
           <form method="POST" action="/upload" enctype="multipart/form-data"  onsubmit="return validateFile()">
-            <input type="file"  id="fileInput" name="image" multiple>
-            <button type="submit" class="main2__btn">Scan</button>
+            <input type="file"  id="fileInput"  name="image" multiple>
+            <button type="submit" class="main2__btn" >Scan</button>
           </form>
         </div>
       </div>
@@ -56,37 +56,45 @@
         <p>You can only upload one file at a time</p>
       </div>
       <script>
-        function validateFile() {       
-        var fileInput = document.getElementById('fileInput');
-        var filePath = fileInput.value;
-        var fileInput = document.getElementById('fileInput');
-        if (fileInput.files.length > 1) {
-        var errorBox = document.getElementById('errorBox2');
-        errorBox.style.display = 'block';
-        return false;
-    }
-    return true;
-        if (!fileInput.value) {
-       // Showing error message
-       document.getElementById('emptyBox').style.display = 'block';
-       // Preventing form submission
-       return false;
-     }
-        // Allowing only image file types
-       var allowedExtensions = /(.jpg|.jpeg|.png)$/i;
-      if (!allowedExtensions.exec(filePath)) {
-       // Showing error message
-        document.getElementById('errorBox').style.display = 'block';
-       // Preventing form submission
-       return false;
-       } else {
-       // Hiding error message
-      document.getElementById('errorBox').style.display = 'none';
-      document.getElementById('emptyBox').style.display = 'none';
-      return true;
-      }
-    }
+       
 
+
+function validateFile() {
+  var fileInput = document.getElementById('fileInput');
+  var files = fileInput.files;
+  var errorBox = document.getElementById('errorBox');
+  var allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+  var error = false;
+
+  if (files.length > 1) {
+    errorBox.innerHTML = "You can only upload one file at a time";
+    error = true;
+  } else if (files[0] && !allowedExtensions.exec(files[0].name)) {
+    errorBox.innerHTML = "Please upload an image file (JPG, JPEG, PNG, or GIF)";
+    error = true;
+  }
+  if (!fileInput.value) {
+    // Showing error message
+    document.getElementById('errorBox').innerHTML = 'Error: Please select a file';
+    document.getElementById('errorBox').style.display = 'block';
+    // Preventing form submission
+    return false;
+  }
+
+  if (error) {
+    errorBox.style.display = "block";
+    return false;
+  }
+
+  errorBox.style.display = "none";
+  return true;
+}
+
+
+
+ 
+
+  
 
       </script>
 
