@@ -63,7 +63,7 @@
                     <%= data[i].containsAnimal[0] %>
                     <%= data[i].containsAnimal[1] != null ? ', ' + data[i].containsAnimal[1] : '' %>
                   </td>                  
-                  <td><button onclick="showLabels(this, <%= JSON.stringify(data[i].labels) %>)">Show Labels</button></td> 
+                  <td><button onclick="showLabels(this, <%= JSON.stringify(data[i].labels) %>)">Show Labels</button></td>
                 </tr>
               <% } %>
             </table>

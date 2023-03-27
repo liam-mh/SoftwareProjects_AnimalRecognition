@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Animal Recognition Results</title>
-  <link rel="stylesheet" href="index.css">
+  <link rel="stylesheet" href="results.css">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css">
 </head>
 
@@ -35,12 +35,12 @@
   <div class="main__container">
     <div class="main__content">
 
-      <h1 style="position: absolute; top: 10%;">Results</h1>
+      <h1 style="position: absolute; top: 5%;">Results</h1>
       <button class="main__btn" style="right: 70px;" onclick="showContent()">Show Object Detection Results</button>
 
       <% for (let image of images) { %>
 
-        <li style="position: absolute; top: 22%;">
+        <li2 style="position: absolute; top: 22%;">
           <% if (image.containsAnimal[0]) { %>
             <% 
               var color = 'red';
@@ -67,7 +67,7 @@
             <br>
             <br>We have highlighted any labels we feel are relevant to the animal
             <br>To help our AI improve, please toggle the ✅ / ❌ if you think that label is correct
-        </li>
+        </li2>
 
         <!-- Label data: toggle display with button -->
         <div class="results_box" id="label_content">

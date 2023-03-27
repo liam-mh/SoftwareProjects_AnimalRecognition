@@ -1,17 +1,6 @@
-@import url('https://fonts.googleapis.com/css?family=Noto+Sans+TC&display=swap');
-body{
- margin: 0;
- padding: 0;
- height: 100vh;
- font-family: 'Noto Sans TC', sans-serif;
- overflow-x: hidden; /* Hide horizontal scrollbar */
-	
-}
-p{
-	position: relative;
-	top: 15%;
-	
-}
+body {
+	overflow: hidden; /* Hide scrollbars */
+  }
 a {
     text-decoration: none;
   }
@@ -45,7 +34,7 @@ a {
     margin-top: -0.6rem;
     position: relative; left: 1px;
   }
-  .links ul {
+.links ul {
     display: flex;
     list-style: none;
     align-items: center;
@@ -59,51 +48,77 @@ a {
     
   }
   
-
-  .box{
-    width:31%;
-    height: 18%;
-    padding:1em;
-    position: absolute;
-    left:850px;
-    transform: translate(-50%,-50%);
-    background: #E5E4E2;
-    text-align:center;
-    opacity: 90%;
-	top: 1100px;
-	margin: 200px;
-    background-color: #C0C0C0;
-    opacity: 0.8;
-    background: radial-gradient(circle, transparent 20%, #C0C0C0 20%, #C0C0C0 80%, transparent 80%, transparent), radial-gradient(circle, transparent 20%, #C0C0C0 20%, #C0C0C0 80%, transparent 80%, transparent) 25px 25px, linear-gradient(#848884 2px, transparent 2px) 0 -1px, linear-gradient(90deg, #848884 2px, #C0C0C0 2px) -1px 0;
-    background-size: 50px 50px, 50px 50px, 25px 25px, 25px 25px;
-
-  }
-
-  li{
+  p{
 	margin-top: 1rem;
 	font-size: 20px;
 	font-weight: 10;
 	font-family: Open Sans,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,
 	Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;
+  }
+
+  li{
+	margin-top: 10px;
+	font-size: 20px;
+	font-weight: 150;
+	font-family: Open Sans,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,
+	Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;
 	list-style-type: none;  
   }
 
-  h1{
-    font-size: 3rem;
-    background-color: #04243C;
-    background-size: 100%;
-    -webkit-background-clip: text;
-    -moz-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    -moz-text-fill-color: transparent;
-    font-family: Open Sans,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,
-    Noto Sans,sans-serif,Apple Color Emoji,
-    Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;
-    position: relative;
-    left: 10%;
-    top: 100px;
-    }
-  h1{
+  .li2{
+	margin-top: 1px;
+	font-size: 20px;
+	font-weight: 150;
+	font-family: Open Sans,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,
+	Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;
+	list-style-type: none;  
+  }
+
+  .main2__btn {
+	font-size: 1rem;
+	background-image: linear-gradient(to top, #04243C 0%,#04243C 100%);
+	padding: 14px 32px;
+	border: none;
+	border-radius: 4px;
+	color: white;
+	margin-top: 13rem;
+	cursor: pointer;
+	position: absolute;
+	transition: all 0.35s;
+	outline: none;
+	width: 30%;
+    left: 35%;
+    bottom: 20px;
+  }
+  
+  .main2__btn a {
+	position: relative;
+	z-index: 2;
+	color: #fff;
+	text-decoration: none;
+  }
+
+  .main2__btn:after {
+	position: absolute;
+	content: '';
+	top: 0;
+	left: 0;
+	width: 0;
+	height: 100%;
+	background: #4837ff;
+	transition: all 0.35s;
+	border-radius: 4px;
+  }
+  
+  .main2__btn:hover {
+	color: white;
+  }
+  
+  .main2__btn:hover:after {
+	width: 100%;
+  }
+
+  h2{
 	font-size: 3rem;
 	background-color: #04243C;
 	background-size: 100%;
@@ -114,8 +129,6 @@ a {
 	font-family: Open Sans,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,
 	Noto Sans,sans-serif,Apple Color Emoji,
 	Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;
-	position: relative;
-	top: 15%;
   }
   .box h2
 {
@@ -192,13 +205,62 @@ a {
 	
   }
   
+  .navbar {
+	background: #04243C;
+	height: 80px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 1.2rem;
+	position: sticky;
+	top: 0;
+	z-index: 999;
+  }
+  
+  .navbar__container {
+	display: flex;
+	justify-content: space-between;
+	height: 80px;
+	z-index: 1;
+	width: 100%;
+	max-width: 1300px;
+	margin-right: auto;
+	margin-left: auto;
+	padding-right: 50px;
+	padding-left: 50px;
+	
+  }
+  
+  #navbar__logo {
+	background-color: #ff8177;
+	background-image: linear-gradient(to top, #ff0844 0%, #ffb199 100%);
+	background-size: 100%;
+	-webkit-background-clip: text;
+	-moz-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	-moz-text-fill-color: transparent;
+	display: flex;
+	align-items: center;
+	cursor: pointer;
+	text-decoration: none;
+	font-size: 2rem;
+	position: relative;
+	right: 75px;
+  }
+  
+  .fa-gem {
+	margin-right: 0.5rem;
+	
+  }
+  
   .navbar__menu {
 	display: flex;
 	align-items: center;
 	list-style: none;
 	text-align: center;
-	position: relative;
-	bottom: 10%;
+    position: relative;
+    bottom: 10%;
+
   }
   
   .navbar__item {
@@ -241,6 +303,9 @@ a {
 	background: #4837ff;
 	transition: all 0.3s ease;
   }
+
+  
+ 
   
   .navbar__links:hover {
 	color: #4837ff;
@@ -357,11 +422,8 @@ a {
 	z-index: 1;
 	width: 100%;
 	max-width: 1300px;
-    min-width: 1200px;
 	padding-right: 50px;
 	padding-left: 50px;
-	
-
 	
   }
   
@@ -370,6 +432,14 @@ a {
   .main__content {
 	
 	width: 100%;
+	
+	
+  }
+
+  p{
+	position: absolute;
+	top: 25%;
+	white-space:pre-line
   }
   
   .main__content h1 {
@@ -384,6 +454,22 @@ a {
 	Noto Sans,sans-serif,Apple Color Emoji,
 	Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;
   }
+
+  .main__content2 h1 {
+	font-size: 4rem;
+	background-color: #04243C;
+	background-size: 100%;
+	-webkit-background-clip: text;
+	-moz-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	-moz-text-fill-color: transparent;
+	font-family: Open Sans,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,
+	Noto Sans,sans-serif,Apple Color Emoji,
+	Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;
+	position: absolute;
+	top: 10%;
+  }
+  
   
 
   
@@ -395,8 +481,11 @@ a {
 	Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;
 
   }
-  
-  .main__btn {
+
+ 
+/* main button */
+
+.main__btn {
 	font-size: 1rem;
 	background-image: linear-gradient(to top, #04243C 0%,#04243C 100%);
 	padding: 14px 32px;
@@ -405,19 +494,69 @@ a {
 	color: #fff;
 	margin-top: 2rem;
 	cursor: pointer;
-	position: relative;
+	position: absolute;
 	transition: all 0.35s;
 	outline: none;
-  }
+	top: 25%;
+}
+
+.main__btn a {
+	position: relative;
+	z-index: 2;
+	color: #fff;
+	text-decoration: none;
+}
+
+.main__btn:after {
+	position: absolute;
+	content: '';
+	top: 0;
+	left: 0;
+	width: 0;
+	height: 100%;
+	background: #4837ff;
+	transition: all 0.35s;
+	border-radius: 4px;
+}
+
+.main__btn:hover {
+	background-color: #4837ff;
+}
+
+.main__btn:hover a {
+	color: white;
+}
+
+.main__btn:hover:after {
+	width: 100%;
+}  
+
+/* end main button */
+
+.main__btn2 {
+	font-size: 1rem;
+	background-image: linear-gradient(to top, #04243C 0%,#04243C 100%);
+	padding: 14px 32px;
+	border: none;
+	border-radius: 4px;
+	color: #fff;
+	margin-top: 2rem;
+	cursor: pointer;
+	position: absolute;
+	transition: all 0.35s;
+	outline: none;
+	top: 25%;
+	margin-left: 260px;
+}
   
-  .main__btn a {
+  .main__btn2 a {
 	position: relative;
 	z-index: 2;
 	color: #fff;
 	text-decoration: none;
   }
   
-  .main__btn:after {
+  .main__btn2:after {
 	position: absolute;
 	content: '';
 	top: 0;
@@ -429,26 +568,26 @@ a {
 	border-radius: 4px;
   }
   
-  .main__btn:hover {
+  .main__btn2:hover {
 	color: white;
   }
   
-  .main__btn:hover:after {
+  .main__btn2:hover:after {
 	width: 100%;
   }
-  
-  
-    
-  #main__img{
-    position: relative;
-    left: 20%;
-    max-width: 300;
-    max-height: 300;
 
+
+  
+  .main__img--container {
+	text-align: center;
   }
-    
+  
+  #main__img {
+	height: 80%;
+	width: 80%;
 	
 	
+  }
  
   
   /* Mobile Responsive */
@@ -507,7 +646,7 @@ a {
  label{
 	position: relative;
 	top: 1px;
-	left: 130px;
+	left: 1px;
 	text-align: center;
 	font-size: large;
 	color: #04243C;
@@ -518,16 +657,259 @@ a {
 	position: relative;
 	top: 30px;
 	color: #04243C;
+	left: 35px;
  }
-
  
+ @import url('https://fonts.googleapis.com/css?family=Noto+Sans+TC&display=swap');
+ body{
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  overflow: hidden;
+  font-family: 'Noto Sans TC', sans-serif;
+ }
+  
+ html, body { height: 100%; }
 body {
   background:radial-gradient(ellipse at center, rgba(255,254,234,1) 0%, rgba(255,254,234,1) 35%, #B7E8EB 100%);
-  background-size: cover;
-  background-attachment: fixed;
+  overflow: hidden;
+}
+
+.ocean {
+	height: 5%;
+	width: 100%;
+	position: sticky;
+	bottom: 0;
+	left: 0;
+	background: #015871;
+	opacity: 0.9;
+	z-index: -1;
+  }
+  
+  .wave {
+	background: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/85486/wave.svg) repeat-x; 
+	position: absolute;
+	top: -198px;
+	width: 6400px;
+	height: 198px;
+	animation: wave 7s cubic-bezier(0.36, 0.45, 0.63, 0.53) infinite;
+	transform: translate3d(0, 0, 0);
+	opacity: 0.9;
+	z-index: -1;
+  }
+  
+
+.wave:nth-of-type(2) {
+  top: -175px;
+  animation: wave 7s cubic-bezier( 0.36, 0.45, 0.63, 0.53) -.125s infinite, swell 7s ease -1.25s infinite;
+  opacity: 1;
+}
+
+@keyframes wave {
+  0% {
+    margin-left: 0;
+  }
+  100% {
+    margin-left: -1600px;
+  }
+}
+
+@keyframes swell {
+  0%, 100% {
+    transform: translate3d(0,-25px,0);
+  }
+  50% {
+    transform: translate3d(0,5px,0);
+  }
+}
+
+
+ 
+
+
+.box{
+  position: relative;
+  color: #f5f5f5;
+  display: block;
+  text-align: center;
+  border-radius: 10px;
+  text-decoration: none;
+  left: 200px;
+}
+
+@keyframes rotate {
+  100%{
+    filter: hue-rotate(-360deg)
+  }
+}
+.box{
+  height: 30%;
+  width: 30%;
+  background: white;
+  border-radius: 5px 5px 0 0;
+  display: block;
+  position: absolute;
+  top: 58%;
+  left: 75%;
+  line-height: 62px;
+  font-size: 25px;
+  transform: translate(-50%, -50%);
+  box-sizing: border-box;
+	border: 2px solid #040404;
+	border-radius: 5px;
+	padding: 10px;
+	opacity: 0.7;
 }
 
   
+  .results_box{
+	max-height: 60%;
+	height: 60%;
+	width: 90%;
+	background: rgba(255, 255, 255, 0.7);
+	border-radius: 5px 5px 0 0;
+	display: block;
+	position: absolute;
+	top: 65%;
+	left: 50%;
+	line-height: 20px;
+	font-size: 25px;
+	transform: translate(-50%, -50%);
+	box-sizing: border-box;
+   	border: 2px solid #040404;
+	border-radius: 5px;
+	padding: 1px;
+	z-index: 9;
+  }
+
+
+/* Admin index results */
+.admin_results_box{
+	max-width: 100%;
+	height: 60%;
+	width: 90%;
+	background: rgba(255, 255, 255, 0.7);
+	border-radius: 5px 5px 0 0;
+	display: block;
+	position: absolute;
+	top: 36%;
+	font-size: 25px;
+	box-sizing: border-box;
+	border: 2px solid #040404;
+	border-radius: 5px;
+	padding: 1px;
+	resize: vertical;
+	overflow: scroll;
+	z-index: 9;
+	text-align: center;
+}
+
+.admin_results_box table {
+	border-collapse: collapse;
+	margin: 0 auto;
+	white-space: nowrap;
+	font-size: 15px;
+}
+  
+.admin_results_box th,
+.admin_results_box td {
+	text-align: center;
+	padding: 0 10px;
+}
+  
+.admin_results_box td:first-child {
+	width: 1;
+	max-width: 1;
+}
+  
+.admin_results_box td:not(:first-child) {
+	width: auto;
+}
+  
+.admin_results_box tr:hover {
+	background-color:  #04243c6c;
+}
+  
+.admin_results_box th {
+	background-color: #04243C;
+	color: white;
+}
+  
+.admin_results_box li {
+	font-size: 15px;
+}
+  
+
+/* confirm button on results page */
+.confirm_btn {
+    font-size: 1rem;
+    background-color: #4CAF50;
+    padding: 14px 32px;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.35s;
+    outline: none;
+    position: relative;
+}
+.confirm_btn:hover {
+    background-color: #3e8e41;
+}
+.confirm_btn:focus {
+    outline: none;
+}
+.confirm_btn:active {
+    background-color: #3e8e41;
+    transform: translateY(2px);
+}
+ 
+#errorBox {
+	background-color: #f44336; /* Set background color to red */
+	color: #fff; /* Set font color to white */
+	padding: 10px; /* Add some padding to the box */
+	border-radius: 5px; /* Add rounded corners to the box */
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); /* Add a box shadow */
+	position: relative;
+	bottom: 150px;
+	left: 23%;
+	width: 66%;
+	height: 5%;
+	opacity: 0.8;
+  }
+
+  #errorBox p {
+    color: black;
+    position: fixed;
+    left: 66%;
+    top: 295px;
+
+  }
+
+  #emptyBox {
+	background-color: #f44336; /* Set background color to red */
+	color: #fff; /* Set font color to white */
+	padding: 10px; /* Add some padding to the box */
+	border-radius: 5px; /* Add rounded corners to the box */
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); /* Add a box shadow */
+	position: relative;
+	bottom: 150px;
+	left: 23%;
+	width: 66%;
+	height: 5%;
+	opacity: 0.8;
+  }
+
+  #emptyBox p {
+    color: black;
+    position: fixed;
+    left: 68%;
+    top: 295px;
+
+  }
+
+
+
 
  
 

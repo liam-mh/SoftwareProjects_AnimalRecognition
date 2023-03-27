@@ -32,29 +32,56 @@
       <div class="header">
          Login Form
       </div>
-      <form action="/admin">
-         <input type="text" placeholder="Email or Username">
+      <form action="/admin" id="loginForm">
+         <input type="text" id="username" placeholder="Email or Username">
          <i class="far fa-envelope"></i>
-         <input id="pswrd" type="password" placeholder="Password">
+         <input id="password" type="password" placeholder="Password">
          <i class="fas fa-lock" onclick="show()"></i>
-         <input type="submit" value="Sign in">
+         <input type="submit" value="Submit">
          <a href="#">Forgot Password?</a>
       </form>
    </div>
 
    <script>
       function show(){
-         var pswrd = document.getElementById('pswrd');
+         var password = document.getElementById('password');
          var icon = document.querySelector('.fas');
-         if (pswrd.type === "password") {
-            pswrd.type = "text";
-            pswrd.style.marginTop = "20px";
+         if (password.type === "password") {
+            password.type = "text";
+            password.style.marginTop = "20px";
             icon.style.color = "#7f2092";
          } else {
-            pswrd.type = "password";
+            password.type = "password";
             icon.style.color = "grey";
          }
       }
+
+      function validateLoginForm() {
+         const username = document.getElementById('username').value;
+         const password = document.getElementById('password').value;
+
+         if (username.trim() === '') {
+            alert('Please enter a username.');
+            return false;
+         }
+
+         if (password.trim() === '') {
+            alert('Please enter a password.');
+            return false;
+         }
+
+  return true;
+}
+
+const form = document.getElementById('loginForm');
+
+form.addEventListener('submit', (e) => {
+  e.preventDefault();
+
+  if (validateLoginForm()) {
+   window.location.href = "/admin" ;
+  }
+});
    </script>
 
    <div class="ocean">

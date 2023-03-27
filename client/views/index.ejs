@@ -40,11 +40,55 @@
 
         <div class="box">
           <label>Upload File </label>
-          <form method="POST" action="/upload" enctype="multipart/form-data">
-            <input type="file" accept="image/jpeg, image/png, image/jpg" name="image">
+          <form method="POST" action="/upload" enctype="multipart/form-data"  onsubmit="return validateFile()">
+            <input type="file"  id="fileInput" name="image" multiple>
             <button type="submit" class="main2__btn">Scan</button>
           </form>
         </div>
+      </div>
+      <div id="errorBox" style="display:none;">
+        <p>Error: Only image files are allowed</p>
+      </div>
+      <div id="emptyBox" style="display:none;">
+        <p>Error: Please Select a File</p>
+      </div>
+      <div id="errorBox2" style="display: none;">
+        <p>You can only upload one file at a time</p>
+      </div>
+      <script>
+        function validateFile() {       
+        var fileInput = document.getElementById('fileInput');
+        var filePath = fileInput.value;
+        var fileInput = document.getElementById('fileInput');
+        if (fileInput.files.length > 1) {
+        var errorBox = document.getElementById('errorBox2');
+        errorBox.style.display = 'block';
+        return false;
+    }
+    return true;
+        if (!fileInput.value) {
+       // Showing error message
+       document.getElementById('emptyBox').style.display = 'block';
+       // Preventing form submission
+       return false;
+     }
+        // Allowing only image file types
+       var allowedExtensions = /(.jpg|.jpeg|.png)$/i;
+      if (!allowedExtensions.exec(filePath)) {
+       // Showing error message
+        document.getElementById('errorBox').style.display = 'block';
+       // Preventing form submission
+       return false;
+       } else {
+       // Hiding error message
+      document.getElementById('errorBox').style.display = 'none';
+      document.getElementById('emptyBox').style.display = 'none';
+      return true;
+      }
+    }
+
+
+      </script>
 
       </div>
     </div>

@@ -855,6 +855,70 @@ body {
     transform: translateY(2px);
 }
  
+#errorBox {
+	background-color: #f44336; /* Set background color to red */
+	color: #fff; /* Set font color to white */
+	padding: 10px; /* Add some padding to the box */
+	border-radius: 5px; /* Add rounded corners to the box */
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); /* Add a box shadow */
+	position: relative;
+	bottom: 150px;
+	left: 23%;
+	width: 66%;
+	height: 5%;
+	opacity: 0.8;
+  }
 
-  
-  
+  #errorBox p {
+    color: black;
+    position: fixed;
+    left: 66%;
+    top: 295px;
+
+  }
+
+  #emptyBox {
+	background-color: #f44336; /* Set background color to red */
+	color: #fff; /* Set font color to white */
+	padding: 10px; /* Add some padding to the box */
+	border-radius: 5px; /* Add rounded corners to the box */
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); /* Add a box shadow */
+	position: relative;
+	bottom: 150px;
+	left: 23%;
+	width: 66%;
+	height: 5%;
+	opacity: 0.8;
+  }
+
+  #emptyBox p {
+    color: black;
+    position: fixed;
+    left: 68%;
+    top: 295px;
+
+  }
+
+  #errorBox2 {
+	background-color: #f44336; /* Set background color to red */
+	color: #fff; /* Set font color to white */
+	padding: 10px; /* Add some padding to the box */
+	border-radius: 5px; /* Add rounded corners to the box */
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); /* Add a box shadow */
+	position: relative;
+	bottom: 150px;
+	left: 23%;
+	width: 66%;
+	height: 5%;
+	opacity: 0.8;
+  }
+
+  #errorBox2 p {
+    color: black;
+    position: fixed;
+    left: 65%;
+    top: 295px;
+
+  }
+
+
