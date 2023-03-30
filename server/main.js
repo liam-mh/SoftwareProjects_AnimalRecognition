@@ -88,7 +88,7 @@ app.get('/admin', async (req, res) => {
             data: data, 
             formatDate: formatDate,
             label: label,
-            frequency: frequency
+            frequency: frequency,
         });
     } catch (error) {
         handleError(error, req, res);
