@@ -151,7 +151,7 @@ This application is made by Liam, James, Sami, Mohammad, and should only be used
 by those authorised by themselves, Elanco, or Sheffield Hallam University.
 
 Elanco : https://www.elanco.com/en-us
-Sheffield Hallam University: https://www.shu.ac.uk/myhallam
+Sheffield Hallam University: https://www.shu.ac.uk
 
 ------------------
 6.  SUPPORT
