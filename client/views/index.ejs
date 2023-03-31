@@ -40,13 +40,25 @@
 
         <div class="box">
           <label>Upload File </label>
-          <form method="POST" action="/upload" enctype="multipart/form-data">
-            <input type="file" accept="image/jpeg, image/png, image/jpg" name="image">
-            <button type="submit" class="main2__btn">Scan</button>
+          <form method="POST" action="/upload" enctype="multipart/form-data"  onsubmit="return validateFile()">
+            <input type="file"  id="fileInput"  name="image" multiple>
+            <img id="thumbnail" style="position: absolute; top: 40%; left: 70%;">
+            <button type="submit" class="main2__btn" >Scan</button>
           </form>
         </div>
 
       </div>
+
+      <div id="errorBox" style="display:none;">
+        <p>Error: Only image files are allowed</p>
+      </div>
+      <div id="emptyBox" style="display:none;">
+        <p>Error: Please Select a File</p>
+      </div>
+      <div id="errorBox2" style="display: none;">
+        <p>You can only upload one file at a time</p>
+      </div>
+      
     </div>
   </div>
       
@@ -56,6 +68,64 @@
   </div>
 
 </body>
+
+<script>
+
+function validateFile() {
+  var fileInput = document.getElementById('fileInput');
+  var files = fileInput.files;
+  var errorBox = document.getElementById('errorBox');
+  var allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
+  var error = false;
+  if (files.length > 1) {
+    errorBox.innerHTML = "You can only upload one file at a time";
+    error = true;
+  } else if (files[0] && !allowedExtensions.exec(files[0].name)) {
+    errorBox.innerHTML = "Please upload an image file (JPG, JPEG or PNG)";
+    error = true;
+  }
+  if (!fileInput.value) {
+    // Showing error message
+    document.getElementById('errorBox').innerHTML = 'Error: Please select a file';
+    document.getElementById('errorBox').style.display = 'block';
+    // Preventing form submission
+    return false;
+  }
+  if (error) {
+    errorBox.style.display = "block";
+    return false;
+  }
+  errorBox.style.display = "none";
+  return true;
+};
+
+function previewImage(event) {
+  var reader = new FileReader();
+  reader.onload = function() {
+    var image = new Image();
+    image.src = reader.result;
+    image.onload = function() {
+      var canvas = document.createElement('canvas');
+      var context = canvas.getContext('2d');
+      var maxImageSize = 100;
+      var ratio = Math.min(maxImageSize / image.width, maxImageSize / image.height);
+      canvas.width = image.width * ratio;
+      canvas.height = image.height * ratio;
+      context.drawImage(image, 0, 0, canvas.width, canvas.height);
+      document.getElementById('thumbnail').src = canvas.toDataURL();
+    };
+  };
+  reader.readAsDataURL(event.target.files[0]);
+};
+
+document.getElementById('fileInput').addEventListener('change', previewImage);
+function cancelImage(event) {
+  document.getElementById('fileInput').value = '';
+  document.getElementById('thumbnail').src = '';
+}
+document.getElementById('thumbnail').addEventListener('click', cancelImage);
+
+</script>
 
 </html>
 

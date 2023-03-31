@@ -1,4 +1,5 @@
 const { saveImageToFirebaseStorage } = require('../dataStore/firebase');
+const { createCanvas, loadImage } = require('canvas');
 const fs = require("fs");
 
 // Connect to API
@@ -27,7 +28,9 @@ async function readDirectory(userImagePath) {
                         date: currentDate,
                         containsAnimal: [false],
                         labels: [],
-                        objectDetection: []
+                        objectDetection: [],
+                        animals: [null],
+                        hazards: [null]
                     });
                 }
             }
@@ -102,7 +105,33 @@ async function getImageLabels(array) {
 
 // Object Detection -----------------------------------------------------------
 
-const { createCanvas, loadImage } = require('canvas');
+// Compares to hazards.json
+async function checkObjectsForHazards(objects) {
+    const hazards = new Set(JSON.parse(await fs.promises.readFile(path.join(__dirname, 'hazards.json'), 'utf8')));
+    const hazardCounts = {};
+    objects.forEach(obj => {
+        if (hazards.has(obj.name)) {
+            hazardCounts[obj.name] = (hazardCounts[obj.name] || 0) + 1;
+        }
+    });
+    const hazardsInObject = Object.entries(hazardCounts).map(([name, count]) => [name, count]);
+    console.log('Hazards found in object: ', hazardsInObject);
+    return hazardsInObject;
+};
+// Compares to animals.json
+async function checkObjectsForAnimals(objects) {
+    const animals = new Set(JSON.parse(await fs.promises.readFile(path.join(__dirname, 'animals.json'), 'utf8')));
+    const animalCounts = {};
+    objects.forEach(obj => {
+        if (animals.has(obj.name)) {
+            animalCounts[obj.name] = (animalCounts[obj.name] || 0) + 1;
+        }
+    });
+    const animalsInObject = Object.entries(animalCounts).map(([name, count]) => [name, count]);
+    console.log('Animals found in object: ', animalsInObject);
+    return animalsInObject;
+};
+  
 
 async function objectDetection(array) {
 
@@ -120,12 +149,14 @@ async function objectDetection(array) {
         const animals = await checkObjectsForAnimals(objects);
         const hazards = await checkObjectsForHazards(objects);
         objects.forEach(obj => {
-            obj.containsAnimal = animals.includes(obj.name) ? 'true' : 'false';
-            obj.containsHazard = hazards.includes(obj.name) ? 'true' : 'false';
+            obj.containsAnimal = animals.some(([name, count]) => name === obj.name);
+            obj.containsHazard = hazards.some(([name, count]) => name === obj.name);
         });
-
+      
         // add objects to array
         image.objectDetection = objects;
+        image.animals = animals;
+        image.hazards = hazards;
 
         // Create new image with highlighted objects
         await drawBoxes(image.path, objects);
@@ -133,6 +164,7 @@ async function objectDetection(array) {
 
     return array;
 };
+
   
 async function drawBoxes(imageName, objects) {
   
@@ -152,13 +184,13 @@ async function drawBoxes(imageName, objects) {
         const object = objects[i];
         const vertices = object.boundingPoly.normalizedVertices;
         
-        let boxColor = "rgba(0, 0, 0, 0";
+        let boxColor = "rgba(0, 0, 0, 0)";
         ctx.fillStyle = "rgba(0, 0, 0, 0)";
 
-        if (object.containsAnimal === 'true') {
+        if (object.containsAnimal === true) {
             boxColor = "#ff00fb";
         }
-        if (object.containsHazard === 'true') {
+        if (object.containsHazard === true) {
             boxColor = "red";
             ctx.fillStyle = "rgba(255, 0, 0, 0.3)";
         } 
@@ -207,21 +239,6 @@ async function drawBoxes(imageName, objects) {
             reject(error);
         });
     })
-};
-
-// Compares to hazards.json
-async function checkObjectsForHazards(objects) {
-    const hazards = new Set(JSON.parse(await fs.promises.readFile(path.join(__dirname, 'hazards.json'), 'utf8')));
-    const hazardsInObject = objects.filter(obj => hazards.has(obj.name)).map(obj => obj.name);
-    console.log('Hazards found in object: ', hazardsInObject);
-    return hazardsInObject;
-};
-// Compares to animals.json
-async function checkObjectsForAnimals(objects) {
-    const animals = new Set(JSON.parse(await fs.promises.readFile(path.join(__dirname, 'animals.json'), 'utf8')));
-    const animalsInObject = objects.filter(obj => animals.has(obj.name)).map(obj => obj.name);
-    console.log('Animals found in object: ', animalsInObject);
-    return animalsInObject;
 };
 
 async function scanImages() {

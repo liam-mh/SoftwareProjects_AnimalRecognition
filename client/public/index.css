@@ -732,18 +732,18 @@ body {
   }
 }
 .box{
-  height: 30%;
-  width: 30%;
-  background: white;
-  border-radius: 5px 5px 0 0;
-  display: block;
-  position: absolute;
-  top: 58%;
-  left: 75%;
-  line-height: 62px;
-  font-size: 25px;
-  transform: translate(-50%, -50%);
-  box-sizing: border-box;
+	height: 30%;
+	width: 30%;
+	background: white;
+	border-radius: 5px 5px 0 0;
+	display: block;
+	position: absolute;
+	top: 58%;
+	left: 75%;
+	line-height: 62px;
+	font-size: 25px;
+	transform: translate(-50%, -50%);
+	box-sizing: border-box;
 	border: 2px solid #040404;
 	border-radius: 5px;
 	padding: 10px;
@@ -759,7 +759,7 @@ body {
 	border-radius: 5px 5px 0 0;
 	display: block;
 	position: absolute;
-	top: 65%;
+	top: 66%;
 	left: 50%;
 	line-height: 20px;
 	font-size: 25px;
@@ -856,5 +856,71 @@ body {
 }
  
 
-  
+/* Error Box for images */
+
+
+#errorBox {
+	background-color: #f44336; /* Set background color to red */
+	color: #fff; /* Set font color to white */
+	padding: 10px; /* Add some padding to the box */
+	border-radius: 5px; /* Add rounded corners to the box */
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); /* Add a box shadow */
+	position: relative;
+	bottom: 150px;
+	left: 23%;
+	width: 62%;
+	height: 5%;
+	opacity: 0.8;
+	text-align: center;
+	font-size: large;
+  }
+
+  #errorBox p {
+    color: black;
+    position: fixed;
+    left: 66%;
+    top: 295px;
+	text-align: center;
+
+  }
+
+  #emptyBox {
+	background-color: #f44336; /* Set background color to red */
+	color: #fff; /* Set font color to white */
+	padding: 10px; /* Add some padding to the box */
+	border-radius: 5px; /* Add rounded corners to the box */
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); /* Add a box shadow */
+	position:relative;
+	bottom: 150px;
+	left: 30%;
+	width: 60%;
+	height: 5%;
+	opacity: 0.8;
+  }
+
+  #emptyBox p {
+    color: black;
+  }
+
+  #errorBox2 {
+	background-color: #f44336; /* Set background color to red */
+	color: #fff; /* Set font color to white */
+	padding: 10px; /* Add some padding to the box */
+	border-radius: 5px; /* Add rounded corners to the box */
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); /* Add a box shadow */
+	position: relative;
+	bottom: 150px;
+	left: 23%;
+	width: 66%;
+	height: 5%;
+	opacity: 0.8;
+  }
+
+  #errorBox2 p {
+    color: black;
+    position: fixed;
+    left: 65%;
+    top: 295px;
+
+  }
   

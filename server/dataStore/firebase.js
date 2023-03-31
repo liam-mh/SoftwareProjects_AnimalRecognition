@@ -35,14 +35,6 @@ function readFirebaseData(reference) {
     });
 };
   
-// read.once('value', (snapshot) => {
-//     const data = snapshot.val();           // all table data
-//     const keys = Object.keys(data);        // each row
-//     const thirdKey = keys[2];              // row 3
-//     const thirdName = data[thirdKey].name; // column in row
-//     console.log('Name',thirdName);
-// });
-  
 /**
  * Writing to the database
  */
@@ -94,5 +86,5 @@ module.exports = {
     saveImageToFirebaseStorage,
     saveCurrentSearchToFirebase,
     saveErrorToFirebase,
-    readFirebaseData,
+    readFirebaseData
 };
